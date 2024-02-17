@@ -10,3 +10,5 @@ def hello():
 hello()
 
 print('done')
+
+print('hello')
