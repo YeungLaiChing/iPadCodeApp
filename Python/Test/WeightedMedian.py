@@ -25,3 +25,5 @@ index = cumulative_weights[cumulative_weights >= P].index[0]
 weighted_median = df.loc[index, 'price']
 
 print(f"Weighted Median Price: ${weighted_median:.2f}")
+
+df['price'].plot()
