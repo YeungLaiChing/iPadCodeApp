@@ -9,6 +9,8 @@ async def main():
     async with serve(echo, "localhost", 8765):
         await asyncio.Future()  # run forever
 
+print("start")
+
 asyncio.run(main())
 
 print('done')
