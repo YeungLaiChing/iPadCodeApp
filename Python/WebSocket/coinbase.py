@@ -16,7 +16,25 @@ def write_to_csv(data_row):
             
 
 def process_message(message):
-    print(message)
+    try:
+        data = json.loads(message)
+        if data['type'] == 'ticker':
+            original_timestamp = data['time']
+            utc_datetime = datetime.strptime(original_timestamp,'%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
+            unix_timestamp=int(utc_datetime.timestamp())
+            hkt=timezone(timedelta(hours=8))
+            hkt_datetime=utc_datetime.astimezone(hkt)
+            hkt_timestamp=hkt_datetime.strftime('%Y-%m-%d %H:%M:%S')
+            trade_id=data['trade_id']
+            last_price=data['price']
+            last_quantity=data['last_size']
+            data_row=[original_timestamp,unix_timestamp,hkt_timestamp,trade_id,last_price,last_quantity]
+            write_to_csv(data_row )
+            print(f"saved data to csv: {data_row}")
+    except json.JSONDecodeError as e:
+        print(f"JSON decode error: {e}")
+    except IOError as e:
+        print(f"IOError: {e}")
     
 def on_message(ws,message):
     print("received a message")
