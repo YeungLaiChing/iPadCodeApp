@@ -85,5 +85,5 @@ while True:
             if code == hs_tech_leverage_index_config["underly_index_code"]:
                 price=payload['last_price']
                 result=calculateLeveragedIndex(price)
-            print(f"{payload['data_time']} : {payload['code']} = {payload['last_price']} , index = {result}. Captured @ {getFormattedTime(ns)}. Processed @ {diff_ms} ms")
+                print(f"{payload['data_time']} : {payload['code']} = {payload['last_price']} , index = {result}. Captured @ {getFormattedTime(ns)}. Processed @ {diff_ms} ms")
     
