@@ -67,7 +67,7 @@ r = redis.Redis(
 mobile = r.pubsub()
 
 # use .subscribe() method to subscribe to topic on which you want to listen for messages
-mobile.subscribe('quote_stream')
+mobile.subscribe('index_capture_stream')
 
 # .listen() returns a generator over which you can iterate and listen for messages from publisher
 
