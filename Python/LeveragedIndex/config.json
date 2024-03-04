@@ -1,0 +1,11 @@
+{
+    "index_name": "Hang Seng Tech Leveraged Index x 2",
+    "underly_index_code": "HK.800700",
+    "leverage_ratio" : "2",
+    "number_calendar_days" : "1",
+    "stamp_duty_pct" : "0.1",
+    "overnight_interest_pct": "3.80143",
+    "underly_index_previous": "3474.77",
+    "this_index_previous":"1157"
+    
+}
