@@ -95,10 +95,10 @@ while True:
             diff_ns=current-ns
             diff_ms=diff_ns / 1000000
             if code == hs_tech_leverage_index_config["underly_index_code"]:
-                if processed_time != payload['date_time'] or processed_price != payload['last_price'] :
+                if processed_time != payload['data_time'] or processed_price != payload['last_price'] :
                     price=payload['last_price']
                     result=calculateLeveragedIndex(price)
-                    processed_time=payload['date_time']
+                    processed_time=payload['data_time']
                     processed_price=payload['last_price']
                     logger.info(f"{payload['data_time']} : {payload['code']} = {payload['last_price']} , index = {result}. Captured @ {getFormattedTime(ns)}. Processed @ {diff_ms} ms")
         
