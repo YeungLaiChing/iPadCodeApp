@@ -81,6 +81,9 @@ mobile.subscribe('index_capture_stream')
 # .listen() returns a generator over which you can iterate and listen for messages from publisher
 
 #for message in mobile.listen():
+processed_time=''
+processed_price=''
+
 while True:
     message = mobile.get_message()
     if message:
@@ -92,8 +95,11 @@ while True:
             diff_ns=current-ns
             diff_ms=diff_ns / 1000000
             if code == hs_tech_leverage_index_config["underly_index_code"]:
-                price=payload['last_price']
-                result=calculateLeveragedIndex(price)
-                logger.info(f"{payload['data_time']} : {payload['code']} = {payload['last_price']} , index = {result}. Captured @ {getFormattedTime(ns)}. Processed @ {diff_ms} ms")
+                if processed_time != payload['date_time'] or processed_price != payload['last_price'] :
+                    price=payload['last_price']
+                    result=calculateLeveragedIndex(price)
+                    processed_time=payload['date_time']
+                    processed_price=payload['last_price']
+                    logger.info(f"{payload['data_time']} : {payload['code']} = {payload['last_price']} , index = {result}. Captured @ {getFormattedTime(ns)}. Processed @ {diff_ms} ms")
+        
     
- 
