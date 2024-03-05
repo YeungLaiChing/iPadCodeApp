@@ -24,7 +24,7 @@ def homepage():
 
 	# Return the components to the HTML template 
 	return render_template(
-		template_name_or_list='chartjs-example.html',
+		template_name_or_list='graph2d-template.html',
 		data=data,
 		labels=labels,
 	)
