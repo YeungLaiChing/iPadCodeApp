@@ -15,7 +15,7 @@ f.close()
 logger = logging.getLogger('calc.application')
 logger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
-fh = logging.FileHandler('calc.log')
+fh = logging.FileHandler('./log/calc.log')
 fh.setLevel(logging.DEBUG)
 logger.addHandler(fh)
 
