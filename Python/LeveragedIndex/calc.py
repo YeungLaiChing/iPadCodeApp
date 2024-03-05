@@ -3,12 +3,21 @@ import time
 from datetime import datetime
 import json
 from pathlib import Path
+import logging.config
+
 file_path = Path(__file__).with_name("config.json")
 
 f = open (file_path, "r")
 hs_tech_leverage_index_config = json.loads(f.read())
 f.close()
 
+# create logger with 'spam_application'
+logger = logging.getLogger('calc.application')
+logger.setLevel(logging.DEBUG)
+# create file handler which logs even debug messages
+fh = logging.FileHandler('./log/calc.log')
+fh.setLevel(logging.DEBUG)
+logger.addHandler(fh)
 
 def calculateLeveragedIndex(underly_index_current):
     result=0
@@ -72,6 +81,9 @@ mobile.subscribe('index_capture_stream')
 # .listen() returns a generator over which you can iterate and listen for messages from publisher
 
 #for message in mobile.listen():
+processed_time=''
+processed_price=''
+
 while True:
     message = mobile.get_message()
     if message:
@@ -83,7 +95,11 @@ while True:
             diff_ns=current-ns
             diff_ms=diff_ns / 1000000
             if code == hs_tech_leverage_index_config["underly_index_code"]:
-                price=payload['last_price']
-                result=calculateLeveragedIndex(price)
-                print(f"{payload['data_time']} : {payload['code']} = {payload['last_price']} , index = {result}. Captured @ {getFormattedTime(ns)}. Processed @ {diff_ms} ms")
+                if processed_time != payload['data_time'] or processed_price != payload['last_price'] :
+                    price=payload['last_price']
+                    result=calculateLeveragedIndex(price)
+                    processed_time=payload['data_time']
+                    processed_price=payload['last_price']
+                    logger.info(f"{payload['data_time']} : {payload['code']} = {payload['last_price']} , index = {result}. Captured @ {getFormattedTime(ns)}. Processed @ {diff_ms} ms")
+        
     
