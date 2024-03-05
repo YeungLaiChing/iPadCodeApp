@@ -3,12 +3,21 @@ import time
 from datetime import datetime
 import json
 from pathlib import Path
+import logging.config
+
 file_path = Path(__file__).with_name("config.json")
 
 f = open (file_path, "r")
 hs_tech_leverage_index_config = json.loads(f.read())
 f.close()
 
+# create logger with 'spam_application'
+logger = logging.getLogger('calc.application')
+logger.setLevel(logging.DEBUG)
+# create file handler which logs even debug messages
+fh = logging.FileHandler('calc.log')
+fh.setLevel(logging.DEBUG)
+logger.addHandler(fh)
 
 def calculateLeveragedIndex(underly_index_current):
     result=0
@@ -85,5 +94,6 @@ while True:
             if code == hs_tech_leverage_index_config["underly_index_code"]:
                 price=payload['last_price']
                 result=calculateLeveragedIndex(price)
-                print(f"{payload['data_time']} : {payload['code']} = {payload['last_price']} , index = {result}. Captured @ {getFormattedTime(ns)}. Processed @ {diff_ms} ms")
+                logger.info(f"{payload['data_time']} : {payload['code']} = {payload['last_price']} , index = {result}. Captured @ {getFormattedTime(ns)}. Processed @ {diff_ms} ms")
     
+ 
