@@ -6,6 +6,7 @@ from pathlib import Path
 import logging.config
 from futu import *
 from datetime import date, timedelta
+import requests
 
 
 file_path = Path(__file__).with_name("config.json")
