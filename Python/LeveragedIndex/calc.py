@@ -18,7 +18,7 @@ date_format = "%Y-%m-%d"
 logger = logging.getLogger('calc.application')
 logger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
-fh = logging.FileHandler(f'./log/calc.{time.strftime('%Y%m%d_%H%M%S')}.log')
+fh = logging.FileHandler(f"./log/calc.{time.strftime('%Y%m%d_%H%M%S')}.log")
 fh.setLevel(logging.DEBUG)
 logger.addHandler(fh)
 
