@@ -162,6 +162,6 @@ while True:
                     processed_time=payload['data_time']
                     processed_price=payload['last_price']
                     logger.info(f"{payload['data_time']} : {payload['code']} = {payload['last_price']} , index = {result}. Captured @ {getFormattedTime(ns)}. Processed @ {diff_ms} ms")
-                    logger.info(f"Index @ {payload['data_date']} {payload['data_time']} : index = {result} . Completed @ {getFormattedTime(current)}. Processed @ {diff_ms} ms")
+                    logger.info(f"RESULT @ {payload['data_date']} {payload['data_time']} : index = {result} . Completed @ {getFormattedTime(current)}. Processed @ {diff_ms} ms")
         
     

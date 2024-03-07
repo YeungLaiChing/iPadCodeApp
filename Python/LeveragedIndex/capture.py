@@ -54,7 +54,7 @@ if ret == RET_OK:
     #print(data)
 else:
     print('error:', data)
-time.sleep(120)  #  设置脚本接收 OpenD 的推送持续时间为15秒
+time.sleep(8*3600)  #  设置脚本接收 OpenD 的推送持续时间为15秒
 quote_ctx.close()   # 关闭当条连接，OpenD 会在1分钟后自动取消相应股票相应类型的订阅    	
 
 rds.publish('index_capture_stream',"SHUTDOWN")
