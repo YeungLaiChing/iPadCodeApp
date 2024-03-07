@@ -10,7 +10,6 @@ from datetime import date, timedelta
 #target_date = date.today() - timedelta(1)
 target_date = date.today() 
 
-
 file_path = Path(__file__).with_name("config.json")
 f = open (file_path, "r")
 hs_tech_leverage_index_config = json.loads(f.read())
@@ -42,8 +41,10 @@ else:
      print('subscription failed', err_message)
 quote_ctx.close() # Close the current connection, Futu OpenD will automatically cancel the corresponding type of subscription for the corresponding stock after 1 minute
 
-new_file_path = Path(__file__).with_name(f"config_{time.strftime('%Y-%m-%d_%H%M%S')}.json")
 
+hs_tech_leverage_index_config["last_calc_date"]=date.today().strftime('%Y%m%d')
+
+new_file_path = Path(__file__).with_name(f"config_{time.strftime('%Y-%m-%d_%H%M%S')}.json")
 f = open(new_file_path, 'w', encoding='utf-8')
 json.dump(hs_tech_leverage_index_config, f, ensure_ascii=False, indent=4)
 f.close()
