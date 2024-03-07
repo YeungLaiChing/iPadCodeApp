@@ -11,19 +11,30 @@ f = open (file_path, "r")
 hs_tech_leverage_index_config = json.loads(f.read())
 f.close()
 
+
+date_format = "%Y-%m-%d"
+
 # create logger with 'spam_application'
 logger = logging.getLogger('calc.application')
 logger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
-fh = logging.FileHandler('./log/calc.log')
+fh = logging.FileHandler(f'./log/calc.{time.strftime('%Y%m%d_%H%M%S')}.log')
 fh.setLevel(logging.DEBUG)
 logger.addHandler(fh)
 
+
+DayCount=(datetime.today()-datetime.strptime(hs_tech_leverage_index_config["last_calc_date"], date_format)).days
+if DayCount==0:
+    logger.info("Cannot restart after upagain")
+    exit()
+    
 def calculateLeveragedIndex(underly_index_current):
     result=0
     
     K=float(hs_tech_leverage_index_config["leverage_ratio"])
     DayCount=float(hs_tech_leverage_index_config["number_calendar_days"])
+
+    DayCount=(datetime.today()-datetime.strptime(hs_tech_leverage_index_config["last_calc_date"], date_format)).days
     N=float(365)
     StampDuty=float(hs_tech_leverage_index_config["stamp_duty_pct"])
     Interest=float(hs_tech_leverage_index_config["overnight_interest_pct"])
@@ -43,6 +54,8 @@ def calculateLeveragedIndex2(underly_index_current):
     
     K=float(hs_tech_leverage_index_config["leverage_ratio"])
     DayCount=float(hs_tech_leverage_index_config["number_calendar_days"])
+    
+    DayCount=(datetime.today()-datetime.strptime(hs_tech_leverage_index_config["last_calc_date"], date_format)).days
     N=float(365)
     StampDuty=float(hs_tech_leverage_index_config["stamp_duty_pct"])
     Interest=float(hs_tech_leverage_index_config["overnight_interest_pct"])
