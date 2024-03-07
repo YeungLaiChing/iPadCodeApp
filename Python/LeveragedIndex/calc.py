@@ -4,6 +4,9 @@ from datetime import datetime
 import json
 from pathlib import Path
 import logging.config
+from futu import *
+from datetime import date, timedelta
+
 
 file_path = Path(__file__).with_name("config.json")
 
@@ -26,6 +29,10 @@ logger.addHandler(fh)
 DayCount=(datetime.today()-datetime.strptime(hs_tech_leverage_index_config["last_calc_date"], date_format)).days
 if DayCount==0:
     logger.info("Cannot restart after upagain")
+    exit()
+
+if date.today().strftime('%Y-%m-%d') in hs_tech_leverage_index_config["holiday_list"] :
+    logger.info("Today is holiday")
     exit()
     
 def calculateLeveragedIndex(underly_index_current):
@@ -76,6 +83,43 @@ def getFormattedTime(ns):
     nanoseconds_part = str(int(ns % 1_000_000_000)).zfill(9)
     formatted_time += '.' + nanoseconds_part
     return formatted_time
+def endprocess():
+    target_date = date.today() 
+
+    resp = requests.get(f'https://www.hkab.org.hk/api/hibor?year={target_date.year}&month={target_date.month}&day={target_date.day}').json()
+    hs_tech_leverage_index_config["overnight_interest_pct"]=str(resp["Overnight"]);
+
+
+    quote_ctx = OpenQuoteContext(host='127.0.0.1', port=11111)
+
+    ret_sub, err_message = quote_ctx.subscribe(['HK.800700','HK.800868'], [SubType.QUOTE], subscribe_push=False)
+    # Subscribe to the K line type first. After the subscription is successful, Futu OpenD will continue to receive pushes from the server, False means that there is no need to push to the script temporarily
+    if ret_sub == RET_OK: # Subscription successful
+        ret, data = quote_ctx.get_stock_quote(['HK.800700']) # Get real-time data of subscription stock quotes
+        if ret == RET_OK:
+            hs_tech_leverage_index_config["underly_index_previous"]=str(data['last_price'][0])
+            hs_tech_leverage_index_config["last_calc_date"]=str(data['data_date'][0])
+        else:
+            print('error:', data)
+            
+        ret, data = quote_ctx.get_stock_quote(['HK.800868']) # Get real-time data of subscription stock quotes
+        if ret == RET_OK:
+            hs_tech_leverage_index_config["this_index_previous"]=str(data['last_price'][0])
+            hs_tech_leverage_index_config["last_calc_date"]=str(data['data_date'][0])
+        else:
+            print('error:', data)
+    else:
+        print('subscription failed', err_message)
+    quote_ctx.close() # Close the current connection, Futu OpenD will automatically cancel the corresponding type of subscription for the corresponding stock after 1 minute
+
+
+    new_file_path = Path(__file__).with_name(f"config.json")
+    f = open(new_file_path, 'w', encoding='utf-8')
+    json.dump(hs_tech_leverage_index_config, f, ensure_ascii=False, indent=4)
+    f.close()
+
+    return "OK"
+
 
 r = redis.Redis(
     host='192.168.0.5',
@@ -101,6 +145,9 @@ while True:
     message = mobile.get_message()
     if message:
         current=time.time_ns()
+        if message['data']=="SHUTDOWN":
+            endprocess()
+            exit()
         if message['data']!=1 :
             payload=json.loads(message['data'])
             code=payload['code']
