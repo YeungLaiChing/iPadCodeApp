@@ -42,7 +42,7 @@ else:
      print('subscription failed', err_message)
 quote_ctx.close() # Close the current connection, Futu OpenD will automatically cancel the corresponding type of subscription for the corresponding stock after 1 minute
 
-new_file_path = Path(__file__).with_name(f"config_{time.strftime('%Y-%m-%d_%H:%M:%S')}.json")
+new_file_path = Path(__file__).with_name(f"config_{time.strftime('%Y-%m-%d_%H%M%S')}.json")
 
 f = open(new_file_path, 'w', encoding='utf-8')
 json.dump(hs_tech_leverage_index_config, f, ensure_ascii=False, indent=4)
