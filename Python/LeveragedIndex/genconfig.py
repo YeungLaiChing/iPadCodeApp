@@ -26,15 +26,15 @@ ret_sub, err_message = quote_ctx.subscribe(['HK.800700','HK.800868'], [SubType.Q
 if ret_sub == RET_OK: # Subscription successful
      ret, data = quote_ctx.get_stock_quote(['HK.800700']) # Get real-time data of subscription stock quotes
      if ret == RET_OK:
-         print(data)
          hs_tech_leverage_index_config["underly_index_previous"]=str(data['last_price'][0])
+         hs_tech_leverage_index_config["last_calc_date"]=str(data['data_date'][0])
      else:
          print('error:', data)
          
      ret, data = quote_ctx.get_stock_quote(['HK.800868']) # Get real-time data of subscription stock quotes
      if ret == RET_OK:
-         print(data)
          hs_tech_leverage_index_config["this_index_previous"]=str(data['last_price'][0])
+         hs_tech_leverage_index_config["last_calc_date"]=str(data['data_date'][0])
      else:
          print('error:', data)
 else:
@@ -42,9 +42,9 @@ else:
 quote_ctx.close() # Close the current connection, Futu OpenD will automatically cancel the corresponding type of subscription for the corresponding stock after 1 minute
 
 
-hs_tech_leverage_index_config["last_calc_date"]=date.today().strftime('%Y%m%d')
 
-new_file_path = Path(__file__).with_name(f"config_{time.strftime('%Y-%m-%d_%H%M%S')}.json")
+
+new_file_path = Path(__file__).with_name(f"config_{time.strftime('%Y%m%d_%H%M%S')}.json")
 f = open(new_file_path, 'w', encoding='utf-8')
 json.dump(hs_tech_leverage_index_config, f, ensure_ascii=False, indent=4)
 f.close()
