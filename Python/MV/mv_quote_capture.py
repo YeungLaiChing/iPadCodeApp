@@ -51,7 +51,7 @@ class StockQuoteTest(StockQuoteHandlerBase):
 quote_ctx = OpenQuoteContext(host='127.0.0.1', port=11111)
 handler = StockQuoteTest()
 quote_ctx.set_handler(handler)  # 设置实时报价回调
-ret, data = quote_ctx.subscribe(mv_index_config["list"].keys(), [SubType.QUOTE])  # 订阅实时报价类型，OpenD 开始持续收到服务器的推送
+ret, data = quote_ctx.subscribe(['HK.00700', 'HK.09988', 'HK.03690', 'HK.01810', 'HK.02015', 'HK.09618', 'HK.01024', 'HK.09999', 'HK.00981', 'HK.09888', 'HK.00992', 'HK.06690', 'HK.09961', 'HK.09868', 'HK.02382', 'HK.06618', 'HK.00285', 'HK.00268', 'HK.00780', 'HK.09626', 'HK.03888', 'HK.00241', 'HK.00020', 'HK.01347', 'HK.01797', 'HK.06060', 'HK.00772', 'HK.01833', 'HK.09866', 'HK.09898'], [SubType.QUOTE])  # 订阅实时报价类型，OpenD 开始持续收到服务器的推送
 if ret == RET_OK:
     handleUpdate(data)
     #print(data)
