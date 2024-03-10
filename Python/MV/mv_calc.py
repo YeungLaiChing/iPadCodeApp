@@ -49,11 +49,12 @@ current_index_mv=df['stock_cap_mv'].sum()
 yest_index_mv=int(index_config["yest_mv"])
 yest_index_value=float(index_config["yest_index"])
 divisor=float(index_config["divisor"])
-current_index_Value=0
+current_index_value=0
 
 
 def calcIndexMVByStockChange(stockCode,price):
     global current_index_mv
+    global df
     old_stock_mv= df.loc[stockCode,'stock_cap_mv']
     new_stock_mv=int(price*df.loc[stockCode,'wgt'])
     current_index_mv=current_index_mv-old_stock_mv+new_stock_mv
@@ -63,6 +64,8 @@ def calcIndexMVByStockChange(stockCode,price):
             
 
 def calcIndexMVByAllStock(stockCode,price):
+    global current_index_mv
+    global df
     df.loc[stockCode,'price'] = price
     df["stock_cap_mv"]=(df["price"]*df["wgt"]).astype(int)
     current_index_mv=df['stock_cap_mv'].sum()
@@ -70,14 +73,14 @@ def calcIndexMVByAllStock(stockCode,price):
         
             
 def calcIndexbyMV(mv):
-    result=0
-    result=round(mv / yest_index_mv * yest_index_value,2)
-    return result
+    global current_index_value
+    current_index_value=round(mv / yest_index_mv * yest_index_value,2)
+    return current_index_value
         
 def calcIndexbyDivisor(mv):
-    result=0
-    result=round(mv / divisor,2)
-    return result
+    global current_index_value
+    current_index_value=round(mv / divisor,2)
+    return current_index_value
 
 
 
