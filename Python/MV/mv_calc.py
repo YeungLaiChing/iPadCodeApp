@@ -45,14 +45,15 @@ df[["cf", "faf","is","pre_close"]] = df[["cf", "faf","is","pre_close"]].apply(pd
 df["wgt"]=(df["cf"]*df["faf"]*df["is"]).astype(int)
 df["price"]=df["pre_close"]
 df["stock_cap_mv"]=(df["price"]*df["wgt"]).astype(int)
-current_index_mv=df['stock_cap_mv'].sum()
-yest_index_mv=int(index_config["yest_mv"])
-yest_index_value=float(index_config["yest_index"])
-divisor=float(index_config["divisor"])
-current_index_Value=0
+global current_index_mv=df['stock_cap_mv'].sum()
+global yest_index_mv=int(index_config["yest_mv"])
+global yest_index_value=float(index_config["yest_index"])
+global divisor=float(index_config["divisor"])
+global current_index_Value=0
 
 
 def calcIndexMVByStockChange(stockCode,price):
+    global current_index_mv
     old_stock_mv= df.loc[stockCode,'stock_cap_mv']
     new_stock_mv=int(price*df.loc[stockCode,'wgt'])
     current_index_mv=current_index_mv-old_stock_mv+new_stock_mv
