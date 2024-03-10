@@ -29,6 +29,7 @@ fh = logging.FileHandler(f"./log/calc.{time.strftime('%Y%m%d_%H%M%S')}.log")
 fh.setLevel(logging.DEBUG)
 logger.addHandler(fh)
 
+logger.info(index_config)
 
 DayCount=(datetime.today()-datetime.strptime(index_config["last_calc_date"], date_format)).days
 if DayCount==0:
