@@ -1,6 +1,7 @@
 import json
 import os
 from datetime import date
+import pandas as pd
 
 from pathlib import Path
 file_path = Path(__file__).with_name("config.json")
@@ -37,7 +38,41 @@ print(mv_index_config["constituents_list"][0]["stock_code"])
 if mv_index_config["constituents_list"][0].get("cap_mv") is None:
     mv_index_config["constituents_list"][0]["cap_mv"]=123
 
-print(mv_index_config["constituents_list"][0]["cap_mv"])
+print("the key")
+print(mv_index_config["list"].keys())
 print(calc_current_index_mv(mv_index_config["constituents_list"]))
 
-print(mv_index_config["list"]["0005.HK"]["futu_code"])
+con_list=mv_index_config["list"]
+
+#print(con_list)
+
+#df=pd.read_json(json.dumps(con_list),orient="index")
+
+df=pd.DataFrame.from_dict((con_list),orient="index")
+
+df[["cf", "faf","is","pre_close"]] = df[["cf", "faf","is","pre_close"]].apply(pd.to_numeric)
+
+df["wgt"]=(df["cf"]*df["faf"]*df["is"]).astype(int)
+
+df["price"]=df["pre_close"]
+    
+df.loc['HK.00700','price']=float("766")
+
+df["stock_cap_mv"]=(df["price"]*df["wgt"]).astype(int)
+
+if "HK.23242" in df.index:
+    print("not found")
+    
+if "HK.00700" in df.index:
+    print("got it")
+
+print(df.index.to_list())
+print(df)
+
+curr_index_mv=df["stock_cap_mv"].sum()
+# 05 Mar 2024
+prev_index_mv=1712229673885
+prev_index_value=3323.89
+
+print(round(curr_index_mv/prev_index_mv*prev_index_value,2))
+
