@@ -1,0 +1,33 @@
+{
+    "index_name": "Hang Seng Tech Index",
+    "yest_index": "1234.34",
+    "yest_mv": "1253.12",
+    "divisor": "232232232",
+    "index_ccy" : "HKD",
+    "last_calc_date":"2023-12-12",
+    "list":{
+
+    },
+    "constituents_list" : [
+        {
+            "stock_code":"0005.HK",
+            "yest_close":"50",
+            "issued_shares":"583934343",
+            "faf":"0.5",
+            "ccy":"HKD",
+            "current_price":"20",
+            "cf":"0.5"
+        },
+        {
+            "stock_code":"0001.HK",
+            "yest_close":"71",
+            "issued_shares":"183934343",
+            "faf":"0.71",
+            "ccy":"HKD",
+            "current_price":"20",
+            "cf":"0.1"
+        }
+
+    ]
+
+}
