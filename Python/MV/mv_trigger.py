@@ -40,7 +40,11 @@ if __name__ == '__main__':
     sched.start()
     
     time.sleep(8*3600)
-    
+    	
+
+    r.publish(trigger_topic,"SHUTDOWN")
+
+    time.sleep(10) 
     # while (True):
        # print('main 1s')
        #  time.sleep(100)
