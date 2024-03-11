@@ -39,7 +39,7 @@ if __name__ == '__main__':
     #sched.add_job(job2,'interval',id='2_sec',seconds=15)
     sched.start()
     
-    time.sleep(8*10)
+    time.sleep(8*3600)
     	
 
     r.publish(trigger_topic,"SHUTDOWN")
