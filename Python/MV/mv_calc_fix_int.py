@@ -17,7 +17,7 @@ f = open (file_path, "r")
 index_config = json.loads(f.read())
 f.close()
 
-topic_name="mv_capture_stream"
+topic_name="Trigger_Index_2s"
 
 date_format = "%Y-%m-%d"
 
