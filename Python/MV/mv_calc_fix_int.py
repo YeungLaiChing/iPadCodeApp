@@ -124,6 +124,7 @@ mobile.subscribe(topic_name)
 #for message in mobile.listen():
 processed_time=''
 processed_price=''
+mv=0
 #for message in mobile.listen():
 while True:
     message = mobile.get_message()
@@ -138,7 +139,7 @@ while True:
             ns=int(payload['ns']) # <-- you can literally do any thing with this message i am just printing it
             diff_ns=current-ns
             diff_ms=diff_ns / 1000000
-            mv=0
+            
             for code in df.index:
                 obj=json.loads(r.get(f"{code}_quote"))
                 price=float(obj['last_price'])
