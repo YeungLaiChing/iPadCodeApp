@@ -141,7 +141,7 @@ while True:
             diff_ms=diff_ns / 1000000
             
             if code in df.index:
-                if price != df.loc[code,'price'] :
+                if price > 0 and price != df.loc[code,'price'] :
                     mv=calcIndexMVByStockChange(code,price)
                     #mv=calcIndexMVByAllStock(code,price)
                     result=calcIndexbyMV(mv)
