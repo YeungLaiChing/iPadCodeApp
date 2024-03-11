@@ -146,7 +146,6 @@ while True:
                     #mv=calcIndexMVByAllStock(code,price)
                     result=calcIndexbyMV(mv)
                     processed_time=payload['data_time']
-                    logger.info(f"STOCKS @ {payload['data_date']} {payload['data_time']} : Stock = {code} , Price = {price}. Completed @ {getFormattedTime(current)}. Processed @ {diff_ms} ms")
-                    logger.info(f"RESULT @ {payload['data_date']} {payload['data_time']} : index = {result} . Completed @ {getFormattedTime(current)}. Processed @ {diff_ms} ms")
+                    logger.info(f"RESULT @ {payload['data_date']} {payload['data_time']} : Index = {result} . MV = {mv} . Stock = {code} , Price = {price} . Completed @ {getFormattedTime(current)}. Processed @ {diff_ms} ms")
 
     
