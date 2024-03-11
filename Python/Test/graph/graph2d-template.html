@@ -36,7 +36,7 @@
 <div id="visualization"></div>
 
 <script type="text/javascript">
-  var DELAY = 1000; // delay in ms to add new data points
+  var DELAY = 5000; // delay in ms to add new data points
 
   var strategy = document.getElementById('strategy');
 
@@ -50,7 +50,7 @@
     dataAxis: {
       left: {
         range: {
-          min:-10, max: 10
+          min:16500-10, max: 16500+10
         }
       }
     },
@@ -65,7 +65,7 @@
 
   // a function to generate data points
   function y(x) {
-    return (Math.sin(x / 2) + Math.cos(x / 4)) * 5;
+    return 16500+(Math.sin(x / 2) + Math.cos(x / 4)) * 5;
   }
 
   function renderStep() {
@@ -102,9 +102,12 @@
   function addDataPoint() {
     // add a new data point to the dataset
     var now = vis.moment();
+    var now1 = new Date().getTime();
     dataset.add({
       x: now,
-      y: y(now / 1000)
+      y: y(now / 1000),
+      group: "Index",
+      label : now
     });
 
     // remove all data points which are no longer visible
