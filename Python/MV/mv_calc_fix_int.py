@@ -125,6 +125,7 @@ mobile.subscribe(topic_name)
 processed_time=''
 processed_price=''
 mv=0
+name='TECH_Sim_2s'
 #for message in mobile.listen():
 while True:
     message = mobile.get_message()
@@ -147,7 +148,9 @@ while True:
                     mv=calcIndexMVByStockChange(code,price)
                     #mv=calcIndexMVByAllStock(code,price)
             result=calcIndexbyMV(mv)
-            
+            output = {'indexNam': name, 'exchangeTime' : getFormattedTime(current), 'indexValue' : result}
+            r.publish("index-distribution",json.dumps(output))
+                    
             logger.info(f"RESULT @ {indexTime}  : Index = {result} . MV = {mv} . trigger at : {getFormattedTime(ns)}. complete at : {getFormattedTime(current)}. Elapse time {diff_ms} ms")
     
     
