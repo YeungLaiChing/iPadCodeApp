@@ -4,6 +4,7 @@ import json
 
 URL = 'wss://stream.coinmarketcap.com/price/latest'
 
+
 async def hello():
   async with websockets.connect(URL) as websocket:
     payload = {
