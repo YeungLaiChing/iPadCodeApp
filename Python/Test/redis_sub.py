@@ -23,7 +23,7 @@ r = redis.Redis(
 mobile = r.pubsub()
 
 # use .subscribe() method to subscribe to topic on which you want to listen for messages
-mobile.subscribe('army-camp-1')
+mobile.subscribe('index-distribution')
 
 # .listen() returns a generator over which you can iterate and listen for messages from publisher
 
@@ -34,9 +34,10 @@ while True:
         current=time.time_ns()
         if message['data']!=1 :
             payload=json.loads(message['data'])
-            indexTime=payload['IndexTime']
-            ns=int(payload['ns']) # <-- you can literally do any thing with this message i am just printing it
+            indexTime=payload['exchangeTime']
+            indexName=payload['indexName']
+            indexValue=payload['indexValue']
             diff_ns=current-ns
             diff_ms=diff_ns / 1000000
-            print(f'{indexTime} : trigger at : {getFormattedTime(ns)}. complete at : {getFormattedTime(current)}. Elapse time {diff_ns} ns, {diff_ms} ms')
+            print(f'{indexTime} : {indexValue} [{indexName}]')
     
