@@ -2,7 +2,7 @@ import time
 from futu import *
 from zoneinfo import ZoneInfo
 import redis
-
+import json
 
 output_path=f'./log/market_data.output.{time.strftime("%Y%m%d-%H%M%S")}.csv'
 rds = redis.Redis(host='192.168.0.5', port=6379, db=0,decode_responses=True)
@@ -28,6 +28,9 @@ def handleDfUpdate(df):
         record=row.to_json()
         rds.set(row['code']+'_quote',record)
         rds.publish('index_capture_stream',record)
+        if record['code']=='HK.800700' :
+            output = {'indexName': "HSTECH", 'exchangeTime' : getFormattedTime(time.time_ns()), 'indexValue' : record['last_price']}
+            rds.publish("index-distribution",json.dumps(output))
     df.to_csv(output_path, mode='a', header=not os.path.exists(output_path)) 
 
 
