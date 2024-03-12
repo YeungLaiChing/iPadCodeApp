@@ -21,13 +21,43 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 
-
+<style type="text/css">
+  #button {
+      border-radius: 50%;
+      border: 1px solid black;
+      padding-top: 3px;
+      padding-bottom: 3px;
+  }
+  #info {
+      margin-left: 5%;
+  }
+  #help_container {
+      border: 0.5px solid black;
+      background-color: #efefef;
+      width: 50%;
+  }
+  #close {
+      float: right;
+      margin-top: 1%;
+      background-color: #efefef;
+      border: 0px solid #efefef;
+  }
+  #help_text {
+      margin: 5%;
+      font-family: Arial;
+      font-size: 15px;
+  }
+</style>       
 
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
 <script>
+
+   const socket = new WebSocket('ws://joeyching.mooo.com:8000');
+   //const socket = new WebSocket('ws://localhost:8000');
+ 
     /**
      * HashMap - HashMap Class for JavaScript
      * @author Ariel Flesler <aflesler@gmail.com>
@@ -251,10 +281,24 @@
     <option value="static" selected >Static</option>
   </select>
 </p>
+<div>
+  <table>
+    <tr>
+      <td align="right">TECH_Sim_Tick_by_Tick</td>
+      <td><p id='TECH_Sim_Tick_by_Tick'></p></td>
+    </tr>
+    <tr>
+      <td align="right">HS TECH</td>
+      <td><p id='HSTECH'></p></td>
+    </tr>
+    <tr>
+      <td align="right">TECH_Sim_2s</td>
+      <td><p id='TECH_Sim_2s'></p></td>
+    </tr>
+
+  </table>
+</div>
 <div style="display: none">
-
-
-
 
 <div class="">
   <table class="ui celled padded table">
@@ -431,8 +475,7 @@ function renderStep() {
 renderStep();
 
 
-const socket = new WebSocket('ws://joeyching.mooo.com:8000');
- 
+
 socket.addEventListener('open', function (event) {
  
     socket.send('Connection Established');
@@ -444,8 +487,9 @@ socket.addEventListener('open', function (event) {
 socket.addEventListener('message', function (event) {
  
     da=JSON.parse(event.data)
-
-    if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'TECH_Sim_Tick_by_Tick') {
+    
+    if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'TECH_Sim_Tick_by_Tick'|| da['indexName']=== 'HSTECH') {
+        document.getElementById(da['indexName']).innerHTML = " : " + (da['exchangeTime']).substring(0,19)+" : "+da['indexValue']
         tradeDate=da['exchangeTime']
 
         dataset.add({
@@ -472,7 +516,7 @@ socket.addEventListener('message', function (event) {
 });
  
  
-socket.send("Initialize");
+//socket.send("Initialize");
  
 
 
