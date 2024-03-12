@@ -399,8 +399,7 @@ var options = {
 
 
 var graph2d = new vis.Graph2d(container, dataset, options);
-//var graph2d2 = new vis.Graph2d(container2, dataset2, options2);
-//var graph2d3 = new vis.Graph2d(container3, dataset3, options3);
+
 
 
 function renderStep() {
@@ -445,19 +444,30 @@ socket.addEventListener('open', function (event) {
 socket.addEventListener('message', function (event) {
  
     da=JSON.parse(event.data)
-    console.log(da);
+
     if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'TECH_Sim_Tick_by_Tick') {
-    tradeDate=da['exchangeTime']
-    console.log(tradeDate)
+        tradeDate=da['exchangeTime']
 
-
-    dataset.add({
-        x: tradeDate,
-        y:parseFloat(da['indexValue']),
-        group: da['indexName'] ,
-        label: da['indexName']
-    });
+        dataset.add({
+            x: tradeDate,
+            y:parseFloat(da['indexValue']),
+            group: da['indexName'] ,
+            label: da['indexName']
+        });
     }
+
+    // remove all data points which are no longer visible
+    var range = graph2d.getWindow();
+    var interval = range.end - range.start;
+    var oldIds = dataset.getIds({
+        filter: function (item) {
+            return item.x < range.start - interval;
+        }
+    });
+    
+    dataset.remove(oldIds);
+
+    
  
 });
  
