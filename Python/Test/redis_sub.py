@@ -37,6 +37,7 @@ while True:
             indexTime=payload['exchangeTime']
             indexName=payload['indexName']
             indexValue=payload['indexValue']
+            ns=current
             diff_ns=current-ns
             diff_ms=diff_ns / 1000000
             print(f'{indexTime} : {indexValue} [{indexName}]')
