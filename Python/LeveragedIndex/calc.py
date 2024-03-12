@@ -141,7 +141,7 @@ mobile.subscribe('index_capture_stream')
 #for message in mobile.listen():
 processed_time=''
 processed_price=''
-name='TECH2LSim'
+name='TECH2L_Sim'
 while True:
     message = mobile.get_message()
     if message:
@@ -161,7 +161,7 @@ while True:
                     result=calculateLeveragedIndex(price)
                     processed_time=payload['data_time']
                     processed_price=payload['last_price']
-                    output = {'indexNam': name, 'exchangeTime' : getFormattedTime(current), 'indexValue' : result}
+                    output = {'indexName': name, 'exchangeTime' : getFormattedTime(current), 'indexValue' : result}
                     r.publish("index-distribution",json.dumps(output))
                     logger.info(f"{payload['data_time']} : {payload['code']} = {payload['last_price']} , index = {result}. Captured @ {getFormattedTime(ns)}. Processed @ {diff_ms} ms")
                     logger.info(f"RESULT @ {payload['data_date']} {payload['data_time']} : index = {result} . Completed @ {getFormattedTime(current)}. Processed @ {diff_ms} ms")
