@@ -23,22 +23,44 @@ r = redis.Redis(
 mobile = r.pubsub()
 
 # use .subscribe() method to subscribe to topic on which you want to listen for messages
-mobile.subscribe('index-distribution')
 
+topic='index-distribution'
 # .listen() returns a generator over which you can iterate and listen for messages from publisher
 
 #for message in mobile.listen():
-while True:
-    message = mobile.get_message()
-    if message:
-        current=time.time_ns()
-        if message['data']!=1 :
-            payload=json.loads(message['data'])
-            indexTime=payload['exchangeTime']
-            indexName=payload['indexName']
-            indexValue=payload['indexValue']
-            ns=current
-            diff_ns=current-ns
-            diff_ms=diff_ns / 1000000
-            print(f'{indexTime} : {indexValue} [{indexName}]')
+
+def msg_handler(message):
+        message = mobile.get_message()
+        if message:
+            current=time.time_ns()
+            if message['data']!=1 :
+                payload=json.loads(message['data'])
+                indexTime=payload['exchangeTime']
+                indexName=payload['indexName']
+                indexValue=payload['indexValue']
+                ns=current
+                diff_ns=current-ns
+                diff_ms=diff_ns / 1000000
+                print(f'{indexTime} : {indexValue} [{indexName}]')
+
+def method2():
+    mobile.subscribe(**{topic:msg_handler})
+    
+def method1():
+    mobile.subscribe(topic)
+    while True:
+        message = mobile.get_message()
+        if message:
+            current=time.time_ns()
+            if message['data']!=1 :
+                payload=json.loads(message['data'])
+                indexTime=payload['exchangeTime']
+                indexName=payload['indexName']
+                indexValue=payload['indexValue']
+                ns=current
+                diff_ns=current-ns
+                diff_ms=diff_ns / 1000000
+                print(f'{indexTime} : {indexValue} [{indexName}]')
+                
+method2()
     
