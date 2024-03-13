@@ -45,6 +45,7 @@ def msg_handler(message):
 
 def method2():
     mobile.subscribe(**{topic:msg_handler})
+    time.sleep(60)
     
 def method1():
     mobile.subscribe(topic)
