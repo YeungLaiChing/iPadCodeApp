@@ -46,6 +46,8 @@ async def handler(websocket, path):
             if message['data']!=1 :
                 payload=message['data']
                 await websocket.send(payload)
+        else:
+            time.sleep(0.01)
 
     
 start_server = websockets.serve(handler, "0.0.0.0", 8000)
