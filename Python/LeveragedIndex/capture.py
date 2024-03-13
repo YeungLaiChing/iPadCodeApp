@@ -29,7 +29,7 @@ def handleDfUpdate(df):
         rds.set(row['code']+'_quote',record)
         rds.publish('index_capture_stream',record)
         if row['code']=='HK.800700' :
-            output = {'indexName': "HSTECH", 'exchangeTime' : getFormattedTime(time.time_ns()), 'indexValue' : record['last_price']}
+            output = {'indexName': "HSTECH", 'exchangeTime' : getFormattedTime(time.time_ns()), 'indexValue' : row['last_price']}
             rds.publish("index-distribution",json.dumps(output))
     df.to_csv(output_path, mode='a', header=not os.path.exists(output_path)) 
 
