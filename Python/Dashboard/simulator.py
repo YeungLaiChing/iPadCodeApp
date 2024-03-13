@@ -59,7 +59,10 @@ def method2():
         time.sleep(0.5)
         message = get_message("TECH_Sim_Tick_by_Tick")
 
-        r.publish("index-distribution", message)
+        r.publish("index-distribution", message)"
+
+method2()
+
     
     
     
