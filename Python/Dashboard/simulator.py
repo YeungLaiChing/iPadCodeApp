@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 import json
 import random
-
+import redis
 
 def getFormattedTime(ns):
     dt = datetime.fromtimestamp(ns//1000000000)
@@ -38,9 +38,28 @@ async def handler(websocket, path):
         message = get_message("HSTECH")
         await websocket.send(message)
 
+def method1():    
+    start_server = websockets.serve(handler, "0.0.0.0", 8000)
+     
+    asyncio.get_event_loop().run_until_complete(start_server)
+     
+    asyncio.get_event_loop().run_forever()'
     
-start_server = websockets.serve(handler, "0.0.0.0", 8000)
- 
-asyncio.get_event_loop().run_until_complete(start_server)
- 
-asyncio.get_event_loop().run_forever()
+    
+def method2():
+    
+    # initializing the redis instance
+    r = redis.Redis(
+        host='192.168.0.5',
+        port=6379,
+        decode_responses=True # <-- this will ensure that binary data is decoded
+    )
+    
+    while True:
+        time.sleep(0.5)
+        message = get_message("TECH_Sim_Tick_by_Tick")
+
+        r.publish("index-distribution", message)
+    
+    
+    
