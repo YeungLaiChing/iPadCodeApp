@@ -6,6 +6,16 @@ import json
 
 output_path=f'./log/market_data.output.{time.strftime("%Y%m%d-%H%M%S")}.csv'
 rds = redis.Redis(host='192.168.0.5', port=6379, db=0,decode_responses=True)
+last_time= {'HK.800000':'', # HSI
+    'HK.800700':'', # HS Tech
+    'HK.800864':'', # HSI Leverage x 2
+    'HK.800868':''
+} 
+last_price= {'HK.800000':'', # HSI
+    'HK.800700':'', # HS Tech
+    'HK.800864':'', # HSI Leverage x 2
+    'HK.800868':''
+} 
 
 def getFormattedTime(ns):
     dt = datetime.fromtimestamp(ns//1000000000)
@@ -22,15 +32,21 @@ def handleUpdate(df):
         print(df)
 
 def handleDfUpdate(df):
+    global last_price
+    global last_time
+    
     ns=time.time_ns()
     df['ns']=ns
     for index, row in df.iterrows():
-        record=row.to_json()
-        rds.set(row['code']+'_quote',record)
-        rds.publish('index_capture_stream',record)
-        if row['code']=='HK.800700' :
-            output = {'indexName': "HSTECH", 'exchangeTime' : getFormattedTime(time.time_ns()), 'indexValue' : row['last_price']}
-            rds.publish("index-distribution",json.dumps(output))
+        if last_time[row['code']]!=row['data_time'] and last_price[row['code']]!=row['last_price'] :
+            last_time[row['code']]=row['data_time']
+            last_price[row['code']]=row['last_price'] 
+            record=row.to_json()
+            rds.set(row['code']+'_quote',record)
+            rds.publish('index_capture_stream',record)
+            if row['code']=='HK.800700' :
+                output = {'indexName': "HSTECH", 'exchangeTime' : getFormattedTime(time.time_ns()), 'indexValue' : row['last_price']}
+                rds.publish("index-distribution",json.dumps(output))
     df.to_csv(output_path, mode='a', header=not os.path.exists(output_path)) 
 
 
@@ -46,6 +62,8 @@ class StockQuoteTest(StockQuoteHandlerBase):
 quote_ctx = OpenQuoteContext(host='127.0.0.1', port=11111)
 handler = StockQuoteTest()
 quote_ctx.set_handler(handler)  # 设置实时报价回调
+
+
 ret, data = quote_ctx.subscribe([
     'HK.800000', # HSI
     'HK.800700', # HS Tech
