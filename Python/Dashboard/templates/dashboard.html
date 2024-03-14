@@ -499,8 +499,8 @@ socket.addEventListener('message', function (event) {
     da=JSON.parse(event.data)
     console.log(da)
     
-        //if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'HSTECH') {
-        if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'TECH_Sim_Tick_by_Tick'|| da['indexName']=== 'HSTECH') {
+        if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'HSTECH') {
+        //if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'TECH_Sim_Tick_by_Tick'|| da['indexName']=== 'HSTECH') {
         document.getElementById(da['indexName']).innerHTML = " : " + (da['exchangeTime']).substring(0,19)+" : "+da['indexValue']
         tradeDate=da['exchangeTime']
 
