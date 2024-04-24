@@ -7,7 +7,7 @@ import time
 import redis
 rds = redis.Redis(host='192.168.0.9', port=6379, db=0,decode_responses=True)
 ccix_data_channel='ccix_itbit_btc_data_channel'
-csv_file_path='./itbit_btc.csv'
+csv_file_path='./data/itbit_btc.csv'
 
 
 lock=threading.Lock()
