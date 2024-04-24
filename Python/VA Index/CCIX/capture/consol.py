@@ -39,9 +39,14 @@ while True:
             volume=float(payload["volume"])
             hr=payload["timestamp_hrs"]
             exchange=payload["exchange"]
-            acc_vol=volume;
-            if rds.hget(hr,exchange) :
-                acc_vol=volume+float(rds.hget(hr,exchange))
-            rds.hset(hr,exchange,acc_vol)
-            payload["acc_vol"]=acc_vol
-            rds.publish(ccix_consol_data_channel,json.dumps(payload))
+            acc_vol=volume;  
+            key=f"{payload['exchange']}_{payload['timestamp_org']}_{payload['from_symbol']}_{payload['to_symbol']}_{payload['side']}_{payload['trade_id']}_{payload['price']}_{payload['volume']}"
+            if rds.setnx(key,"1"):
+                rds.expire(key,3600*24)
+                if rds.hget(hr,exchange) :
+                    acc_vol=volume+float(rds.hget(hr,exchange))
+                rds.hset(hr,exchange,acc_vol)
+                payload["acc_vol"]=acc_vol
+                rds.publish(ccix_consol_data_channel,json.dumps(payload))
+            else:
+                rds.publish("duplicated_data_channel",json.dumps(payload))
