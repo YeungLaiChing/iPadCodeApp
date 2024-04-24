@@ -25,7 +25,8 @@ def process_message(message):
         if data['price'] :
             original_timestamp = data['executed_at']
             #utc_datetime = datetime.fromisoformat(original_timestamp.rstrip('Z'))
-            utc_datetime = datetime.strptime(original_timestamp,'%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
+            #utc_datetime = datetime.strptime(original_timestamp,'%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
+            utc_datetime = datetime.strptime(original_timestamp[0:19],'%Y-%m-%dT%H:%M:%S').replace(tzinfo=timezone.utc)
             unix_timestamp=int(utc_datetime.timestamp())
             hkt=timezone(timedelta(hours=8))
             hkt_datetime=utc_datetime.astimezone(hkt)
