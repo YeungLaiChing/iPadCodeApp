@@ -6,7 +6,7 @@ import json
 
 exchange = ''
 if len(sys.argv) > 1:
-    exchange=sys.argv[2]
+    exchange=sys.argv[1]
 ccix_from_data_channel=f'ccix_{exchange}_btc_data_channel'
 ccix_consol_data_channel='ccix_btc_data_channel'
 
