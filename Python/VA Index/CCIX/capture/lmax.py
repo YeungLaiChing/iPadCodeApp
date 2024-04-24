@@ -35,6 +35,7 @@ def process_message(message):
             data_row=[original_timestamp,unix_timestamp,hkt_timestamp,trade_id,last_price,last_quantity]
             payload={
                 'exchange':'lmax',
+                'timestamp_hrs':int(unix_timestamp/3600)*3600,
                 'timestamp':unix_timestamp,
                 'timestamp_org':original_timestamp,
                 'timestamp_hkt':hkt_timestamp,
