@@ -7,7 +7,7 @@ import time
 import redis
 rds = redis.Redis(host='192.168.0.9', port=6379, db=0,decode_responses=True)
 ccix_data_channel='ccix_itbit_btc_data_channel'
-csv_file_path='./data/itbit_btc.csv'
+csv_file_path='./itbit_btc.csv'
 
 
 lock=threading.Lock()
@@ -24,7 +24,8 @@ def process_message(message):
         data = json.loads(message)
         if data['price'] :
             original_timestamp = data['executed_at']
-            utc_datetime = datetime.fromisoformat(original_timestamp.rstrip('Z'))
+            #utc_datetime = datetime.fromisoformat(original_timestamp.rstrip('Z'))
+            utc_datetime = datetime.strptime(original_timestamp,'%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
             unix_timestamp=int(utc_datetime.timestamp())
             hkt=timezone(timedelta(hours=8))
             hkt_datetime=utc_datetime.astimezone(hkt)
