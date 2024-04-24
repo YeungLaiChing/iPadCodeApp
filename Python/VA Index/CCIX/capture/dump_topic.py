@@ -6,7 +6,7 @@ import json
 
 topic = 'ccix_btc_data_channel'
 if len(sys.argv) > 1:
-    topic=sys.argv[2]
+    topic=sys.argv[1]
 
 
 rds = redis.Redis(host='192.168.0.9', port=6379, db=0,decode_responses=True)
