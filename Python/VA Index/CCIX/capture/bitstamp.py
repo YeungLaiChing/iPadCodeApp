@@ -32,6 +32,11 @@ def process_message(message):
             trade_id=data['data']['id']
             last_price=data['data']['price']
             last_quantity=data['data']['amount']
+            side='U'
+            if str(data['data']['type']) == '0':
+                side='B'
+            if str(data['data']['type']) == '1':
+                side='S'
             data_row=[original_timestamp,unix_timestamp,hkt_timestamp,trade_id,last_price,last_quantity]
             payload={
                 'exchange':'bitstamp',
@@ -41,7 +46,7 @@ def process_message(message):
                 'timestamp_hkt':hkt_timestamp,
                 'timestamp_recv':time.time(),
                 'trade_id':trade_id,
-                'side':'U',
+                'side':side,
                 'from_symbol':'BTC',
                 'to_symbol':'USD',
                 'price':last_price,

@@ -35,6 +35,11 @@ def process_message(message):
                 trade_id=str(time.time_ns())
                 last_price=data[0]
                 last_quantity=data[1]
+                side='U'
+                if str(data[3]) == 'b':
+                    side='B'
+                if str(data[3]) == 's':
+                    side='S'
                 data_row=[original_timestamp,unix_timestamp,hkt_timestamp,trade_id,last_price,last_quantity]
                 payload={
                     'exchange':'kraken',
@@ -44,7 +49,7 @@ def process_message(message):
                     'timestamp_hkt':hkt_timestamp,
                     'timestamp_recv':time.time(),
                     'trade_id':trade_id,
-                    'side':'U',
+                    'side':side,
                     'from_symbol':'BTC',
                     'to_symbol':'USD',
                     'price':last_price,
