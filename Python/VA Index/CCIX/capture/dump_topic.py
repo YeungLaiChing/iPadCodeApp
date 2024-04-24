@@ -1,0 +1,37 @@
+import time
+import redis
+import sys
+from datetime import date, timedelta
+import json
+
+topic = 'ccix_btc_data_channel'
+if sys.argv.count>1:
+    topic=sys.argv[2]
+
+
+rds = redis.Redis(host='192.168.0.9', port=6379, db=0,decode_responses=True)
+
+mobile = rds.pubsub()
+mobile.subscribe(topic)
+print(f"already subscribed channel {topic}")
+
+def endprocess():
+    target_date = date.today() 
+
+    #new_file_path = Path(__file__).with_name(f"config.json")
+    #f = open(new_file_path, 'w', encoding='utf-8')
+    #json.dump(index_config, f, ensure_ascii=False, indent=4)
+    #f.close()
+
+    return "OK"
+
+while True:
+    message = mobile.get_message()
+    if message:
+        current=time.time_ns()
+        if message['data']=="SHUTDOWN":
+            endprocess()
+            exit()
+        if message['data']!=1 :
+            print(message['data'])
+            
