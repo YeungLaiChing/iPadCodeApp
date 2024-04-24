@@ -5,7 +5,7 @@ from datetime import date, timedelta
 import json
 
 topic = 'ccix_btc_data_channel'
-if sys.argv.count>1:
+if len(sys.argv) > 1:
     topic=sys.argv[2]
 
 

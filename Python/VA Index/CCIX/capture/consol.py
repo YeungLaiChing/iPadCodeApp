@@ -5,7 +5,7 @@ from datetime import date, timedelta
 import json
 
 exchange = ''
-if sys.argv.count>1:
+if len(sys.argv) > 1:
     exchange=sys.argv[2]
 ccix_from_data_channel=f'ccix_{exchange}_btc_data_channel'
 ccix_consol_data_channel='ccix_btc_data_channel'
