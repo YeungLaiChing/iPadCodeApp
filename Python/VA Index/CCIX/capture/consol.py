@@ -47,6 +47,7 @@ while True:
                     acc_vol=volume+float(rds.hget(hr,exchange))
                 rds.hset(hr,exchange,acc_vol)
                 payload["acc_vol"]=acc_vol
+                rds.hset(payload['from_symbol'],exchange,f"{str(payload['timestamp'])}@{price}")
                 rds.publish(ccix_consol_data_channel,json.dumps(payload))
             else:
                 rds.publish("duplicated_data_channel",json.dumps(payload))
