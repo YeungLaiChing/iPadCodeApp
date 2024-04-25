@@ -148,7 +148,7 @@ while True:
                 
                 df['price_diff'] =abs(df['current_price']/last_index-1)
                 df.loc[df['price_diff'] < threshold, 'outlier_penalty_factor'] = 1
-                df.loc[df['price_diff'] >= threshold, 'outlier_penalty_factor'] = 0
+                df.loc[df['price_diff'] >= threshold, 'outlier_penalty_factor'] = 1
                 for ex in exchange_list :
                     df.loc[ex,'vwap']=df3.loc[ex,'weights']
                 
@@ -158,7 +158,7 @@ while True:
                 last_index=round(df['adj_price'].sum(),2)
       
                 
-                if int(payload['timestamp']) >= int(last_index_time) :
+                if int(payload['timestamp']) > int(last_index_time) :
                     rds.hset("BTC","last_index",last_index)
                     rds.hset("BTC","last_index_time",current)
                     pl={
