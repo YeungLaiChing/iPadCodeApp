@@ -4,7 +4,7 @@ import sys
 from datetime import date, timedelta
 import json
 
-topic = 'ccix_btc_data_channel'
+topic = 'ccix_index_channel'
 if len(sys.argv) > 1:
     topic=sys.argv[1]
 

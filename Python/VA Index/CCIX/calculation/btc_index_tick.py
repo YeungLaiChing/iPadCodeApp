@@ -47,9 +47,7 @@ if current == int(current/3600)*3600:
     df3=df2[(df2.timestamp_hrs < current) & (df2.timestamp_hrs >= int(int(current/3600)*3600-3600*(24)))].drop(columns=['timestamp_hrs']).T
 
 
-df3['sum']=df3.sum(axis=1)
-df3['weights'] = df3['sum'].div(df3['sum'].sum())
-
+df3['24hr_vol']=df3.sum(axis=1)
 
 
 last_index=64773
@@ -70,9 +68,9 @@ df['price_diff'] =abs(df['current_price']/last_index-1)
 df.loc[df['price_diff'] < threshold, 'outlier_penalty_factor'] = 1
 df.loc[df['price_diff'] >= threshold, 'outlier_penalty_factor'] = 0
 
-
+df=df.astype({"last_update_time": int})
           
-print(df)
+
 
 mobile = rds.pubsub()
 mobile.subscribe(topic)
@@ -134,33 +132,41 @@ while True:
                     df3=df2[(df2.timestamp_hrs < current) & (df2.timestamp_hrs >= int(int(current/3600)*3600-3600*(24)))].drop(columns=['timestamp_hrs']).T
 
 
-                df3['sum']=df3.sum(axis=1)
-                df3['weights'] = df3['sum'].div(df3['sum'].sum())
-
+                df3['24hr_vol']=df3.sum(axis=1)
                 
 
                 df['calc_time']=int(payload["timestamp"])
+             
                 df.loc[exchange,'last_update_time']=int(payload["timestamp"])
                 df.loc[exchange,'current_price']=float(payload["price"])
                 
                 df['time_diff']=df['calc_time']-df['last_update_time']
                 df['time_penalty_factor']= df['time_diff'].map(apply_time_penalty_factor)
                 
-                df['price_diff'] =abs(df['current_price']/last_index-1)
-                df.loc[df['price_diff'] < threshold, 'outlier_penalty_factor'] = 1
-                df.loc[df['price_diff'] >= threshold, 'outlier_penalty_factor'] = 1
+                if last_index > 0 :
+                    df['price_diff'] =abs(df['current_price']/last_index-1)
+                    df.loc[df['price_diff'] < threshold, 'outlier_penalty_factor'] = 1
+                    df.loc[df['price_diff'] >= threshold, 'outlier_penalty_factor'] = 1
+                else :
+                    df['price_diff']=df['current_price']
+                    df['outlier_penalty_factor']=1
+                    
                 for ex in exchange_list :
-                    df.loc[ex,'vwap']=df3.loc[ex,'weights']
+                    #df.loc[ex,'weights']=df3.loc[ex,'weights']
+                    df.loc[ex,'24hr_vol']=df3.loc[ex,'24hr_vol']
                 
-                df['adj_price']=df['current_price']*df['time_penalty_factor']*df['vwap']*df['outlier_penalty_factor']
+                df['adj_vol']=df['time_penalty_factor']*df['24hr_vol']*df['outlier_penalty_factor']
+                df['weights']= df['adj_vol'].div(df['adj_vol'].sum())
+                df['adj_price']=df['current_price']*df['weights']
              
-                
+                print(df[['calc_time','last_update_time','time_diff','time_penalty_factor','current_price','outlier_penalty_factor','24hr_vol','weights','adj_price']])
                 last_index=round(df['adj_price'].sum(),2)
       
-                
-                if int(payload['timestamp']) > int(last_index_time) :
+
+                if int(payload['timestamp']) > int(last_index_time) or 1==1:
                     rds.hset("BTC","last_index",last_index)
-                    rds.hset("BTC","last_index_time",current)
+                    rds.hset("BTC","last_index_time",payload['timestamp'])
+                    last_index_time=payload['timestamp']
                     pl={
                         'index':'BTCIndex',
                         'exchange':payload["exchange"],
