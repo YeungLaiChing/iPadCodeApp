@@ -9,7 +9,7 @@ if len(sys.argv) > 1:
     topic=sys.argv[1]
 
 
-rds = redis.Redis(host='192.168.0.9', port=6379, db=0,decode_responses=True)
+rds = redis.Redis(host='192.168.0.3', port=6379, db=0,decode_responses=True)
 
 mobile = rds.pubsub()
 mobile.subscribe(topic)
@@ -26,7 +26,7 @@ def endprocess():
     return "OK"
 
 while True:
-    message = mobile.get_message()
+    message = mobile.get_message(timeout=5)
     if message:
         current=time.time_ns()
         if message['data']=="SHUTDOWN":

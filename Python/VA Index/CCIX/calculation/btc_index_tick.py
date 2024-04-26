@@ -9,7 +9,7 @@ topic = 'ccix_btc_data_channel'
 if len(sys.argv) > 1:
     topic=sys.argv[1]
 
-rds = redis.Redis(host='192.168.0.9', port=6379, db=0,decode_responses=True)
+rds = redis.Redis(host='192.168.0.3', port=6379, db=0,decode_responses=True)
 
 def apply_time_penalty_factor(value):
     if value < 300:
@@ -96,7 +96,7 @@ if rds.hget("BTC","last_index_time"):
     last_index_time=rds.hget("BTC","last_index_time")
 
 while True:
-    message = mobile.get_message()
+    message = mobile.get_message(timeout=5)
     if message:
         current=time.time_ns()
         if message['data']=="SHUTDOWN":
@@ -159,7 +159,7 @@ while True:
                 df['weights']= df['adj_vol'].div(df['adj_vol'].sum())
                 df['adj_price']=df['current_price']*df['weights']
              
-                print(df[['calc_time','last_update_time','time_diff','time_penalty_factor','current_price','outlier_penalty_factor','24hr_vol','weights','adj_price']])
+                print(df[['time_diff','time_penalty_factor','current_price','outlier_penalty_factor','24hr_vol','weights','adj_price']].rename(columns={'time_penalty_factor':'tpf','outlier_penalty_factor':'opf','current_price':'price'}))
                 last_index=round(df['adj_price'].sum(),2)
       
 
