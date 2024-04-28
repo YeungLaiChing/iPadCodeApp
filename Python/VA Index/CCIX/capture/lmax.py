@@ -5,7 +5,7 @@ from datetime import datetime, timezone, timedelta
 from websocket import WebSocketApp
 import time
 import redis
-rds = redis.Redis(host='192.168.0.3', port=6379, db=0,decode_responses=True)
+rds = redis.Redis(host='redis-va', port=6379, db=0,decode_responses=True)
 ccix_data_channel='ccix_lmax_btc_data_channel'
 csv_file_path='./data/lmax_btc.csv'
 
@@ -99,7 +99,7 @@ def get_data():
                     on_ping=on_ping,
                     on_pong=on_pong,
                     on_close=on_close)
-    ws.run_forever(ping_interval=40, ping_timeout=10, ping_payload="ping payload")
+    ws.run_forever(ping_interval=60, ping_timeout=10, ping_payload="PING")
     
 if __name__ == "__main__":
     get_data()

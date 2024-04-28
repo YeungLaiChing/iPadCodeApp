@@ -5,7 +5,7 @@ from datetime import datetime, timezone, timedelta
 from websocket import WebSocketApp
 import time
 import redis
-rds = redis.Redis(host='192.168.0.3', port=6379, db=0,decode_responses=True)
+rds = redis.Redis(host='redis-va', port=6379, db=0,decode_responses=True)
 ccix_data_channel='ccix_kraken_btc_data_channel'
 csv_file_path='./data/kraken_btc.csv'
 
@@ -20,7 +20,7 @@ def write_to_csv(data_row):
             
 
 def process_message(message):
-    print("received a message:",message)
+    #print("received a message:",message)
     try:
         trade_data = json.loads(message)
         if isinstance(trade_data,list) and trade_data[2] == 'trade':
@@ -57,22 +57,30 @@ def process_message(message):
                 }
                 rds.publish(ccix_data_channel,json.dumps(payload))
                 write_to_csv(data_row )
-                print(f"saved data to csv: {data_row}")
+                #print(f"saved data to csv: {data_row}")
     except json.JSONDecodeError as e:
         print(f"JSON decode error: {e}")
     except IOError as e:
         print(f"IOError: {e}")
     
 def on_message(ws,message):
-    print("received a message")
+    #print("received a message")
     threading.Thread(target=process_message, args=(message,)).start()
     
 def on_error(ws,error):
     print(f"Encountereed an error :{error}")
     
 def on_close(ws,close_status_code,close_msg):
-    print("closed connection")
+    print(f"closed connection.code={close_status_code}.msg={close_msg}")
     
+def on_ping(ws,msg):
+    if msg=='hello':
+        print(f"Got a ping msg={msg}. A pong reply has already been automatically sent.")    
+
+def on_pong(ws,msg):
+    if msg=='hello':
+        print(f"Got a pong msg={msg}. No need to respond")
+   
 def on_open(ws):
     subscribe_message = json.dumps({
         "event": "subscribe",
@@ -95,9 +103,11 @@ def get_data():
     ws=WebSocketApp("wss://ws.kraken.com/",
                     on_open=on_open,
                     on_message=on_message,
+                    on_ping=on_ping,
+                    on_pong=on_pong,
                     on_error=on_error,
                     on_close=on_close)
-    ws.run_forever()
+    ws.run_forever(ping_interval=60, ping_timeout=10, ping_payload="PING")
     
 if __name__ == "__main__":
     get_data()
