@@ -49,14 +49,14 @@ def process_message(message):
             }
             rds.publish(ccix_data_channel,json.dumps(payload))
             write_to_csv(data_row )
-            print(f"saved data to csv: {data_row}")
+            #print(f"saved data to csv: {data_row}")
     except json.JSONDecodeError as e:
         print(f"JSON decode error: {e}")
     except IOError as e:
         print(f"IOError: {e}")
     
 def on_message(ws,message):
-    print("received a message")
+    #print("received a message")
     threading.Thread(target=process_message, args=(message,)).start()
     
 def on_error(ws,error):
@@ -66,10 +66,12 @@ def on_close(ws,close_status_code,close_msg):
     print(f"closed connection.code={close_status_code}.msg={close_msg}")
     
 def on_ping(ws,msg):
-    print(f"Got a ping msg={msg}. A pong reply has already been automatically sent.")    
+    if msg=='hello':
+        print(f"Got a ping msg={msg}. A pong reply has already been automatically sent.")    
 
 def on_pong(ws,msg):
-    print(f"Got a pong msg={msg}. No need to respond")
+    if msg=='hello':
+        print(f"Got a pong msg={msg}. No need to respond")
     
 def on_open(ws):
     subscribe_message = json.dumps({
