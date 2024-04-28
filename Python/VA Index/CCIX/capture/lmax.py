@@ -63,7 +63,13 @@ def on_error(ws,error):
     print(f"Encountereed an error :{error}")
     
 def on_close(ws,close_status_code,close_msg):
-    print("closed connection")
+    print(f"closed connection.code={close_status_code}.msg={close_msg}")
+    
+def on_ping(ws,msg):
+    print(f"Got a ping msg={msg}. A pong reply has already been automatically sent.")    
+
+def on_pong(ws,msg):
+    print(f"Got a pong msg={msg}. No need to respond")
     
 def on_open(ws):
     subscribe_message = json.dumps({
@@ -88,8 +94,10 @@ def get_data():
                     on_open=on_open,
                     on_message=on_message,
                     on_error=on_error,
+                    on_ping=on_ping,
+                    on_pong=on_pong,
                     on_close=on_close)
-    ws.run_forever()
+    ws.run_forever(ping_interval=40, ping_timeout=10, ping_payload="ping payload")
     
 if __name__ == "__main__":
     get_data()
