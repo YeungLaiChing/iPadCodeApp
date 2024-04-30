@@ -19,10 +19,14 @@ def write_to_csv(data_row):
             csv_writer.writerow(data_row)
             
 
-def process_message(message):
+def process_message(ws,message):
     try:
         body = json.loads(message)
-        if body['id']==-1:
+        method=body['method']
+        if method=='public/heartbeat':
+            body['method']='public/respond-heartbeat'
+            ws.send(json.dumps(body))
+        if method=='subscribe':
             datas=body['result']['data']
             for data in datas:
                 original_timestamp = int(int(data['t'])/1000)
@@ -52,7 +56,7 @@ def process_message(message):
                 }
                 rds.publish(ccix_data_channel,json.dumps(payload))
                 write_to_csv(data_row )
-                print(f"saved data to csv: {data_row}")
+                #print(f"saved data to csv: {data_row}")
     except json.JSONDecodeError as e:
         print(f"JSON decode error: {e}")
     except IOError as e:
@@ -60,7 +64,7 @@ def process_message(message):
     
 def on_message(ws,message):
     #print("received a message")
-    threading.Thread(target=process_message, args=(message,)).start()
+    threading.Thread(target=process_message, args=(ws,message,)).start()
     
 def on_error(ws,error):
     print(f"Encountereed an error :{error}")
@@ -96,7 +100,7 @@ def setup_csv_file():
             
 def get_data():
     setup_csv_file()
-    ws=WebSocketApp("wss://stream.crypto.com/exchange/v1/market",
+    ws=WebSocketApp("wss://stream.crypto.com/v2/market",
                     on_open=on_open,
                     on_message=on_message,
                     on_error=on_error,
