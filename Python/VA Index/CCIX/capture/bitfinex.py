@@ -24,7 +24,7 @@ def process_message(message):
         data = json.loads(message)
 
         if len(data)==3 and data[1]=='te':
-            print(data)
+            #print(data)
             original_timestamp = int(int(data[2][1])/1000)
             utc_datetime = datetime.fromtimestamp(int(original_timestamp), tz=timezone.utc)
             unix_timestamp=int(utc_datetime.timestamp())
