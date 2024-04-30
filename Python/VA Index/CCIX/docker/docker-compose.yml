@@ -1,0 +1,156 @@
+services:
+   redis-va: 
+     image: redislabs/redismod
+     container_name: redis-va
+     volumes:
+     - ./redis-cache:/data
+     ports:
+       - '6379:6379' 
+   coinbase-1:
+        build: .
+        container_name: coinbase-1
+        volumes:
+            - ./code/capture/coinbase.py:/code/app.py
+            - .:/code/
+        depends_on:
+            - redis-va
+   coinbase-2:
+        build: .
+        container_name: coinbase-2
+        volumes:
+            - ./code/capture/coinbase.py:/code/app.py
+            - .:/code/
+        depends_on:
+            - redis-va
+   kraken-1:
+        build: .
+        container_name: kraken-1
+        volumes:
+            - ./code/capture/kraken.py:/code/app.py
+            - .:/code/
+        depends_on:
+            - redis-va
+   kraken-2:
+        build: .
+        container_name: kraken-2
+        volumes:
+            - ./code/capture/kraken.py:/code/app.py
+            - .:/code/
+        depends_on:
+            - redis-va
+   bitstamp-1:
+        build: .
+        container_name: bitstamp-1
+        volumes:
+            - ./code/capture/bitstamp.py:/code/app.py
+            - .:/code/
+        depends_on:
+            - redis-va
+   bitstamp-2:
+        build: .
+        container_name: bitstamp-2
+        volumes:
+            - ./code/capture/bitstamp.py:/code/app.py
+            - .:/code/
+        depends_on:
+            - redis-va
+   itbit-1:
+        build: .
+        container_name: itbit-1
+        volumes:
+            - ./code/capture/itbit.py:/code/app.py
+            - .:/code/
+        depends_on:
+            - redis-va
+   itbit-2:
+        build: .
+        container_name: itbit-2
+        volumes:
+            - ./code/capture/itbit.py:/code/app.py
+            - .:/code/
+        depends_on:
+            - redis-va
+   lmax-1:
+        build: .
+        container_name: lmax-1
+        volumes:
+            - ./code/capture/lmax.py:/code/app.py
+            - .:/code/
+        depends_on:
+            - redis-va
+   lmax-2:
+        build: .
+        container_name: lmax-2
+        volumes:
+            - ./code/capture/lmax.py:/code/app.py
+            - .:/code/
+        depends_on:
+            - redis-va
+   cryptodotcom-1:
+        build: .
+        container_name: cryptodotcom-1
+        volumes:
+            - ./code/capture/cryptodotcom.py:/code/app.py
+            - .:/code/
+        depends_on:
+            - redis-va
+   bitfinex-1:
+        build: .
+        container_name: bitfinex-1
+        volumes:
+            - ./code/capture/bitfinex.py:/code/app.py
+            - .:/code/
+        depends_on:
+            - redis-va
+   consol-kraken:
+        build: .
+        container_name: consol-kraken
+        volumes:
+            - ./code/capture/consol-kraken.py:/code/app.py
+        depends_on:
+            - redis-va
+            - kraken-1
+   consol-coinbase:
+        build: .
+        container_name: consol-coinbase
+        volumes:
+            - ./code/capture/consol-coinbase.py:/code/app.py
+        depends_on:
+            - redis-va
+            - coinbase-1
+   consol-itbit:
+        build: .
+        container_name: consol-itbit
+        volumes:
+            - ./code/capture/consol-itbit.py:/code/app.py
+        depends_on:
+            - redis-va
+            - itbit-1
+   consol-lmax:
+        build: .
+        container_name: consol-lmax
+        volumes:
+            - ./code/capture/consol-lmax.py:/code/app.py
+        depends_on:
+            - redis-va
+            - lmax-1
+   consol-bitstamp:
+        build: .
+        container_name: consol-bitstamp
+        volumes:
+            - ./code/capture/consol-bitstamp.py:/code/app.py
+        depends_on:
+            - redis-va
+            - bitstamp-1
+   calc-va:
+        build: .
+        container_name: calc-va
+        volumes:
+            - ./code/calculation/btc_index_tick.py:/code/app.py
+        depends_on:
+            - redis-va
+            - consol-coinbase
+            - consol-kraken
+            - consol-itbit
+            - consol-lmax
+            - consol-bitstamp
