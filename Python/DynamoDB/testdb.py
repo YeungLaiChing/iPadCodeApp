@@ -1,42 +1,40 @@
+import boto3
 
-import boto3 as boto3
-
-# Get the service resource.
-dynamodb = boto3.resource('dynamodb',endpoint_url='http://192.168.0.9:8000',region_name='us-west-2',aws_access_key_id='DUMMYIDEXAMPLE',
-         aws_secret_access_key= 'DUMMYEXAMPLEKEY')
-
-
-# Create the DynamoDB table.
-table = dynamodb.create_table(
-    TableName='users3',
-    KeySchema=[
-        {
-            'AttributeName': 'username',
-            'KeyType': 'HASH'
-        },
-        {
-            'AttributeName': 'last_name',
-            'KeyType': 'RANGE'
+def create_books_table(dynamodb=None):
+    dynamodb = boto3.resource(
+        'dynamodb', endpoint_url="http://192.168.0.3:8000",region_name='us-east-1',aws_access_key_id='key',
+         aws_secret_access_key= '')
+    table = dynamodb.create_table(
+        TableName='Books',
+        KeySchema=[
+            {
+                'AttributeName': 'book_id',
+                'KeyType': 'HASH'  # Partition key
+            },
+            {
+                'AttributeName': 'title',
+                'KeyType': 'RANGE'  # Sort key
+            }
+        ],
+        AttributeDefinitions=[
+            {
+                'AttributeName': 'book_id',
+                # AttributeType refers to the data type 'N' for number type and 'S' stands for string type.
+                'AttributeType': 'N'
+            },
+            {
+                'AttributeName': 'title',
+                'AttributeType': 'S'
+            },
+        ],
+        ProvisionedThroughput={
+            # ReadCapacityUnits set to 10 strongly consistent reads per second
+            'ReadCapacityUnits': 10,
+            'WriteCapacityUnits': 10  # WriteCapacityUnits set to 10 writes per second
         }
-    ],
-    AttributeDefinitions=[
-        {
-            'AttributeName': 'username',
-            'AttributeType': 'S'
-        },
-        {
-            'AttributeName': 'last_name',
-            'AttributeType': 'S'
-        },
-    ],
-    ProvisionedThroughput={
-        'ReadCapacityUnits': 5,
-        'WriteCapacityUnits': 5
-    }
-)
+    )
+    return table
 
-# Wait until the table exists.
-table.wait_until_exists()
-
-# Print out some data about the table.
-print(table.item_count)
+if __name__ == '__main__':
+    book_table = create_books_table()
+    print("Status:", book_table.table_status)
