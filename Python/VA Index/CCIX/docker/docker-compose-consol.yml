@@ -3,24 +3,36 @@ services:
         build: .
         container_name: consol-kraken
         volumes:
-            - ./code/capture/consol-kraken.py:/code/app.py
+            - ./code/capture/consol.py:/code/app.py
+            - ./code/capture/config/consol-kraken.json:/code/config.json
    consol-coinbase:
         build: .
         container_name: consol-coinbase
         volumes:
-            - ./code/capture/consol-coinbase.py:/code/app.py
+            - ./code/capture/consol.py:/code/app.py
+            - ./code/capture/config/consol-coinbase.json:/code/config.json
    consol-itbit:
         build: .
         container_name: consol-itbit
         volumes:
-            - ./code/capture/consol-itbit.py:/code/app.py
+            - ./code/capture/consol.py:/code/app.py
+            - ./code/capture/config/consol-itbit.json:/code/config.json
    consol-lmax:
         build: .
         container_name: consol-lmax
         volumes:
-            - ./code/capture/consol-lmax.py:/code/app.py
+            - ./code/capture/consol.py:/code/app.py
+            - ./code/capture/config/consol-lmax.json:/code/config.json
    consol-bitstamp:
         build: .
         container_name: consol-bitstamp
         volumes:
-            - ./code/capture/consol-bitstamp.py:/code/app.py
+            - ./code/capture/consol.py:/code/app.py
+            - ./code/capture/config/consol-bitstamp.json:/code/config.json
+    consol-cryptodotcom:
+        build: .
+        container_name: consol-cryptodotcom
+        volumes:
+            - ./code/capture/consol.py:/code/app.py
+            - ./code/capture/config/consol-cryptodotcom.json:/code/config.json
+ 
