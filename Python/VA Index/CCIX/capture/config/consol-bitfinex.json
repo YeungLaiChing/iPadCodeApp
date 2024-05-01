@@ -1,0 +1,12 @@
+{
+    "exchange_name": "bitfinex",
+
+    "redis_ip":"localhost",
+    "redis_port":6379,
+
+    "endpoint_url":"http://localhost:8000",
+    "region_name":"us-east-1",
+    "aws_access_key_id":"key",
+    "aws_secret_access_key":""
+
+}

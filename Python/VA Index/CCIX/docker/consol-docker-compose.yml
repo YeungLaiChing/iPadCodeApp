@@ -41,4 +41,24 @@ services:
             - ../capture/consol.py:/code/app.py
             - ../capture/config/consol-cryptodotcom.json:/code/config.json
         network_mode: host  
- 
+   consol-bitfinex:
+        build: .
+        container_name: consol-bitfinex
+        volumes:
+            - ../capture/consol.py:/code/app.py
+            - ../capture/config/consol-bitfinex.json:/code/config.json
+        network_mode: host  
+   consol-bullish:
+        build: .
+        container_name: consol-bullish
+        volumes:
+            - ../capture/consol.py:/code/app.py
+            - ../capture/config/consol-bullish.json:/code/config.json
+        network_mode: host  
+   consol-cexio:
+        build: .
+        container_name: consol-cexio
+        volumes:
+            - ../capture/consol.py:/code/app.py
+            - ../capture/config/consol-cexio.json:/code/config.json
+        network_mode: host  

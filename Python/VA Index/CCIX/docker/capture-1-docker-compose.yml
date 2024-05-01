@@ -2,6 +2,7 @@ services:
    coinbase-1:
         build: .
         container_name: coinbase-1
+        restart: unless-stopped
         volumes:
             - ../capture/coinbase.py:/code/app.py
             - .:/code/
@@ -9,6 +10,7 @@ services:
    kraken-1:
         build: .
         container_name: kraken-1
+        restart: unless-stopped
         volumes:
             - ../capture/kraken.py:/code/app.py
             - .:/code/
@@ -16,6 +18,7 @@ services:
    bitstamp-1:
         build: .
         container_name: bitstamp-1
+        restart: unless-stopped
         volumes:
             - ../capture/bitstamp.py:/code/app.py
             - .:/code/
@@ -23,6 +26,7 @@ services:
    itbit-1:
         build: .
         container_name: itbit-1
+        restart: unless-stopped
         volumes:
             - ../capture/itbit.py:/code/app.py
             - .:/code/
@@ -30,6 +34,7 @@ services:
    lmax-1:
         build: .
         container_name: lmax-1
+        restart: unless-stopped
         volumes:
             - ../capture/lmax.py:/code/app.py
             - .:/code/
@@ -37,6 +42,7 @@ services:
    cryptodotcom-1:
         build: .
         container_name: cryptodotcom-1
+        restart: unless-stopped
         volumes:
             - ../capture/cryptodotcom.py:/code/app.py
             - .:/code/
@@ -44,6 +50,7 @@ services:
    bitfinex-1:
         build: .
         container_name: bitfinex-1
+        restart: unless-stopped
         volumes:
             - ../capture/bitfinex.py:/code/app.py
             - .:/code/
