@@ -1,0 +1,17 @@
+services:
+   redis-va: 
+     image: redislabs/redismod
+     container_name: redis-va
+     volumes:
+     - ./redis-cache:/data
+     ports:
+       - '6379:6379' 
+   dynamodb-va:
+      image: amazon/dynamodb-local
+      conainter_name: dynamodb-va
+      ports:
+        - '8000:8000'
+   dynamodb-admin:
+      image: aaronshaf/dynamodb-admin
+      conainter_name: dynamodb-admin
+      network_mode: host  
