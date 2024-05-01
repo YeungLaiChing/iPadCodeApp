@@ -23,7 +23,7 @@ def process_message(message):
     try:
         data = json.loads(message)
 
-        if len(data)==3 and data[1]=='te':
+        if len(data)==3 and (data[1]=='te'):
             #print(data)
             original_timestamp = int(int(data[2][1])/1000)
             utc_datetime = datetime.fromtimestamp(int(original_timestamp), tz=timezone.utc)
@@ -34,6 +34,11 @@ def process_message(message):
             trade_id=data[2][0]
             last_price=data[2][3]
             last_quantity=data[2][2]
+            side="B"
+            if (float(data[2][2])<0):
+                side="S"
+                last_quantity=abs(float(data[2][2]))
+                
             data_row=[original_timestamp,unix_timestamp,hkt_timestamp,trade_id,last_price,last_quantity]
             payload={
                 'exchange':'bitfinex',
@@ -43,7 +48,7 @@ def process_message(message):
                 'timestamp_hkt':hkt_timestamp,
                 'timestamp_recv':time.time(),
                 'trade_id':trade_id,
-                'side':'U',
+                'side':side,
                 'from_symbol':'BTC',
                 'to_symbol':'USD',
                 'price':last_price,
