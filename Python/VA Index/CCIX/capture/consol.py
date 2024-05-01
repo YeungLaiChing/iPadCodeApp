@@ -22,7 +22,8 @@ def create_table(dynamodb=None,exchange=None):
     
     # Each table/index must have 1 hash key and 0 or 1 range keys.
     
-    dynamodb.create_table(
+    try:
+        dynamodb.create_table(
         TableName=exchange,
         KeySchema=[
 
@@ -51,7 +52,10 @@ def create_table(dynamodb=None,exchange=None):
             'ReadCapacityUnits': 1000,
             'WriteCapacityUnits': 1000  # WriteCapacityUnits set to 10 writes per second
         }
-    )
+        )
+    except dynamodb_client.exceptions.ResourceInUseException:
+    # do something here as you require
+        pass
     
 def main_process(exchange,rds,dynamodb):
 
@@ -60,7 +64,7 @@ def main_process(exchange,rds,dynamodb):
 
     ccix_consol_data_channel='ccix_btc_data_channel'
 
-    table_list=dynamodb.list_tables()
+    table_list=dynamodb.list(dynamodb.tables.all())
     if exchange not in table_list:
         create_table(dynamodb=dynamodb,exchange=exchange)
     
