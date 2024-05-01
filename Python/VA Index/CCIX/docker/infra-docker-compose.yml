@@ -9,6 +9,9 @@ services:
       image: amazon/dynamodb-local
       ports:
         - '8000:8000'
+      volumes:
+        - "./dynamodb-data:/home/dynamodblocal/data"
+      working_dir: /home/dynamodblocal
    dynamodb-admin:
       image: aaronshaf/dynamodb-admin
       network_mode: host  
