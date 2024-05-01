@@ -4,7 +4,7 @@ services:
         container_name: coinbase-2
         restart: unless-stopped
         volumes:
-            - ../capture/coinbase.py:/code/app.py
+            - ../../source/capture/coinbase.py:/code/app.py
             - .:/code/
         network_mode: host  
    kraken-2:
@@ -12,7 +12,7 @@ services:
         container_name: kraken-2
         restart: unless-stopped
         volumes:
-            - ../capture/kraken.py:/code/app.py
+            - ../../source/capture/kraken.py:/code/app.py
             - .:/code/
         network_mode: host  
    bitstamp-2:
@@ -20,7 +20,7 @@ services:
         container_name: bitstamp-2
         restart: unless-stopped
         volumes:
-            - ../capture/bitstamp.py:/code/app.py
+            - ../../source/capture/bitstamp.py:/code/app.py
             - .:/code/
         network_mode: host  
    itbit-2:
@@ -28,7 +28,7 @@ services:
         container_name: itbit-2
         restart: unless-stopped
         volumes:
-            - ../capture/itbit.py:/code/app.py
+            - ../../source/capture/itbit.py:/code/app.py
             - .:/code/
         network_mode: host  
    lmax-2:
@@ -36,7 +36,7 @@ services:
         container_name: lmax-2
         restart: unless-stopped
         volumes:
-            - ../capture/lmax.py:/code/app.py
+            - ../../source/capture/lmax.py:/code/app.py
             - .:/code/
         network_mode: host  
    cryptodotcom-2:
@@ -44,7 +44,7 @@ services:
         container_name: cryptodotcom-2
         restart: unless-stopped
         volumes:
-            - ../capture/cryptodotcom.py:/code/app.py
+            - ../../source/capture/cryptodotcom.py:/code/app.py
             - .:/code/
         network_mode: host  
    bitfinex-2:
@@ -52,6 +52,6 @@ services:
         container_name: bitfinex-2
         restart: unless-stopped
         volumes:
-            - ../capture/bitfinex.py:/code/app.py
+            - ../../source/capture/bitfinex.py:/code/app.py
             - .:/code/
         network_mode: host  

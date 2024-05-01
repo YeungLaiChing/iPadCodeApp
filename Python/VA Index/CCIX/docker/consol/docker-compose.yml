@@ -1,0 +1,64 @@
+services:
+   consol-kraken:
+        build: .
+        container_name: consol-kraken
+        volumes:
+            - ../../source/capture/consol.py:/code/app.py
+            - ../../source/capture/config/consol-kraken.json:/code/config.json
+        network_mode: host  
+   consol-coinbase:
+        build: .
+        container_name: consol-coinbase
+        volumes:
+            - ../../source/capture/consol.py:/code/app.py
+            - ../../source/capture/config/consol-coinbase.json:/code/config.json
+        network_mode: host  
+   consol-itbit:
+        build: .
+        container_name: consol-itbit
+        volumes:
+            - ../../source/capture/consol.py:/code/app.py
+            - ../../source/capture/config/consol-itbit.json:/code/config.json
+        network_mode: host  
+   consol-lmax:
+        build: .
+        container_name: consol-lmax
+        volumes:
+            - ../../source/capture/consol.py:/code/app.py
+            - ../../source/capture/config/consol-lmax.json:/code/config.json
+        network_mode: host  
+   consol-bitstamp:
+        build: .
+        container_name: consol-bitstamp
+        volumes:
+            - ../../source/capture/consol.py:/code/app.py
+            - ../../source/capture/config/consol-bitstamp.json:/code/config.json
+        network_mode: host  
+   consol-cryptodotcom:
+        build: .
+        container_name: consol-cryptodotcom
+        volumes:
+            - ../../source/capture/consol.py:/code/app.py
+            - ../../source/capture/config/consol-cryptodotcom.json:/code/config.json
+        network_mode: host  
+   consol-bitfinex:
+        build: .
+        container_name: consol-bitfinex
+        volumes:
+            - ../../source/capture/consol.py:/code/app.py
+            - ../../source/capture/config/consol-bitfinex.json:/code/config.json
+        network_mode: host  
+   consol-bullish:
+        build: .
+        container_name: consol-bullish
+        volumes:
+            - ../../source/capture/consol.py:/code/app.py
+            - ../../source/capture/config/consol-bullish.json:/code/config.json
+        network_mode: host  
+   consol-cexio:
+        build: .
+        container_name: consol-cexio
+        volumes:
+            - ../../source/capture/consol.py:/code/app.py
+            - ../../source/capture/config/consol-cexio.json:/code/config.json
+        network_mode: host  
