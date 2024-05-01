@@ -15,4 +15,8 @@ services:
       working_dir: /home/dynamodblocal
    dynamodb-admin:
       image: aaronshaf/dynamodb-admin
-      network_mode: host  
+      enviornment:
+        DYNAMO_ENDPOINT: "http://dynamodb-va:8000"
+      ports:
+        - '8001:8001'
+ 
