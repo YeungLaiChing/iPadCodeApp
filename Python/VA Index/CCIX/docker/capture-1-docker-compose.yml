@@ -5,39 +5,46 @@ services:
         volumes:
             - ../capture/coinbase.py:/code/app.py
             - .:/code/
+        network_mode: host  
    kraken-1:
         build: .
         container_name: kraken-1
         volumes:
             - ../capture/kraken.py:/code/app.py
             - .:/code/
+        network_mode: host  
    bitstamp-1:
         build: .
         container_name: bitstamp-1
         volumes:
             - ../capture/bitstamp.py:/code/app.py
             - .:/code/
+        network_mode: host  
    itbit-1:
         build: .
         container_name: itbit-1
         volumes:
             - ../capture/itbit.py:/code/app.py
             - .:/code/
+        network_mode: host  
    lmax-1:
         build: .
         container_name: lmax-1
         volumes:
             - ../capture/lmax.py:/code/app.py
             - .:/code/
+        network_mode: host  
    cryptodotcom-1:
         build: .
         container_name: cryptodotcom-1
         volumes:
             - ../capture/cryptodotcom.py:/code/app.py
             - .:/code/
+        network_mode: host  
    bitfinex-1:
         build: .
         container_name: bitfinex-1
         volumes:
             - ../capture/bitfinex.py:/code/app.py
             - .:/code/
+        network_mode: host  

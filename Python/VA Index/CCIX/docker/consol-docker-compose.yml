@@ -34,7 +34,7 @@ services:
             - ../capture/consol.py:/code/app.py
             - ../capture/config/consol-bitstamp.json:/code/config.json
         network_mode: host  
-    consol-cryptodotcom:
+   consol-cryptodotcom:
         build: .
         container_name: consol-cryptodotcom
         volumes:
