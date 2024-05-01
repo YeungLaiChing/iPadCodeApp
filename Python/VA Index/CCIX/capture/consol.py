@@ -64,9 +64,7 @@ def main_process(exchange,rds,dynamodb):
 
     ccix_consol_data_channel='ccix_btc_data_channel'
 
-    table_list=dynamodb.list(dynamodb.tables.all())
-    if exchange not in table_list:
-        create_table(dynamodb=dynamodb,exchange=exchange)
+    create_table(dynamodb=dynamodb,exchange=exchange)
     
     exchange_table = dynamodb.Table(exchange)
 
