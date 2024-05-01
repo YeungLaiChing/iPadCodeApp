@@ -17,7 +17,42 @@ def endprocess():
     #f.close()
 
     return "OK"
+def create_table(dynamodb=None,exchange=None):
 
+    
+    # Each table/index must have 1 hash key and 0 or 1 range keys.
+    
+    dynamodb.create_table(
+        TableName=exchange,
+        KeySchema=[
+
+            {
+                'AttributeName': 'timestamp_hrs',
+                'KeyType': 'HASH'  # Sort key
+            },
+            {
+                'AttributeName': 'timestamp',
+                'KeyType': 'RANGE'  # Sort key
+            }
+        ],
+        AttributeDefinitions=[
+            {
+                'AttributeName': 'timestamp_hrs',
+                # AttributeType refers to the data type 'N' for number type and 'S' stands for string type.
+                'AttributeType': 'N'
+            },
+            {
+                'AttributeName': 'timestamp',
+                'AttributeType': 'N'
+            }
+        ],
+        ProvisionedThroughput={
+            # ReadCapacityUnits set to 10 strongly consistent reads per second
+            'ReadCapacityUnits': 1000,
+            'WriteCapacityUnits': 1000  # WriteCapacityUnits set to 10 writes per second
+        }
+    )
+    
 def main_process(exchange,rds,dynamodb):
 
 
@@ -25,6 +60,10 @@ def main_process(exchange,rds,dynamodb):
 
     ccix_consol_data_channel='ccix_btc_data_channel'
 
+    table_list=dynamodb.list_tables()
+    if exchange not in table_list:
+        create_table(dynamodb=dynamodb,exchange=exchange)
+    
     exchange_table = dynamodb.Table(exchange)
 
     mobile = rds.pubsub()
