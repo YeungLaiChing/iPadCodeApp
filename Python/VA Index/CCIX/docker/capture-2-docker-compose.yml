@@ -3,41 +3,41 @@ services:
         build: .
         container_name: coinbase-2
         volumes:
-            - ./code/capture/coinbase.py:/code/app.py
+            - ../capture/coinbase.py:/code/app.py
             - .:/code/
    kraken-2:
         build: .
         container_name: kraken-2
         volumes:
-            - ./code/capture/kraken.py:/code/app.py
+            - ../capture/kraken.py:/code/app.py
             - .:/code/
    bitstamp-2:
         build: .
         container_name: bitstamp-2
         volumes:
-            - ./code/capture/bitstamp.py:/code/app.py
+            - ../capture/bitstamp.py:/code/app.py
             - .:/code/
    itbit-2:
         build: .
         container_name: itbit-2
         volumes:
-            - ./code/capture/itbit.py:/code/app.py
+            - ../capture/itbit.py:/code/app.py
             - .:/code/
    lmax-2:
         build: .
         container_name: lmax-2
         volumes:
-            - ./code/capture/lmax.py:/code/app.py
+            - ../capture/lmax.py:/code/app.py
             - .:/code/
    cryptodotcom-2:
         build: .
         container_name: cryptodotcom-2
         volumes:
-            - ./code/capture/cryptodotcom.py:/code/app.py
+            - ../capture/cryptodotcom.py:/code/app.py
             - .:/code/
    bitfinex-2:
         build: .
         container_name: bitfinex-2
         volumes:
-            - ./code/capture/bitfinex.py:/code/app.py
+            - ../capture/bitfinex.py:/code/app.py
             - .:/code/
