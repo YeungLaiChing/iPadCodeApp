@@ -56,7 +56,7 @@ def process_message(message):
             }
             rds.publish(ccix_data_channel,json.dumps(payload))
             write_to_csv(data_row )
-            print(f"saved data to csv: {data_row}")
+            #print(f"saved data to csv: {data_row}")
     except json.JSONDecodeError as e:
         print(f"JSON decode error: {e}")
     except IOError as e:
