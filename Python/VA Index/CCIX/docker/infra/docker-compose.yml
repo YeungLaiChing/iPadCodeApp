@@ -17,7 +17,7 @@ services:
         - '8000:8000'
       networks:
         - infra_default
-    dynamodb-admin:
+   dynamodb-admin:
       image: aaronshaf/dynamodb-admin
       ports:
         - '8001:8001'
