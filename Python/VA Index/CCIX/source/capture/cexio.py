@@ -7,7 +7,7 @@ import time
 import redis
 
 ### PENDING
-rds = redis.Redis(host='localhost', port=6379, db=0,decode_responses=True)
+rds = redis.Redis(host='redis-va', port=6379, db=0,decode_responses=True)
 ccix_data_channel='ccix_cexio_btc_data_channel'
 csv_file_path='./data/cexio_btc.csv'
 

@@ -6,7 +6,8 @@ services:
         volumes:
             - ../../source/capture/coinbase.py:/code/app.py
             - .:/code/
-        network_mode: host  
+        networks:
+            - infra_default
    kraken-1:
         image: vaindex-base
         container_name: kraken-1
@@ -14,7 +15,8 @@ services:
         volumes:
             - ../../source/capture/kraken.py:/code/app.py
             - .:/code/
-        network_mode: host  
+        networks:
+            - infra_default
    bitstamp-1:
         image: vaindex-base
         container_name: bitstamp-1
@@ -22,7 +24,8 @@ services:
         volumes:
             - ../../source/capture/bitstamp.py:/code/app.py
             - .:/code/
-        network_mode: host  
+        networks:
+            - infra_default
    itbit-1:
         image: vaindex-base
         container_name: itbit-1
@@ -30,7 +33,8 @@ services:
         volumes:
             - ../../source/capture/itbit.py:/code/app.py
             - .:/code/
-        network_mode: host  
+        networks:
+            - infra_default
    lmax-1:
         image: vaindex-base
         container_name: lmax-1
@@ -38,7 +42,8 @@ services:
         volumes:
             - ../../source/capture/lmax.py:/code/app.py
             - .:/code/
-        network_mode: host  
+        networks:
+            - infra_default
    cryptodotcom-1:
         image: vaindex-base
         container_name: cryptodotcom-1
@@ -46,7 +51,8 @@ services:
         volumes:
             - ../../source/capture/cryptodotcom.py:/code/app.py
             - .:/code/
-        network_mode: host  
+        networks:
+            - infra_default
    bitfinex-1:
         image: vaindex-base
         container_name: bitfinex-1
@@ -54,4 +60,9 @@ services:
         volumes:
             - ../../source/capture/bitfinex.py:/code/app.py
             - .:/code/
-        network_mode: host  
+        networks:
+            - infra_default
+networks:
+  infra_default:
+    name: infra_default
+

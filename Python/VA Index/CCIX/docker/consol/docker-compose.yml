@@ -5,60 +5,73 @@ services:
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-kraken.json:/code/config.json
-        network_mode: host  
+        networks:
+            - infra_default
    consol-coinbase:
         image: vaindex-base
         container_name: consol-coinbase
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-coinbase.json:/code/config.json
-        network_mode: host  
+        networks:
+            - infra_default
    consol-itbit:
         image: vaindex-base
         container_name: consol-itbit
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-itbit.json:/code/config.json
-        network_mode: host  
+        networks:
+            - infra_default
    consol-lmax:
         image: vaindex-base
         container_name: consol-lmax
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-lmax.json:/code/config.json
-        network_mode: host  
+        networks:
+            - infra_default
    consol-bitstamp:
         image: vaindex-base
         container_name: consol-bitstamp
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-bitstamp.json:/code/config.json
-        network_mode: host  
+        networks:
+            - infra_default
    consol-cryptodotcom:
         image: vaindex-base
         container_name: consol-cryptodotcom
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-cryptodotcom.json:/code/config.json
-        network_mode: host  
+        networks:
+            - infra_default
    consol-bitfinex:
         image: vaindex-base
         container_name: consol-bitfinex
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-bitfinex.json:/code/config.json
-        network_mode: host  
+        networks:
+            - infra_default
    consol-bullish:
         image: vaindex-base
         container_name: consol-bullish
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-bullish.json:/code/config.json
-        network_mode: host  
+        networks:
+            - infra_default
    consol-cexio:
         image: vaindex-base
         container_name: consol-cexio
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-cexio.json:/code/config.json
-        network_mode: host  
+        networks:
+            - infra_default
+networks:
+  infra_default:
+    name: infra_default
+
