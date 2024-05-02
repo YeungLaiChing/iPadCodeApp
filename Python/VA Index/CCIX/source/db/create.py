@@ -1,7 +1,7 @@
 import boto3
 
 dynamodb = boto3.resource(
-    'dynamodb', endpoint_url="http://192.168.0.249:8000",region_name='us-east-1',aws_access_key_id='key',
+    'dynamodb', endpoint_url="http://localhost:8000",region_name='us-east-1',aws_access_key_id='key',
         aws_secret_access_key= '')
 
 def create_books_table(dynamodb=None,exchange=None):

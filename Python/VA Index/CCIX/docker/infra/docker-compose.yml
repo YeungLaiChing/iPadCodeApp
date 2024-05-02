@@ -7,16 +7,13 @@ services:
        - '6379:6379' 
    dynamodb-va:
       image: amazon/dynamodb-local
-      command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
-      ports:
-        - '8000:8000'
+      command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data/"
       volumes:
-        - "./dynamodb-data:/home/dynamodblocal/data"
-      working_dir: /home/dynamodblocal
+      - ./dynamodb-data:/home/dynamodblocal/data
+     ports:
+        - '8000:8000'
    dynamodb-admin:
       image: aaronshaf/dynamodb-admin
       environment:
-        DYNAMO_ENDPOINT: "http://dynamodb-va:8000"
-      ports:
-        - '8001:8001'
- 
+        DYNAMO_ENDPOINT: "http://localhost:8000"
+      network_mode: host
