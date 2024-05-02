@@ -1,12 +1,14 @@
 import time
 import redis
 import sys
-from datetime import date, timedelta
+from datetime import datetime, timezone, timedelta,date
 import json
 from decimal import Decimal
 import boto3
 from pathlib import Path
 
+def get_current_time():
+    return datetime.fromtimestamp(int(time.time()+8*3600), tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
 def endprocess():
     target_date = date.today() 
@@ -70,7 +72,7 @@ def main_process(exchange,rds,dynamodb):
 
     mobile = rds.pubsub()
     mobile.subscribe(ccix_from_data_channel)
-    print(f"already subscribed channel {ccix_from_data_channel}")
+    print(f"{get_current_time()}: already subscribed channel {ccix_from_data_channel}")
     
     while True:
         message = mobile.get_message(timeout=5)

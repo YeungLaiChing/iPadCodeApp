@@ -13,6 +13,8 @@ csv_file_path='./data/cexio_btc.csv'
 
 
 lock=threading.Lock()
+def get_current_time():
+    return datetime.fromtimestamp(int(time.time()+8*3600), tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
 def write_to_csv(data_row):
     with lock:

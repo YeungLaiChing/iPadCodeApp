@@ -11,6 +11,8 @@ csv_file_path='./data/kraken_btc.csv'
 
 
 lock=threading.Lock()
+def get_current_time():
+    return datetime.fromtimestamp(int(time.time()+8*3600), tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
 def write_to_csv(data_row):
     with lock:
@@ -59,19 +61,19 @@ def process_message(message):
                 write_to_csv(data_row )
                 #print(f"saved data to csv: {data_row}")
     except json.JSONDecodeError as e:
-        print(f"JSON decode error: {e}")
+        print(f"{get_current_time()}: JSON decode error: {e}")
     except IOError as e:
-        print(f"IOError: {e}")
+        print(f"{get_current_time()}: IOError: {e}")
     
 def on_message(ws,message):
     #print("received a message")
     threading.Thread(target=process_message, args=(message,)).start()
     
 def on_error(ws,error):
-    print(f"Encountereed an error :{error}")
+    print(f"{get_current_time()}: Encountereed an error :{error}")
     
 def on_close(ws,close_status_code,close_msg):
-    print(f"closed connection.code={close_status_code}.msg={close_msg}")
+    print(f"{get_current_time()}: closed connection.code={close_status_code}.msg={close_msg}")
     
 def on_ping(ws,msg):
     if msg=='hello':
@@ -90,7 +92,7 @@ def on_open(ws):
         }
     })
     ws.send(subscribe_message)
-    print("sent subscribe")
+    print(f"{get_current_time()}: sent subscribe")
 
 def setup_csv_file():
     with open(csv_file_path,mode='a',newline='') as file:

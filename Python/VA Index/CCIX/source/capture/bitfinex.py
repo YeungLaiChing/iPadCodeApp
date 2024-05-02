@@ -11,6 +11,8 @@ csv_file_path='./data/bitfinex_btc.csv'
 
 
 lock=threading.Lock()
+def get_current_time():
+    return datetime.fromtimestamp(int(time.time()+8*3600), tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
 def write_to_csv(data_row):
     with lock:
@@ -58,27 +60,27 @@ def process_message(message):
             write_to_csv(data_row )
             #print(f"saved data to csv: {data_row}")
     except json.JSONDecodeError as e:
-        print(f"JSON decode error: {e}")
+        print(f"{get_current_time()}: JSON decode error: {e}")
     except IOError as e:
-        print(f"IOError: {e}")
+        print(f"{get_current_time()}: IOError: {e}")
     
 def on_message(ws,message):
     #print("received a message")
     threading.Thread(target=process_message, args=(message,)).start()
     
 def on_error(ws,error):
-    print(f"Encountereed an error :{error}")
+    print(f"{get_current_time()}: Encountereed an error :{error}")
     
 def on_close(ws,close_status_code,close_msg):
-    print(f"closed connection.code={close_status_code}.msg={close_msg}")
+    print(f"{get_current_time()}: closed connection.code={close_status_code}.msg={close_msg}")
     
 def on_ping(ws,msg):
     if msg=='hello':
-        print(f"Got a ping msg={msg}. A pong reply has already been automatically sent.")    
+        print(f"{get_current_time()}: Got a ping msg={msg}. A pong reply has already been automatically sent.")    
 
 def on_pong(ws,msg):
     if msg=='hello':
-        print(f"Got a pong msg={msg}. No need to respond")
+        print(f"{get_current_time()}: Got a pong msg={msg}. No need to respond")
     
 def on_open(ws):
     subscribe_message = json.dumps({
@@ -88,7 +90,7 @@ def on_open(ws):
         
     })
     ws.send(subscribe_message)
-    print("sent subscribe")
+    print(f"{get_current_time()}: sent subscribe")
 
 def setup_csv_file():
     with open(csv_file_path,mode='a',newline='') as file:
@@ -108,5 +110,6 @@ def get_data():
     ws.run_forever(ping_interval=60, ping_timeout=10, ping_payload="PING")
     
 if __name__ == "__main__":
+    print(f"start at {get_current_time()}")
     get_data()
     
