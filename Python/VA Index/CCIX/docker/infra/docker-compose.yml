@@ -1,16 +1,17 @@
 services:
    redis-va: 
-     image: redislabs/redismod
-     volumes:
-     - ./redis-cache:/data
-     ports:
-       - '6379:6379' 
+      image: redislabs/redismod
+      volumes:
+        - ./redis-cache:/data
+      ports:
+        - '6379:6379' 
    dynamodb-va:
       image: amazon/dynamodb-local
       command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data/"
+      user: 0:0
       volumes:
-      - ./dynamodb-data:/home/dynamodblocal/data
-     ports:
+        - ./dynamodb-data:/home/dynamodblocal/data
+      ports:
         - '8000:8000'
    dynamodb-admin:
       image: aaronshaf/dynamodb-admin
