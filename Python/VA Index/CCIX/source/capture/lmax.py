@@ -68,12 +68,10 @@ def on_close(ws,close_status_code,close_msg):
     print(f"{get_current_time()}: closed connection.code={close_status_code}.msg={close_msg}")
     
 def on_ping(ws,msg):
-    if not msg=='hello':
-        print(f"Got a ping msg={msg}. A pong reply has already been automatically sent.")    
+    print(f"{get_current_time()}: Got a ping msg={msg}. A pong reply has already been automatically sent.")    
 
 def on_pong(ws,msg):
-    if not msg=='hello':
-        print(f"Got a pong msg={msg}. No need to respond")
+    print(f"{get_current_time()}: Got a pong msg={msg}. No need to respond")
     
 def on_open(ws):
     subscribe_message = json.dumps({
