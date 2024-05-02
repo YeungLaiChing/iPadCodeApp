@@ -53,7 +53,7 @@ def create_table(dynamodb=None,exchange=None):
             'WriteCapacityUnits': 1000  # WriteCapacityUnits set to 10 writes per second
         }
         )
-    except dynamodb_client.exceptions.ResourceInUseException:
+    except Exception:
     # do something here as you require
         pass
     

@@ -1,15 +1,15 @@
 import boto3
 
 dynamodb = boto3.resource(
-    'dynamodb', endpoint_url="http://localhost:8000",region_name='us-east-1',aws_access_key_id='key',
+    'dynamodb', endpoint_url="http://192.168.0.3:8000",region_name='us-east-1',aws_access_key_id='key',
         aws_secret_access_key= '')
 
 def create_books_table(dynamodb=None,exchange=None):
 
     
     # Each table/index must have 1 hash key and 0 or 1 range keys.
-    
-    table = dynamodb.create_table(
+    table=None
+    try: table = dynamodb.create_table(
         TableName=exchange,
         KeySchema=[
 
@@ -38,11 +38,14 @@ def create_books_table(dynamodb=None,exchange=None):
             'ReadCapacityUnits': 1000,
             'WriteCapacityUnits': 1000  # WriteCapacityUnits set to 10 writes per second
         }
-    )
+        )
+    except Exception:
+        pass
     return table
 
 if __name__ == '__main__':
     exchange_list=['bitstamp','bitfinex','itbit','kraken','lmax','cexio','cryptodotcom','bullish','coinbase']
     for exchange_name in exchange_list:
         book_table = create_books_table(dynamodb=dynamodb,exchange=exchange_name)
-        print("Status:", book_table.table_status)
+        if (book_table):
+            print("Status:", book_table.table_status)
