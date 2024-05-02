@@ -1,6 +1,6 @@
 services:
    coinbase-1:
-        build: .
+        image: vaindex-base
         container_name: coinbase-1
         restart: unless-stopped
         volumes:
@@ -8,7 +8,7 @@ services:
             - .:/code/
         network_mode: host  
    kraken-1:
-        build: .
+        image: vaindex-base
         container_name: kraken-1
         restart: unless-stopped
         volumes:
@@ -16,7 +16,7 @@ services:
             - .:/code/
         network_mode: host  
    bitstamp-1:
-        build: .
+        image: vaindex-base
         container_name: bitstamp-1
         restart: unless-stopped
         volumes:
@@ -24,7 +24,7 @@ services:
             - .:/code/
         network_mode: host  
    itbit-1:
-        build: .
+        image: vaindex-base
         container_name: itbit-1
         restart: unless-stopped
         volumes:
@@ -32,7 +32,7 @@ services:
             - .:/code/
         network_mode: host  
    lmax-1:
-        build: .
+        image: vaindex-base
         container_name: lmax-1
         restart: unless-stopped
         volumes:
@@ -40,7 +40,7 @@ services:
             - .:/code/
         network_mode: host  
    cryptodotcom-1:
-        build: .
+        image: vaindex-base
         container_name: cryptodotcom-1
         restart: unless-stopped
         volumes:
@@ -48,7 +48,7 @@ services:
             - .:/code/
         network_mode: host  
    bitfinex-1:
-        build: .
+        image: vaindex-base
         container_name: bitfinex-1
         restart: unless-stopped
         volumes:
