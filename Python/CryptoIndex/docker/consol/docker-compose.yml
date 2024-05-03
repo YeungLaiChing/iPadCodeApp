@@ -2,6 +2,7 @@ services:
    consol-kraken:
         image: vaindex-base
         container_name: consol-kraken
+        restart: unless-stopped
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-kraken.json:/code/config.json
@@ -10,6 +11,7 @@ services:
    consol-coinbase:
         image: vaindex-base
         container_name: consol-coinbase
+        restart: unless-stopped
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-coinbase.json:/code/config.json
@@ -18,6 +20,7 @@ services:
    consol-itbit:
         image: vaindex-base
         container_name: consol-itbit
+        restart: unless-stopped
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-itbit.json:/code/config.json
@@ -26,6 +29,7 @@ services:
    consol-lmax:
         image: vaindex-base
         container_name: consol-lmax
+        restart: unless-stopped
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-lmax.json:/code/config.json
@@ -34,6 +38,7 @@ services:
    consol-bitstamp:
         image: vaindex-base
         container_name: consol-bitstamp
+        restart: unless-stopped
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-bitstamp.json:/code/config.json
@@ -42,6 +47,7 @@ services:
    consol-cryptodotcom:
         image: vaindex-base
         container_name: consol-cryptodotcom
+        restart: unless-stopped
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-cryptodotcom.json:/code/config.json
@@ -50,6 +56,7 @@ services:
    consol-bitfinex:
         image: vaindex-base
         container_name: consol-bitfinex
+        restart: unless-stopped
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-bitfinex.json:/code/config.json
@@ -58,6 +65,7 @@ services:
    consol-bullish:
         image: vaindex-base
         container_name: consol-bullish
+        restart: unless-stopped
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-bullish.json:/code/config.json
@@ -66,6 +74,7 @@ services:
    consol-cexio:
         image: vaindex-base
         container_name: consol-cexio
+        restart: unless-stopped
         volumes:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-cexio.json:/code/config.json
