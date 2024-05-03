@@ -11,6 +11,8 @@ services:
 networks:
     redis_network:
         name: redis_network
+        external: true
     dynamodb_network:
         name: dynamodb_network
+        external: true
 
