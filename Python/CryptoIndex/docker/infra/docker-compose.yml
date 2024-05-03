@@ -1,31 +1,33 @@
 services:
-   redis-va: 
-      image: redislabs/redismod
-      volumes:
-        - ./redis-cache:/data
-      ports:
-        - '6379:6379' 
-      networks:
-        - infra_default
-   dynamodb-va:
-      image: amazon/dynamodb-local
-      command: "-jar DynamoDBLocal.jar -dbPath ./data/"
-      user: 0:0
-      volumes:
-        - ./dynamodb-data:/home/dynamodblocal/data
-      ports:
-        - '8000:8000'
-      networks:
-        - infra_default
-   dynamodb-admin:
-      image: aaronshaf/dynamodb-admin
-      ports:
-        - '8001:8001'
-      environment:
-        DYNAMO_ENDPOINT: "http://dynamodb-va:8000"
-      networks:
-        - infra_default
+  redis-va: 
+    image: redislabs/redismod
+    volumes:
+      - ./redis-cache:/data
+    ports:
+      - '6379:6379' 
+    networks:
+      - redis_network
+  dynamodb-va:
+    image: amazon/dynamodb-local
+    command: "-jar DynamoDBLocal.jar -dbPath ./data/"
+    user: 0:0
+    volumes:
+      - ./dynamodb-data:/home/dynamodblocal/data
+    ports:
+      - '8000:8000'
+    networks:
+      - dynamodb_network
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin
+    ports:
+      - '8001:8001'
+    environment:
+      DYNAMO_ENDPOINT: "http://dynamodb-va:8000"
+    networks:
+      - dynamodb_network
 networks:
-  infra_default:
-    name: infra_default
+  dynamodb_network:
+    name: dynamodb_network
+  redis_network:
+    name: redis_network
 

@@ -7,7 +7,7 @@ services:
             - ../../source/capture/coinbase.py:/code/app.py
             - .:/code/
         networks:
-            - infra_default
+            - redis_network
    kraken-1:
         image: vaindex-base
         container_name: kraken-1
@@ -16,7 +16,7 @@ services:
             - ../../source/capture/kraken.py:/code/app.py
             - .:/code/
         networks:
-            - infra_default
+            - redis_network
    bitstamp-1:
         image: vaindex-base
         container_name: bitstamp-1
@@ -25,7 +25,7 @@ services:
             - ../../source/capture/bitstamp.py:/code/app.py
             - .:/code/
         networks:
-            - infra_default
+            - redis_network
    itbit-1:
         image: vaindex-base
         container_name: itbit-1
@@ -34,7 +34,7 @@ services:
             - ../../source/capture/itbit.py:/code/app.py
             - .:/code/
         networks:
-            - infra_default
+            - redis_network
    lmax-1:
         image: vaindex-base
         container_name: lmax-1
@@ -43,7 +43,7 @@ services:
             - ../../source/capture/lmax.py:/code/app.py
             - .:/code/
         networks:
-            - infra_default
+            - redis_network
    cryptodotcom-1:
         image: vaindex-base
         container_name: cryptodotcom-1
@@ -52,7 +52,7 @@ services:
             - ../../source/capture/cryptodotcom.py:/code/app.py
             - .:/code/
         networks:
-            - infra_default
+            - redis_network
    bitfinex-1:
         image: vaindex-base
         container_name: bitfinex-1
@@ -61,8 +61,8 @@ services:
             - ../../source/capture/bitfinex.py:/code/app.py
             - .:/code/
         networks:
-            - infra_default
+            - redis_network
 networks:
-  infra_default:
-    name: infra_default
+  redis_network:
+    name: redis_network
 

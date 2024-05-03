@@ -1,0 +1,14 @@
+{
+    "redis_ip":"redis-va",
+    "redis_port":6379,
+
+    "endpoint_url":"http://dynamodb-va:8000",
+    "region_name":"us-east-1",
+    "aws_access_key_id":"key",
+    "aws_secret_access_key":"",
+
+    "source_topic":"all-exchanges-log",
+
+    "target_table":"all-exchanges"
+
+}

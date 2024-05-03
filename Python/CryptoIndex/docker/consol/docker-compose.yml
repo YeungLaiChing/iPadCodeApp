@@ -6,7 +6,7 @@ services:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-kraken.json:/code/config.json
         networks:
-            - infra_default
+            - redis_network
    consol-coinbase:
         image: vaindex-base
         container_name: consol-coinbase
@@ -14,7 +14,7 @@ services:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-coinbase.json:/code/config.json
         networks:
-            - infra_default
+            - redis_network
    consol-itbit:
         image: vaindex-base
         container_name: consol-itbit
@@ -22,7 +22,7 @@ services:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-itbit.json:/code/config.json
         networks:
-            - infra_default
+            - redis_network
    consol-lmax:
         image: vaindex-base
         container_name: consol-lmax
@@ -30,7 +30,7 @@ services:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-lmax.json:/code/config.json
         networks:
-            - infra_default
+            - redis_network
    consol-bitstamp:
         image: vaindex-base
         container_name: consol-bitstamp
@@ -38,7 +38,7 @@ services:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-bitstamp.json:/code/config.json
         networks:
-            - infra_default
+            - redis_network
    consol-cryptodotcom:
         image: vaindex-base
         container_name: consol-cryptodotcom
@@ -46,7 +46,7 @@ services:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-cryptodotcom.json:/code/config.json
         networks:
-            - infra_default
+            - redis_network
    consol-bitfinex:
         image: vaindex-base
         container_name: consol-bitfinex
@@ -54,7 +54,7 @@ services:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-bitfinex.json:/code/config.json
         networks:
-            - infra_default
+            - redis_network
    consol-bullish:
         image: vaindex-base
         container_name: consol-bullish
@@ -62,7 +62,7 @@ services:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-bullish.json:/code/config.json
         networks:
-            - infra_default
+            - redis_network
    consol-cexio:
         image: vaindex-base
         container_name: consol-cexio
@@ -70,8 +70,8 @@ services:
             - ../../source/capture/consol.py:/code/app.py
             - ../../source/capture/config/consol-cexio.json:/code/config.json
         networks:
-            - infra_default
+            - redis_network
 networks:
-  infra_default:
-    name: infra_default
+  redis_network:
+    name: redis_network
 
