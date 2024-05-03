@@ -23,6 +23,9 @@ services:
       - '8001:8001'
     environment:
       DYNAMO_ENDPOINT: "http://dynamodb-va:8000"
+      AWS_REGION: "eu-west-1"
+      AWS_ACCESS_KEY_ID: "local"
+      AWS_SECRET_ACCESS_KEY: "local"
     networks:
       - dynamodb_network
 networks:

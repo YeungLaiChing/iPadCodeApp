@@ -75,14 +75,16 @@ def main_process(table,rds,dynamodb,topic):
                 payload=json.loads(message['data'],parse_float=Decimal)
                 exchange_table.put_item(Item=payload)
 if __name__ == "__main__":
-    
+    print(f"{get_current_time()}: application startup! ")
+    print(sys.argv)
     if len(sys.argv) > 1:
         
         file_path=sys.argv[1]
         f = open (file_path, "r")
         config = json.loads(f.read())
         f.close()
-
+        print(f"{get_current_time()}: config conten:")
+        print(config)
         
         target_table = config['target_table']
         source_topic = config['source_topic']

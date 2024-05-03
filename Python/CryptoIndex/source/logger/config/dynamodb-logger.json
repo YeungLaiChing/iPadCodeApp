@@ -4,8 +4,8 @@
 
     "endpoint_url":"http://dynamodb-va:8000",
     "region_name":"us-east-1",
-    "aws_access_key_id":"key",
-    "aws_secret_access_key":"",
+    "aws_access_key_id":"local",
+    "aws_secret_access_key":"local",
 
     "source_topic":"all-exchanges-log",
 
