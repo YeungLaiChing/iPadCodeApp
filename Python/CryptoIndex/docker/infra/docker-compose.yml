@@ -28,6 +28,14 @@ services:
       AWS_SECRET_ACCESS_KEY: "local"
     networks:
       - dynamodb_network
+  dynamodb-manager:
+    image: taydy/dynamodb-manager
+    ports:
+      - "8080:80"
+    privileged: true
+    restart: always
+    networks:
+      - dynamodb_network
 networks:
   dynamodb_network:
     name: dynamodb_network
