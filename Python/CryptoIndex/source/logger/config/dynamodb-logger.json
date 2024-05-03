@@ -7,7 +7,7 @@
     "aws_access_key_id":"local",
     "aws_secret_access_key":"local",
 
-    "source_topic":"all-exchanges-log",
+    "source_topic":"ccix_btc_data_channel",
 
     "target_table":"all-exchanges"
 

@@ -38,7 +38,7 @@ def main_process(exchange,rds):
                 acc_vol=volume;  
         
                 key=f"{payload['exchange']}_{payload['timestamp_org']}_{payload['from_symbol']}_{payload['to_symbol']}_{payload['side']}_{payload['trade_id']}_{payload['price']}_{payload['volume']}"
-                if rds.setnx(key,"1") and 1==2:
+                if rds.setnx(key,"1"):
                     rds.expire(key,3600*24)
                     if rds.hget(hr,exchange) :
                         acc_vol=volume+float(rds.hget(hr,exchange))
