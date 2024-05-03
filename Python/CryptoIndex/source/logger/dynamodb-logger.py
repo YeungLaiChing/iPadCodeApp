@@ -25,22 +25,14 @@ def create_table(dynamodb=None,table=None):
         KeySchema=[
 
             {
-                'AttributeName': 'timestamp_hrs',
-                'KeyType': 'HASH'  # Sort key
-            },
-            {
                 'AttributeName': 'timestamp',
-                'KeyType': 'RANGE'  # Sort key
+                'KeyType': 'HASH'  # Sort key
             }
         ],
         AttributeDefinitions=[
             {
-                'AttributeName': 'timestamp_hrs',
-                # AttributeType refers to the data type 'N' for number type and 'S' stands for string type.
-                'AttributeType': 'N'
-            },
-            {
                 'AttributeName': 'timestamp',
+                # AttributeType refers to the data type 'N' for number type and 'S' stands for string type.
                 'AttributeType': 'N'
             }
         ],
