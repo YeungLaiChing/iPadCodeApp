@@ -25,15 +25,15 @@ def create_table(dynamodb=None,table=None):
         KeySchema=[
 
             {
-                'AttributeName': 'timestamp',
+                'AttributeName': 'key',
                 'KeyType': 'HASH'  # Sort key
             }
         ],
         AttributeDefinitions=[
             {
-                'AttributeName': 'timestamp',
+                'AttributeName': 'key',
                 # AttributeType refers to the data type 'N' for number type and 'S' stands for string type.
-                'AttributeType': 'N'
+                'AttributeType': 'S'
             }
         ],
         ProvisionedThroughput={
@@ -74,7 +74,8 @@ def main_process(table,rds,dynamodb,topic):
                     last_count=current_count
                     last_time=current_time
                 payload=json.loads(message['data'],parse_float=Decimal)
-                
+                key=f"{payload['exchange']}_{payload['timestamp_org']}_{payload['from_symbol']}_{payload['to_symbol']}_{payload['side']}_{payload['trade_id']}_{payload['price']}_{payload['volume']}"
+                payload['key']=key
                 exchange_table.put_item(Item=payload)
 if __name__ == "__main__":
     print(f"{get_current_time()}: application startup! ")
@@ -102,7 +103,7 @@ if __name__ == "__main__":
             aws_access_key_id=config['aws_access_key_id'],
             aws_secret_access_key= config['aws_secret_access_key'])
     else:
-        target_table = 'coinbase'
+        target_table = 'test'
         source_topic = 'ccix_btc_data_channel'
         rds = redis.Redis(host='192.168.0.3', port=6379, db=0,decode_responses=True)
         dynamodb = boto3.resource(
