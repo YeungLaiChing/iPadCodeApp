@@ -23,7 +23,7 @@ def create_books_table(session):
             {
                 'AttributeName': 'book_id',
                 'KeyType': 'HASH'  # Partition key
-            
+            }
         ],
         AttributeDefinitions=[
             {
