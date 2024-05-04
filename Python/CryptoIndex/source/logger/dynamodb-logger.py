@@ -119,7 +119,7 @@ if __name__ == "__main__":
         source_topic = 'ccix_btc_data_channel'
         rds = redis.Redis(host='192.168.0.3', port=6379, db=0,decode_responses=True)
         dynamodb = boto3.resource(
-        'dynamodb', endpoint_url="http://192.168.0.3:8000",region_name='us-east-1',aws_access_key_id='local',
+        'dynamodb', endpoint_url="http://192.168.0.3:8000",region_name='us-east-1',aws_access_key_id='test',
             aws_secret_access_key= 'local')
         
     main_process(table=target_table,rds=rds,dynamodb=dynamodb,topic=source_topic)
