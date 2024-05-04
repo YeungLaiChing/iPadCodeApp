@@ -2,9 +2,20 @@ services:
     logger-dynamodb:
         image: vaindex-base
         container_name: logger-dynamodb
+        restart: unless-stopped
         volumes:
             - ../../source/logger/dynamodb-logger.py:/code/app.py
             - ../../source/logger/config/dynamodb-logger.json:/code/config.json
+        networks:
+            - redis_network
+            - dynamodb_network
+    partition-logger-dynamodb:
+        image: vaindex-base
+        container_name: partition-logger-dynamodb
+        restart: unless-stopped
+        volumes:
+            - ../../source/logger/partition-dynamodb-logger.py:/code/app.py
+            - ../../source/logger/config/partition-dynamodb-logger.json:/code/config.json
         networks:
             - redis_network
             - dynamodb_network

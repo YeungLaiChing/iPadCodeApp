@@ -1,0 +1,12 @@
+{
+    "redis_ip":"redis-va",
+    "redis_port":6379,
+
+    "endpoint_url":"http://dynamodb-va:8000",
+    "region_name":"us-east-1",
+
+    "source_topic":"ccix_btc_data_channel",
+
+    "target_table":"all-exchanges"
+
+}
