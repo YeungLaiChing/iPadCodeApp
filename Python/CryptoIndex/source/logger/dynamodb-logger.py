@@ -45,12 +45,17 @@ def create_table(dynamodb=None,table=None):
     except Exception:
     # do something here as you require
         pass
+def get_partition(input):
+    return int(input/5/60)*5*60
     
 def main_process(table,rds,dynamodb,topic):
-
-    create_table(dynamodb=dynamodb,table=table)
+    table_list=[]
+    table_name=f"{table}_{get_partition(time.time())}"
+    if table_name not in table_list:
+        create_table(dynamodb=dynamodb,table=table_name)
+        table_list.append(table_name)
     
-    exchange_table = dynamodb.Table(table)
+    exchange_table = dynamodb.Table(table_name)
 
     mobile = rds.pubsub()
     mobile.subscribe(topic)
@@ -76,6 +81,13 @@ def main_process(table,rds,dynamodb,topic):
                 payload=json.loads(message['data'],parse_float=Decimal)
                 key=f"{payload['exchange']}_{payload['timestamp_org']}_{payload['from_symbol']}_{payload['to_symbol']}_{payload['side']}_{payload['trade_id']}_{payload['price']}_{payload['volume']}"
                 payload['key']=key
+                table_name=f"{table}_{get_partition(payload['timestamp'])}"
+                if table_name not in table_list:
+                   create_table(dynamodb=dynamodb,table=table_name)
+                   table_list.append(table_name)
+    
+                exchange_table = dynamodb.Table(table_name)
+    
                 exchange_table.put_item(Item=payload)
 if __name__ == "__main__":
     print(f"{get_current_time()}: application startup! ")
