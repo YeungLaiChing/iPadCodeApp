@@ -24,7 +24,9 @@ def endprocess():
     #f.close()
 
     return "OK"
-
+current_count=0
+last_count=0
+last_time=0
 while True:
     message = mobile.get_message(timeout=5)
     if message:
@@ -33,5 +35,11 @@ while True:
             endprocess()
             exit()
         if message['data']!=1 :
-            print(message['data'])
+            current_count=current_count+1
+            current_time=time.time()
+            if int(current_time/10)*10==int(current_time) and int(current_time)>int(last_time):
+                print(f"{get_current_time()}: {round((current_count-last_count)/(current_time-last_time),2)} processed in every sec! total = {current_count} since started!")
+                last_count=current_count
+                last_time=current_time
+            #print(message['data'])
             
