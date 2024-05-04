@@ -38,7 +38,7 @@ def create_books_table(session):
             'WriteCapacityUnits': 10  # WriteCapacityUnits set to 10 writes per second
         }
     )
-    print(table.status)
+    print(f"table status is {table.table_status}")
 
 if __name__ == '__main__':
     create()
