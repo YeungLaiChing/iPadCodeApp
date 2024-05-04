@@ -1,9 +1,22 @@
 import boto3
-
-def create_books_table(dynamodb=None):
-    dynamodb = boto3.resource(
-        'dynamodb', endpoint_url="http://192.168.0.3:8000",region_name='us-east-1',aws_access_key_id='key',
-         aws_secret_access_key= '')
+def create():
+    session1 = boto3.Session(
+    aws_access_key_id='test1',
+    aws_secret_access_key='test1',
+    region='us-east-1'
+    )
+    
+    
+    session2 = boto3.Session(
+    aws_access_key_id='test2',
+    aws_secret_access_key='test2',
+    region='us-east-1'
+    )
+    create_books_table(session1)
+    create_books_table(session2)
+    
+def create_books_table(session):
+    dynamodb=session.resource('dynamodb',endpoint_url="http://192.168.0.3:8000")
     table = dynamodb.create_table(
         TableName='Books',
         KeySchema=[
@@ -28,4 +41,4 @@ def create_books_table(dynamodb=None):
     print(table.status)
 
 if __name__ == '__main__':
-    create_books_table()
+    create()
