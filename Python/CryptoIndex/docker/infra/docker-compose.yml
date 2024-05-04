@@ -9,7 +9,7 @@ services:
       - redis_network
   dynamodb-va:
     image: amazon/dynamodb-local
-    #command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data/"
+    command: "-jar DynamoDBLocal.jar -dbPath ./data/"
     user: 0:0
     volumes:
       - ./dynamodb-data:/home/dynamodblocal/data
