@@ -46,7 +46,7 @@ def create_table(dynamodb=None,table=None):
     # do something here as you require
         pass
 def get_partition(input):
-    return int(input/5/60)*5*60
+    return int(input/3600)*3600
     
 def main_process(table,rds,dynamodb,topic):
     table_list=[]
