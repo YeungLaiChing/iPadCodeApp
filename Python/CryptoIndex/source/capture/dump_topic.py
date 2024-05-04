@@ -4,12 +4,12 @@ import sys
 from datetime import date, timedelta
 import json
 
-topic = 'ccix_index_channel'
+topic = 'ccix_btc_data_channel'
 if len(sys.argv) > 1:
     topic=sys.argv[1]
 
 
-rds = redis.Redis(host='localhost', port=6379, db=0,decode_responses=True)
+rds = redis.Redis(host='192.168.0.3', port=6379, db=0,decode_responses=True)
 
 mobile = rds.pubsub()
 mobile.subscribe(topic)

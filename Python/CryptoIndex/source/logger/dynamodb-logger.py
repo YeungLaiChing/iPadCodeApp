@@ -55,6 +55,9 @@ def main_process(table,rds,dynamodb,topic):
     mobile = rds.pubsub()
     mobile.subscribe(topic)
     print(f"{get_current_time()}: already subscribed channel {topic}")
+    current_count=0
+    last_count=0
+    last_time=0
     
     while True:
         message = mobile.get_message(timeout=5)
@@ -64,7 +67,14 @@ def main_process(table,rds,dynamodb,topic):
                 endprocess()
                 exit()
             if message['data']!=1 :
+                current_count=current_count+1
+                current_time=time.time()
+                if int(current_time/10)*10==int(current_time) and int(current_time)>int(last_time):
+                    print(f"{get_current_time()}: {round((current_count-last_count)/(current_time-last_time),2)} processed in every sec! total = {current_count} since started!")
+                    last_count=current_count
+                    last_time=current_time
                 payload=json.loads(message['data'],parse_float=Decimal)
+                
                 exchange_table.put_item(Item=payload)
 if __name__ == "__main__":
     print(f"{get_current_time()}: application startup! ")
@@ -93,9 +103,10 @@ if __name__ == "__main__":
             aws_secret_access_key= config['aws_secret_access_key'])
     else:
         target_table = 'coinbase'
+        source_topic = 'ccix_btc_data_channel'
         rds = redis.Redis(host='192.168.0.3', port=6379, db=0,decode_responses=True)
         dynamodb = boto3.resource(
-        'dynamodb', endpoint_url="http://192.168.0.3:8000",region_name='us-east-1',aws_access_key_id='key',
-            aws_secret_access_key= '')
+        'dynamodb', endpoint_url="http://192.168.0.3:8000",region_name='us-east-1',aws_access_key_id='local',
+            aws_secret_access_key= 'local')
         
     main_process(table=target_table,rds=rds,dynamodb=dynamodb,topic=source_topic)
