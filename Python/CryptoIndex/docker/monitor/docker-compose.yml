@@ -1,0 +1,16 @@
+services:
+  dynamodb-monitor:
+    image: aaronshaf/dynamodb-admin
+    ports:
+      - '8009:8001'
+    environment:
+      DYNAMO_ENDPOINT: "http://dynamodb-va:8000"
+      AWS_REGION: "us-east-1"
+      AWS_ACCESS_KEY_ID: "IDXDATE20240505"
+      AWS_SECRET_ACCESS_KEY: "IDXDATE20240505"
+    networks:
+      - dynamodb_network
+networks:
+  dynamodb_network:
+    name: dynamodb_network
+    external: true
