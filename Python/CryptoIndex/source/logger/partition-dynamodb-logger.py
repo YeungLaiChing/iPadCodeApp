@@ -116,9 +116,9 @@ def main_process(table,rds,topic,dbconfig):
                     exchange_table = dynamodb.Table(table_name)
                     table_list[table_name]=exchange_table
     
-                table = table_list[table_name]
+                thistable = table_list[table_name]
     
-                table.batch_writer().put_item(Item=payload)
+                thistable.batch_writer().put_item(Item=payload)
 if __name__ == "__main__":
     print(f"{get_current_time()}: application startup! ")
     print(sys.argv)
