@@ -10,7 +10,7 @@ services:
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
-            - ../../source/capture/coinbase.py:/code/app.py
+            - ../../source/websocket/coinbase.py:/code/app.py
             - .:/code/
         networks:
             - redis_network
@@ -25,7 +25,7 @@ services:
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
-            - ../../source/capture/kraken.py:/code/app.py
+            - ../../source/websocket/kraken.py:/code/app.py
             - .:/code/
         networks:
             - redis_network
@@ -40,7 +40,7 @@ services:
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
-            - ../../source/capture/bitstamp.py:/code/app.py
+            - ../../source/websocket/bitstamp.py:/code/app.py
             - .:/code/
         networks:
             - redis_network
@@ -55,7 +55,7 @@ services:
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
-            - ../../source/capture/itbit.py:/code/app.py
+            - ../../source/websocket/itbit.py:/code/app.py
             - .:/code/
         networks:
             - redis_network
@@ -70,7 +70,7 @@ services:
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
-            - ../../source/capture/lmax.py:/code/app.py
+            - ../../source/websocket/lmax.py:/code/app.py
             - .:/code/
         networks:
             - redis_network
@@ -85,7 +85,7 @@ services:
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
-            - ../../source/capture/cryptodotcom.py:/code/app.py
+            - ../../source/websocket/cryptodotcom.py:/code/app.py
             - .:/code/
         networks:
             - redis_network
@@ -100,7 +100,7 @@ services:
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
-            - ../../source/capture/bitfinex.py:/code/app.py
+            - ../../source/websocket/bitfinex.py:/code/app.py
             - .:/code/
         networks:
             - redis_network
