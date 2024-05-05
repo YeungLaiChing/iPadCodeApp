@@ -68,7 +68,7 @@ def main_process(table,rds,topic,dbconfig):
     
     create_table(dynamodb=dynamodb,table=table_name)
     
-    exchange_table = dynamodb.Table(table_name)
+    exchange_table = dynamodb.Table(table_name).batch_writer()
     table_list[table_name]=exchange_table
     
     mobile = rds.pubsub()
@@ -113,7 +113,7 @@ def main_process(table,rds,topic,dbconfig):
                     print(f"{get_current_time()}: create new table. {table_name}")
                     create_table(dynamodb=dynamodb,table=table_name)
                     
-                    exchange_table = dynamodb.Table(table_name)
+                    exchange_table = dynamodb.Table(table_name).batch_writer()
                     table_list[table_name]=exchange_table
     
                 thistable = table_list[table_name]
