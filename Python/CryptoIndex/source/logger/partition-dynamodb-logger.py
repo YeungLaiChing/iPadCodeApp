@@ -118,7 +118,7 @@ def main_process(table,rds,topic,dbconfig):
     
                 thistable = table_list[table_name]
     
-                thistable.batch_writer().put_item(Item=payload)
+                thistable.put_item(Item=payload)
 if __name__ == "__main__":
     print(f"{get_current_time()}: application startup! ")
     print(sys.argv)
