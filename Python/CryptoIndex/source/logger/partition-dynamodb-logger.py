@@ -50,7 +50,7 @@ def get_db_partition(input):
     
 def main_process(table,rds,topic,dbconfig):
     now=time.time()
-    table_list=[]
+    table_list={}
     session_list={}
     
     session_name=get_db_partition(now)
@@ -65,12 +65,12 @@ def main_process(table,rds,topic,dbconfig):
     
     
     table_name=f"{table}_{get_table_partition(now)}"
-    if table_name not in table_list:
-        create_table(dynamodb=dynamodb,table=table_name)
-        table_list.append(table_name)
+    
+    create_table(dynamodb=dynamodb,table=table_name)
     
     exchange_table = dynamodb.Table(table_name)
-
+    table_list[table_name]=exchange_table
+    
     mobile = rds.pubsub()
     mobile.subscribe(topic)
     print(f"{get_current_time()}: already subscribed channel {topic}")
@@ -109,14 +109,16 @@ def main_process(table,rds,topic,dbconfig):
                         
                 dynamodb=session_list[session_name]
                 
-                if table_name not in table_list:
+                if table_name not in table_list.keys():
                     print(f"{get_current_time()}: create new table. {table_name}")
                     create_table(dynamodb=dynamodb,table=table_name)
-                    table_list.append(table_name)
+                    
+                    exchange_table = dynamodb.Table(table_name)
+                    table_list[table_name]=exchange_table
     
-                exchange_table = dynamodb.Table(table_name)
+                table = table_list[table_name]
     
-                exchange_table.put_item(Item=payload)
+                table.batch_writer().put_item(Item=payload)
 if __name__ == "__main__":
     print(f"{get_current_time()}: application startup! ")
     print(sys.argv)
