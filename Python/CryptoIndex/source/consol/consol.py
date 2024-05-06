@@ -16,7 +16,7 @@ exchange_name=os.environ.get('EXCHANGE_NAME','bitfinex')
 
 csv_file_path=f'./data/{exchange_name.lower()}_{crypto_asset.lower()}.csv'
 ccix_from_data_channel=f'ccix_{exchange_name.lower()}_{crypto_asset.lower()}_data_channel'
-ccix_consol_data_channel=f'ccix_{crpto_asset.lower()}_data_channel'
+ccix_consol_data_channel=f'ccix_{crypto_asset.lower()}_data_channel'
 
 
 data_path="./data/"
