@@ -1,0 +1,81 @@
+services:
+   coinbase-eth-rest:
+        image: vaindex-base
+        container_name: coinbase-eth-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "coinbase"
+            PROD_ID: "ETH-USD"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/coinbase.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+   kraken-eth-rest:
+        image: vaindex-base
+        container_name: kraken-eth-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "kraken"
+            PROD_ID: "ETHUSD"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/kraken.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+   bitstamp-eth-rest:
+        image: vaindex-base
+        container_name: bitstamp-eth-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "bitstamp"
+            PROD_ID: "ethusd"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/bitstamp.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+   itbit-eth-rest:
+        image: vaindex-base
+        container_name: itbit-eth-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "itbit"
+            PROD_ID: "ETHUSD"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/itbit.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+   lmax-eth-rest:
+        image: vaindex-base
+        container_name: lmax-eth-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "lmax"
+            PROD_ID: "eth-usd"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/lmax.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+networks:
+  redis_network:
+    name: redis_network
+    external: true
+

@@ -9,7 +9,7 @@ import redis
 import os
 redis_host=os.environ.get('REDIS_HOST', '192.168.0.3')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
-product_ids=os.environ.get('PROD_ID', "XBT/USD")
+product_ids=os.environ.get('PROD_ID', "BTC/USD")
 crypto_asset=os.environ.get('CRYPTO_ASSET','BTC')
 exchange_name=os.environ.get('EXCHANGE_NAME','kraken')
 
@@ -35,22 +35,25 @@ def process_message(message):
     #print("received a message:",message)
     try:
         trade_data = json.loads(message)
-        if isinstance(trade_data,list) and trade_data[2] == 'trade':
-            trades = trade_data[1]
+        #print(f"Data ===={trade_data}=====")
+        if "channel" in trade_data and trade_data["channel"] == "trade":
+            # channel': 'heartbeat'
+            trades = trade_data["data"]
             for data in trades:
-                original_timestamp = float(data[2])
-                utc_datetime = datetime.fromtimestamp((original_timestamp), tz=timezone.utc)
+                #print(data)
+                original_timestamp = data["timestamp"]
+                utc_datetime = datetime.fromisoformat(original_timestamp.rstrip('Z')).replace(tzinfo=timezone.utc)
                 unix_timestamp=int(utc_datetime.timestamp())
                 hkt=timezone(timedelta(hours=8))
                 hkt_datetime=utc_datetime.astimezone(hkt)
                 hkt_timestamp=hkt_datetime.strftime('%Y-%m-%d %H:%M:%S')
-                trade_id=str(time.time_ns())
-                last_price=data[0]
-                last_quantity=data[1]
+                trade_id=data["trade_id"]
+                last_price=data["price"]
+                last_quantity=data["qty"]
                 side='U'
-                if str(data[3]) == 'b':
+                if str(data['side']) == 'buy':
                     side='B'
-                if str(data[3]) == 's':
+                if str(data["side"]) == 'sell':
                     side='S'
                 data_row=[original_timestamp,unix_timestamp,hkt_timestamp,trade_id,last_price,last_quantity]
                 payload={
@@ -69,7 +72,7 @@ def process_message(message):
                 }
                 rds.publish(ccix_data_channel,json.dumps(payload))
                 write_to_csv(data_row )
-                #print(f"saved data to csv: {data_row}")
+                print(f"saved data to csv: {data_row}")
     except json.JSONDecodeError as e:
         print(f"{get_current_time()}: JSON decode error: {e}")
     except IOError as e:
@@ -95,10 +98,10 @@ def on_pong(ws,msg):
    
 def on_open(ws):
     subscribe_message = json.dumps({
-        "event": "subscribe",
-        "pair": [product_ids],
-        "subscription": {
-            "name": "trade"
+        "method": "subscribe",
+        "params": {
+            "channel": "trade",
+            "symbol": [product_ids]
         }
     })
     ws.send(subscribe_message)
@@ -112,7 +115,7 @@ def setup_csv_file():
             
 def get_data():
     setup_csv_file()
-    ws=WebSocketApp("wss://ws.kraken.com/",
+    ws=WebSocketApp("wss://ws.kraken.com/v2",
                     on_open=on_open,
                     on_message=on_message,
                     on_ping=on_ping,

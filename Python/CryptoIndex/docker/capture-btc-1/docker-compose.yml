@@ -20,7 +20,7 @@ services:
         restart: unless-stopped
         environment:
             EXCHANGE_NAME: "kraken"
-            PROD_ID: "XBT/USD"
+            PROD_ID: "BTC/USD"
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"

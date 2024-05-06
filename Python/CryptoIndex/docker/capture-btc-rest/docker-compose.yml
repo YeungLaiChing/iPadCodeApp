@@ -1,7 +1,7 @@
 services:
-   coinbase-btc-2:
+   coinbase-btc-rest:
         image: vaindex-base
-        container_name: coinbase-btc-2
+        container_name: coinbase-btc-rest
         restart: unless-stopped
         environment:
             EXCHANGE_NAME: "coinbase"
@@ -10,43 +10,43 @@ services:
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
-            - ../../source/websocket/coinbase.py:/code/app.py
+            - ../../source/rest/coinbase.py:/code/app.py
             - .:/code/
         networks:
             - redis_network
-   kraken-btc-2:
+   kraken-btc-rest:
         image: vaindex-base
-        container_name: kraken-btc-2
+        container_name: kraken-btc-rest
         restart: unless-stopped
         environment:
             EXCHANGE_NAME: "kraken"
-            PROD_ID: "BTC/USD"
+            PROD_ID: "XBTUSD"
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
-            - ../../source/websocket/kraken.py:/code/app.py
+            - ../../source/rest/kraken.py:/code/app.py
             - .:/code/
         networks:
             - redis_network
-   bitstamp-btc-2:
+   bitstamp-btc-rest:
         image: vaindex-base
-        container_name: bitstamp-btc-2
+        container_name: bitstamp-btc-rest
         restart: unless-stopped
         environment:
             EXCHANGE_NAME: "bitstamp"
-            PROD_ID: "live_trades_btcusd"
+            PROD_ID: "btcusd"
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
-            - ../../source/websocket/bitstamp.py:/code/app.py
+            - ../../source/rest/bitstamp.py:/code/app.py
             - .:/code/
         networks:
             - redis_network
-   itbit-btc-2:
+   itbit-btc-rest:
         image: vaindex-base
-        container_name: itbit-btc-2
+        container_name: itbit-btc-rest
         restart: unless-stopped
         environment:
             EXCHANGE_NAME: "itbit"
@@ -55,52 +55,22 @@ services:
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
-            - ../../source/websocket/itbit.py:/code/app.py
+            - ../../source/rest/itbit.py:/code/app.py
             - .:/code/
         networks:
             - redis_network
-   lmax-btc-2:
+   lmax-btc-rest:
         image: vaindex-base
-        container_name: lmax-btc-2
+        container_name: lmax-btc-rest
         restart: unless-stopped
         environment:
             EXCHANGE_NAME: "lmax"
-            PROD_ID: "btc-usd"
+            PROD_ID: "BTC-usd"
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
-            - ../../source/websocket/lmax.py:/code/app.py
-            - .:/code/
-        networks:
-            - redis_network
-   cryptodotcom-btc-2:
-        image: vaindex-base
-        container_name: cryptodotcom-btc-2
-        restart: unless-stopped
-        environment:
-            EXCHANGE_NAME: "cryptodotcom"
-            PROD_ID: "trade.BTCUSD-PERP"
-            CRYPTO_ASSET: "BTC"
-            REDIS_HOST: "redis-va"
-            REDIS_PORT: "6379"
-        volumes:
-            - ../../source/websocket/cryptodotcom.py:/code/app.py
-            - .:/code/
-        networks:
-            - redis_network
-   bitfinex-btc-2:
-        image: vaindex-base
-        container_name: bitfinex-btc-2
-        restart: unless-stopped
-        environment:
-            EXCHANGE_NAME: "bitfinex"
-            PROD_ID: "tBTCUSD"
-            CRYPTO_ASSET: "BTC"
-            REDIS_HOST: "redis-va"
-            REDIS_PORT: "6379"
-        volumes:
-            - ../../source/websocket/bitfinex.py:/code/app.py
+            - ../../source/rest/lmax.py:/code/app.py
             - .:/code/
         networks:
             - redis_network
