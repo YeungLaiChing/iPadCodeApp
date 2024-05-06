@@ -1,0 +1,127 @@
+services:
+   consol-eth-kraken:
+        image: vaindex-base
+        container_name: consol-eth-kraken
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "kraken"
+            PROD_ID: "ETH-USD"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/capture/consol.py:/code/app.py
+            - ../../source/capture/config/consol-kraken.json:/code/config.json
+            - ./data/:/code/data/
+        networks:
+            - redis_network
+   coinbase-eth-1:
+        image: vaindex-base
+        container_name: coinbase-eth-1
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "coinbase"
+            PROD_ID: "ETH-USD"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/websocket/coinbase.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+   kraken-eth-1:
+        image: vaindex-base
+        container_name: kraken-eth-1
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "kraken"
+            PROD_ID: "ETH/USD"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/websocket/kraken.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+   bitstamp-eth-1:
+        image: vaindex-base
+        container_name: bitstamp-eth-1
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "bitstamp"
+            PROD_ID: "live_trades_ethusd"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/websocket/bitstamp.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+   itbit-eth-1:
+        image: vaindex-base
+        container_name: itbit-eth-1
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "itbit"
+            PROD_ID: "ETHUSD"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/websocket/itbit.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+   lmax-eth-1:
+        image: vaindex-base
+        container_name: lmax-eth-1
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "lmax"
+            PROD_ID: "eth-usd"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/websocket/lmax.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+   cryptodotcom-eth-1:
+        image: vaindex-base
+        container_name: cryptodotcom-eth-1
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "cryptodotcom"
+            PROD_ID: "trade.ETHUSD-PERP"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/websocket/cryptodotcom.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+   bitfinex-eth-1:
+        image: vaindex-base
+        container_name: bitfinex-eth-1
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "bitfinex"
+            PROD_ID: "tETHUSD"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/websocket/bitfinex.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+networks:
+  redis_network:
+    name: redis_network
+    external: true
+
