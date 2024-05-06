@@ -95,7 +95,7 @@ def get_data():
                 process_message(content["result"][f"X{product_ids[0:3]}Z{product_ids[3:6]}"])
                 last=content["result"]["last"]
             else:
-                print(f"Returned error {content["error"][0]}")
+                #print(f"Returned error {content["error"][0]}")
                 exit()
             time.sleep(6)
         else:
