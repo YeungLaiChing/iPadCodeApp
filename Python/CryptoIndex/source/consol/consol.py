@@ -10,13 +10,13 @@ from pathlib import Path
 import os
 redis_host=os.environ.get('REDIS_HOST', '192.168.0.3')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
-product_ids=os.environ.get('PROD_ID', "tBTCUSD")
+
 crypto_asset=os.environ.get('CRYPTO_ASSET','BTC')
 exchange_name=os.environ.get('EXCHANGE_NAME','bitfinex')
-rds = redis.Redis(host=redis_host, port=redis_port, db=0,decode_responses=True)
-csv_file_path=f'./data/{exchange_name.lower()}_{crypto_asset.lower()}.csv'
-ccix_data_channel=f'ccix_{exchange_name.lower()}_{crypto_asset.lower()}_data_channel'
 
+csv_file_path=f'./data/{exchange_name.lower()}_{crypto_asset.lower()}.csv'
+ccix_from_data_channel=f'ccix_{exchange_name.lower()}_{crypto_asset.lower()}_data_channel'
+ccix_consol_data_channel=f'ccix_{crpto_asset.lower()}_data_channel'
 
 
 data_path="./data/"
@@ -57,14 +57,10 @@ def main_process(exchange,rds):
     now=time.time()
     file_list={}
     
-    file_name=f"{exchange}_{get_table_partition(now)}.csv"
+    file_name=f"{exchange}_{crypto_asset.lower()}_{get_table_partition(now)}.csv"
     file_list[str(get_table_partition(now))]=f"{get_path_by_time(now)}/{file_name}"
     setup_csv_file(file_list[str(get_table_partition(now))])
     
-
-    ccix_from_data_channel=str(f'ccix_{exchange}_btc_data_channel')
-
-    ccix_consol_data_channel='ccix_btc_data_channel'
 
     mobile = rds.pubsub()
     mobile.subscribe(ccix_from_data_channel)
@@ -96,7 +92,7 @@ def main_process(exchange,rds):
                     rds.hset(payload['from_symbol'],exchange,f"{str(payload['timestamp'])}@{price}")
                     rds.publish(ccix_consol_data_channel,message['data'])
                     if str(hr) not in file_list:
-                        file_name=f"{exchange}_{hr}.csv"
+                        file_name=f"{exchange}_{crypto_asset.lower()}_{hr}.csv"
                         file_list[str(hr)]=f"{get_path_by_time(hr)}/{file_name}"
                         setup_csv_file(file_list[str(hr)])
                     # csv_writer.writerow(['unit_ts','tradeid','side','price','quantity'])
@@ -107,22 +103,6 @@ def main_process(exchange,rds):
 
 if __name__ == "__main__":
     
-    if len(sys.argv) > 1:
-        
-        file_path=sys.argv[1]
-        f = open (file_path, "r")
-        config = json.loads(f.read())
-        f.close()
-        
-        exchange = config['exchange_name']
-        rds = redis.Redis(
-            host=config['redis_ip'], 
-            port=config['redis_port'], 
-            db=0,
-            decode_responses=True)
+    rds = redis.Redis(host=redis_host,port=redis_port, db=0,decode_responses=True)
 
-    else:
-        exchange = 'coinbase'
-        rds = redis.Redis(host='192.168.0.3', port=6379, db=0,decode_responses=True)
-
-    main_process(exchange=exchange,rds=rds)
+    main_process(exchange=exchange_name,rds=rds)
