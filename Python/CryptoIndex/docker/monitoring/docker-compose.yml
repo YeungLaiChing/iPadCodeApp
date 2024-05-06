@@ -15,7 +15,7 @@ services:
         container_name: mon-topic
         restart: unless-stopped
         volumes:
-            - ../../source/mon/montopic.py:/code/app.py
+            - ../../source/monitoring/montopic.py:/code/app.py
             - ../../source/capture/config/consol-kraken.json:/code/config.json
         networks:
             - redis_network
