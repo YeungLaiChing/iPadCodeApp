@@ -62,7 +62,7 @@ def process_message(ws,message):
                     'timestamp_recv':time.time(),
                     'trade_id':trade_id,
                     'side':side,
-                    'from_symbol':crypto_asset.upper,
+                    'from_symbol':crypto_asset.upper(),
                     'to_symbol':'USD',
                     'price':last_price,
                     'volume':last_quantity
