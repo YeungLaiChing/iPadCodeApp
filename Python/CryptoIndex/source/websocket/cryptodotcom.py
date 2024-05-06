@@ -54,7 +54,7 @@ def process_message(ws,message):
                 side=data['s']
                 data_row=[original_timestamp,unix_timestamp,hkt_timestamp,trade_id,last_price,last_quantity]
                 payload={
-                    'exchange':exchange_name.lower,
+                    'exchange':exchange_name.lower(),
                     'timestamp_hrs':int(unix_timestamp/3600)*3600,
                     'timestamp':unix_timestamp,
                     'timestamp_org':original_timestamp,
