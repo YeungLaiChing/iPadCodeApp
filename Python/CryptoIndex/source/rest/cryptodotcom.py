@@ -84,7 +84,23 @@ def setup_csv_file():
             
 def get_data():
     setup_csv_file()
+    last=0
     
+    while True:
+        
+        resp = requests.get(f'https://api.crypto.com/v2/public/get-trades?instrument_name={product_ids}')
+        if resp.status_code==200 :
+            content=resp.json()
+            if "message" in content: 
+                print(f"Reponse  error {content['message']}")
+                exit()
+            else:
+                last=process_message(content,last)
+                time.sleep(5)
+        else:
+            print(f"Reponse Status error {resp.status_code}")
+            
+            exit()
     
 if __name__ == "__main__":
     get_data()
