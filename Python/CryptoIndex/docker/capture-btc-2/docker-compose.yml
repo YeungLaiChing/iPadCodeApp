@@ -80,7 +80,7 @@ services:
         restart: unless-stopped
         environment:
             EXCHANGE_NAME: "cryptodotcom"
-            PROD_ID: "trade.BTCUSD-PERP"
+            PROD_ID: "trade.BTC_USD"
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
