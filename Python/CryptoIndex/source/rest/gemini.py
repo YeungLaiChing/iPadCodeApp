@@ -35,10 +35,10 @@ def write_to_csv(data_row):
 def process_message(message,last):
     last_id=last
     try:
-      content = json.loads(message)
-      if content['type'] == 'update':
-         for data in content['events']:
-            original_timestamp = content['timestamp']
+         for data in message:
+            original_timestamp = data['timestamp']
+            if int(original_timestamp) > int(last_id):
+                last_id=original_timestamp
             utc_datetime = datetime.fromtimestamp(int(original_timestamp), tz=timezone.utc)
             #utc_datetime = datetime.fromisoformat(original_timestamp.rstrip('Z'))
             #utc_datetime = datetime.strptime(original_timestamp,'%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
@@ -51,9 +51,9 @@ def process_message(message,last):
             last_price=data['price']
             last_quantity=data['amount']
             side='U'
-            if data['makerSide']=='bid':
+            if data['type']=='buy':
                 side='B'
-            if data['makerSide']=='ask':
+            if data['type']=='sell':
                 side='S'
             data_row=[original_timestamp,unix_timestamp,hkt_timestamp,trade_id,last_price,last_quantity]
             payload={
@@ -87,6 +87,22 @@ def setup_csv_file():
             
 def get_data():
     setup_csv_file()
+    last=0
+    
+    while True:
+        if last==0:
+           resp = requests.get(f'https://api.gemini.com/v1/trades/{product_ids}')
+        else :
+           resp = requests.get(f'https://api.gemini.com/v1/trades/{product_ids}?timestamp={last}')
+        if resp.status_code==200 :
+            content=resp.json()
+            
+            last=process_message(content,last)
+            time.sleep(5)
+        else:
+            print(f"Reponse Status error {resp.status_code}")
+            
+            exit()
     
     
 if __name__ == "__main__":
