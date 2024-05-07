@@ -35,8 +35,8 @@ def write_to_csv(data_row):
 def process_message(message):
     try:
       content = json.loads(message)
-        if content['type'] == 'update':
-          for data in content['events']:
+      if content['type'] == 'update':
+         for data in content['events']:
             original_timestamp = content['timestamp']
             #utc_datetime = datetime.fromisoformat(original_timestamp.rstrip('Z'))
             #utc_datetime = datetime.strptime(original_timestamp,'%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
