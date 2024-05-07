@@ -79,7 +79,7 @@ def process_message(message, last):
     except IOError as e:
         print(f"{get_current_time()}: IOError: {e}")
     
-
+    return last_id
 
 def setup_csv_file():
     with open(csv_file_path,mode='a',newline='') as file:
