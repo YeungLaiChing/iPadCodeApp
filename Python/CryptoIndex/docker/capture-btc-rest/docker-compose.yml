@@ -105,6 +105,22 @@ services:
             - .:/code/
         networks:
             - redis_network
+
+   gemini-btc-rest:
+        image: vaindex-base
+        container_name: gemini-btc-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "gemini"
+            PROD_ID: "BTCUSD"
+            CRYPTO_ASSET: "BTC"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/gemini.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
 networks:
   redis_network:
     name: redis_network
