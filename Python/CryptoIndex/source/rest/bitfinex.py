@@ -39,7 +39,7 @@ def process_message(message, last):
     try:
        for data in message:
           if len(data)==4:
-            print(data)
+            #print(data)
             if int(data[1]) > int(last_id):
                 last_id=data[1]
             original_timestamp = int(int(data[1])/1000)
