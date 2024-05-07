@@ -74,6 +74,21 @@ services:
             - .:/code/
         networks:
             - redis_network
+   cryptodotcom-eth-rest:
+        image: vaindex-base
+        container_name: cryptodotcom-eth-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "cryptodotcom"
+            PROD_ID: "ETH_USD"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/cryptodotcom.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
 networks:
   redis_network:
     name: redis_network
