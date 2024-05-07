@@ -74,6 +74,21 @@ services:
             - .:/code/
         networks:
             - redis_network
+   bitfinex-btc-rest:
+        image: vaindex-base
+        container_name: bitfinex-btc-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "bitfinex"
+            PROD_ID: "tBTCUSD"
+            CRYPTO_ASSET: "BTC"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/bitfinex.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
 
    cryptodotcom-btc-rest:
         image: vaindex-base
