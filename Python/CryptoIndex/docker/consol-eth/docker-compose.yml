@@ -109,6 +109,21 @@ services:
         networks:
             - redis_network
 
+   consol-eth-gemini:
+        image: vaindex-base
+        container_name: consol-eth-gemini
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "gemini"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/consol/consol.py:/code/app.py
+            - ./data/:/code/data/
+        networks:
+            - redis_network
+
 
 networks:
   redis_network:
