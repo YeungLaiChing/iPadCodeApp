@@ -74,6 +74,22 @@ services:
             - .:/code/
         networks:
             - redis_network
+   bitfinex-eth-rest:
+        image: vaindex-base
+        container_name: bitfinex-eth-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "bitfinex"
+            PROD_ID: "tETHUSD"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/bitfinex.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+
    cryptodotcom-eth-rest:
         image: vaindex-base
         container_name: cryptodotcom-eth-rest
