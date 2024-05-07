@@ -21,12 +21,15 @@ def write_to_csv(data_row):
             csv_writer.writerow(data_row)
             
 
-def process_message(message):
+def process_message(message,last):
+    last_id=last
     try:
         
 
         for data in message:
             #print(data)
+            if int(data[1]) > int(last_id):
+                last_id=data[1]
             original_timestamp = int(int(data[1])/1000)
             utc_datetime = datetime.fromtimestamp(int(original_timestamp), tz=timezone.utc)
             unix_timestamp=int(utc_datetime.timestamp())
@@ -77,8 +80,10 @@ def get_data():
     last=0
     
     while True:
-        
-        resp = requests.get(f'https://api-pub.bitfinex.com/v2/trades/{product_ids}/hist?limit=125')
+        if last==0:
+           resp = requests.get(f'https://api-pub.bitfinex.com/v2/trades/{product_ids}/hist?limit=1000')
+        else :
+            resp = requests.get(f'https://api-pub.bitfinex.com/v2/trades/{product_ids}/hist?limit=1000&start={last}')
         if resp.status_code==200 :
             content=resp.json()
             
