@@ -9,7 +9,7 @@ import os
 
 redis_host=os.environ.get('REDIS_HOST', '192.168.0.3')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
-product_ids=os.environ.get('PROD_ID', "trade.BTC_USD")
+product_ids=os.environ.get('PROD_ID', "BTC_USD")
 crypto_asset=os.environ.get('CRYPTO_ASSET','BTC')
 exchange_name=os.environ.get('EXCHANGE_NAME','cryptodotcom')
 
