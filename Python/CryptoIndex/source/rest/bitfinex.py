@@ -37,7 +37,8 @@ def write_to_csv(data_row):
 def process_message(message, last):
     last_id=last
     try:
-        for data in message:
+       for data in message:
+          if len(data)==4:
             print(data)
             if int(data[1]) > int(last_id):
                 last_id=data[1]
