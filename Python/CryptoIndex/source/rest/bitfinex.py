@@ -23,23 +23,23 @@ def write_to_csv(data_row):
 
 def process_message(message):
     try:
-        data = json.loads(message)
+        
 
-        if len(data)==3 and (data[1]=='te'):
+        for data in message:
             #print(data)
-            original_timestamp = int(int(data[2][1])/1000)
+            original_timestamp = int(int(data[1])/1000)
             utc_datetime = datetime.fromtimestamp(int(original_timestamp), tz=timezone.utc)
             unix_timestamp=int(utc_datetime.timestamp())
             hkt=timezone(timedelta(hours=8))
             hkt_datetime=utc_datetime.astimezone(hkt)
             hkt_timestamp=hkt_datetime.strftime('%Y-%m-%d %H:%M:%S')
-            trade_id=data[2][0]
-            last_price=data[2][3]
-            last_quantity=data[2][2]
+            trade_id=data[0]
+            last_price=data[3]
+            last_quantity=data[2]
             side="B"
-            if (float(data[2][2])<0):
+            if (float(data[2])<0):
                 side="S"
-                last_quantity=abs(float(data[2][2]))
+                last_quantity=abs(float(data[2]))
                 
             data_row=[original_timestamp,unix_timestamp,hkt_timestamp,trade_id,last_price,last_quantity]
             payload={
@@ -74,14 +74,21 @@ def setup_csv_file():
             
 def get_data():
     setup_csv_file()
-    ws=WebSocketApp("wss://api-pub.bitfinex.com/ws/2",
-                    on_open=on_open,
-                    on_message=on_message,
-                    on_error=on_error,
-                    on_ping=on_ping,
-                    on_pong=on_pong,
-                    on_close=on_close)
-    ws.run_forever(ping_interval=60, ping_timeout=10, ping_payload="PING")
+    last=0
+    
+    while True:
+        
+        resp = requests.get(f'https://api-pub.bitfinex.com/v2/trades/{product_ids}/hist?limit=125')
+        if resp.status_code==200 :
+            content=resp.json()
+            
+            last=process_message(content,last)
+            time.sleep(5)
+        else:
+            print(f"Reponse Status error {resp.status_code}")
+            
+            exit()
+    
     
 if __name__ == "__main__":
     print(f"start at {get_current_time()}")
