@@ -32,10 +32,10 @@ def write_to_csv(data_row):
             csv_writer.writerow(data_row)
             
 
-def process_message(message,last):
+def process_message(body,last):
     last_id=last
     try:
-        body = json.loads(message)
+  
         method=body['method']
 
         if method=='public/get-trades':
