@@ -6,6 +6,7 @@ from websocket import WebSocketApp
 import time
 import redis
 import os
+from pathlib import Path
 
 redis_host=os.environ.get('REDIS_HOST', '192.168.0.3')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
@@ -15,9 +16,19 @@ exchange_name=os.environ.get('EXCHANGE_NAME','itbit')
 
 rds = redis.Redis(host=redis_host, port=redis_port, db=0,decode_responses=True)
 
+data_path="./data/"
+file_list={}
+def get_date_partition(input):
+    return f"{datetime.fromtimestamp(int(input+16*3600), tz=timezone.utc).strftime('%Y%m%d')}"
+               
+def get_path_by_time(now):
+    folder_partition=get_date_partition(now)
+    path=f"{data_path}/{folder_partition}"
+    Path(path).mkdir(parents=True, exist_ok=True)
+    return path
 
 
-csv_file_path=f'./data/{exchange_name.lower()}_{crypto_asset.lower()}.csv'
+file_name=f'{exchange_name.lower()}_{crypto_asset.lower()}.csv'
 ccix_data_channel=f'ccix_{exchange_name.lower()}_{crypto_asset.lower()}_data_channel'
 
 
@@ -25,7 +36,7 @@ lock=threading.Lock()
 def get_current_time():
     return datetime.fromtimestamp(int(time.time()+8*3600), tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
-def write_to_csv(data_row):
+def write_to_csv(csv_file_path,data_row):
     with lock:
         with open(csv_file_path,mode='a', newline='') as file:
             csv_writer = csv.writer(file)
@@ -63,7 +74,13 @@ def process_message(message):
                 'volume':last_quantity
             }
             rds.publish(ccix_data_channel,json.dumps(payload))
-            write_to_csv(data_row )
+            global file_list
+            partition=get_date_partition(unix_timestamp)
+            if partition not in file_list:
+                file_list[partition]=f"{get_path_by_time(unix_timestamp)}/{file_name}"
+                setup_csv_file(file_list[partition])
+                
+            write_to_csv(file_list[partition],data_row)
             #print(f"saved data to csv: {data_row}")
     except json.JSONDecodeError as e:
         print(f"{get_current_time()}: JSON decode error: {e}")
@@ -89,14 +106,18 @@ def on_pong(ws,msg):
         print(f"Got a pong msg={msg}. No need to respond")
 
 
-def setup_csv_file():
+def setup_csv_file(csv_file_path):
     with open(csv_file_path,mode='a',newline='') as file:
         if file.tell() == 0:
             csv_writer=csv.writer(file)
             csv_writer.writerow(['timestamp','unit_ts','hkt','tradeid','price','quantity'])
             
 def get_data():
-    setup_csv_file()
+    now=time.time()
+    global file_list
+    file_list[get_date_partition(now)]=f"{get_path_by_time(now)}/{file_name}"
+    setup_csv_file(file_list[get_date_partition(now)])
+   
     ws=WebSocketApp(f"wss://ws.paxos.com/executiondata/{product_ids}",
                     on_message=on_message,
                     on_ping=on_ping,
