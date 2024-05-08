@@ -97,7 +97,7 @@ def get_data():
             else:
                 #print(f"Returned error {content["error"][0]}")
                 exit()
-            time.sleep(6)
+            time.sleep(60)
         else:
             print(f"Reponse Status error {resp.status_code}")
             exit()

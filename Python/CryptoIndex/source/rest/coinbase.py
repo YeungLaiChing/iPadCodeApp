@@ -101,7 +101,7 @@ def get_coinbase_data():
                 exit()
             else:
                 last=process_message(content,last)
-                time.sleep(3)
+                time.sleep(60)
         else:
             print(f"Reponse Status error {resp.status_code}")
             

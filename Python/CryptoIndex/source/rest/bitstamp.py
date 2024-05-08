@@ -97,7 +97,7 @@ def get_data():
                 exit()
             else:
                 last=process_message(content,last)
-                time.sleep(5)
+                time.sleep(30)
         else:
             print(f"Reponse Status error {resp.status_code}")
             

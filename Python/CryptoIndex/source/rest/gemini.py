@@ -98,7 +98,7 @@ def get_data():
             content=resp.json()
             
             last=process_message(content,last)
-            time.sleep(5)
+            time.sleep(60)
         else:
             print(f"Reponse Status error {resp.status_code}")
             
