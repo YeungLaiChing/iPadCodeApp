@@ -45,20 +45,21 @@ def write_to_csv(csv_file_path,data_row):
 def process_message(message):
     try:
         data = json.loads(message)
-        if data.get('event') == 'trade':
-            original_timestamp = data['data']['timestamp']
+        if data.get('Event') == 'Trade':
+          if data.get('Data').get('Price').get('Usd'):
+            original_timestamp = data['timestamp']
             utc_datetime = datetime.fromtimestamp(int(original_timestamp), tz=timezone.utc)
             unix_timestamp=int(utc_datetime.timestamp())
             hkt=timezone(timedelta(hours=8))
             hkt_datetime=utc_datetime.astimezone(hkt)
             hkt_timestamp=hkt_datetime.strftime('%Y-%m-%d %H:%M:%S')
-            trade_id=data['data']['id']
-            last_price=data['data']['price']
-            last_quantity=data['data']['amount']
+            trade_id=data['Data']['TradeGuid']
+            last_price=data['Data']['Price']['Usd']
+            last_quantity=data['Data']['Volume']
             side='U'
-            if str(data['data']['type']) == '0':
+            if str(data['Data']['Side']) == 'Buy':
                 side='B'
-            if str(data['data']['type']) == '1':
+            if str(data['Data']['Side']) == 'Sell':
                 side='S'
             data_row=[original_timestamp,unix_timestamp,hkt_timestamp,trade_id,last_price,last_quantity]
             payload={
@@ -110,7 +111,7 @@ def on_pong(ws,msg):
 def on_open(ws):
     subscribe_message = json.dumps({
         "Event": "Subscribe",
-        "Data": 
+        "Data": [product_ids]
     })
     ws.send(subscribe_message)
     print(f"{get_current_time()}: sent subscribe")
