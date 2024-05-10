@@ -10,8 +10,8 @@ from pathlib import Path
 
 redis_host=os.environ.get('REDIS_HOST', '192.168.0.3')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
-product_ids=os.environ.get('PROD_ID', 'live_trades_btcusd')
-crypto_asset=os.environ.get('CRYPTO_ASSET','ticker-xbt')
+product_ids=os.environ.get('PROD_ID', 'ticker-xbt')
+crypto_asset=os.environ.get('CRYPTO_ASSET','BTC')
 exchange_name=os.environ.get('EXCHANGE_NAME','independentreserve')
 
 rds = redis.Redis(host=redis_host, port=redis_port, db=0,decode_responses=True)
@@ -109,10 +109,8 @@ def on_pong(ws,msg):
 
 def on_open(ws):
     subscribe_message = json.dumps({
-        "event": "bts:subscribe",
-        "data": {
-            "channel": product_ids
-        }
+        "Event": "Subscribe",
+        "Data": 
     })
     ws.send(subscribe_message)
     print(f"{get_current_time()}: sent subscribe")
@@ -129,7 +127,7 @@ def get_data():
     file_list[get_date_partition(now)]=f"{get_path_by_time(now)}/{file_name}"
     setup_csv_file(file_list[get_date_partition(now)])
    
-    ws=WebSocketApp("wss://ws.bitstamp.net",
+    ws=WebSocketApp("wss://websockets.independentreserve.com",
                     on_open=on_open,
                     on_message=on_message,
                     on_ping=on_ping,
