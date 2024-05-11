@@ -43,18 +43,21 @@ def write_to_csv(csv_file_path,data_row):
             
 
 def process_message(message):
+    ccy='Usd'
     try:
         data = json.loads(message)
+        print(data)
         if data.get('Event') == 'Trade':
-          if data.get('Data').get('Price').get('Usd'):
-            original_timestamp = data['timestamp']
-            utc_datetime = datetime.fromtimestamp(int(original_timestamp), tz=timezone.utc)
+          if data.get('Data').get('Price').get(ccy):
+            print(data)
+            original_timestamp = data['Time']
+            utc_datetime = datetime.fromtimestamp(int(original_timestamp/1000), tz=timezone.utc)
             unix_timestamp=int(utc_datetime.timestamp())
             hkt=timezone(timedelta(hours=8))
             hkt_datetime=utc_datetime.astimezone(hkt)
             hkt_timestamp=hkt_datetime.strftime('%Y-%m-%d %H:%M:%S')
             trade_id=data['Data']['TradeGuid']
-            last_price=data['Data']['Price']['Usd']
+            last_price=data['Data']['Price'][ccy]
             last_quantity=data['Data']['Volume']
             side='U'
             if str(data['Data']['Side']) == 'Buy':
@@ -84,7 +87,7 @@ def process_message(message):
                 setup_csv_file(file_list[partition])
                 
             write_to_csv(file_list[partition],data_row)
-            #print(f"saved data to csv: {data_row}")
+            print(f"saved data to csv: {data_row}")
     except json.JSONDecodeError as e:
         print(f"{get_current_time()}: JSON decode error: {e}")
     except IOError as e:
@@ -135,7 +138,8 @@ def get_data():
                     on_pong=on_pong,
                     on_error=on_error,
                     on_close=on_close)
-    ws.run_forever(ping_interval=60, ping_timeout=10, ping_payload="PING")
+    #ws.run_forever(ping_interval=60, ping_timeout=10, ping_payload="PING")
+    ws.run_forever()
     
 if __name__ == "__main__":
     get_data()
