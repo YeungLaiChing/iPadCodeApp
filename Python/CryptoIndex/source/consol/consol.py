@@ -82,7 +82,8 @@ def main_process(exchange,rds):
                 acc_vol=volume;  
                 #key=f"{payload['exchange']}_{payload['timestamp_org']}_{payload['from_symbol']}_{payload['to_symbol']}_{payload['side']}_{payload['trade_id']}_{float(payload['price'])}_{float(payload['volume'])}"
                 
-                key=f"{payload['exchange']}_{payload['timestamp']}_{payload['from_symbol']}_{payload['to_symbol']}_{payload['trade_id']}_{float(payload['price'])}_{float(payload['volume'])}"
+                #key=f"{payload['exchange']}_{payload['timestamp']}_{payload['from_symbol']}_{payload['to_symbol']}_{payload['trade_id']}_{float(payload['price'])}_{float(payload['volume'])}"
+                key=f"{payload['exchange']}_{payload['from_symbol']}_{payload['to_symbol']}_{payload['trade_id']}_{float(payload['price'])}_{float(payload['volume'])}"
                 #print(key)
                 if rds.setnx(key,"1"):
                     rds.expire(key,3600*24)
