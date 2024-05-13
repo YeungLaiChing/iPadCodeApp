@@ -38,7 +38,7 @@ def process_message(message,last):
         for data in message:
             
             original_timestamp = data['TradeTimestampUtc']
-            print(original_timestamp)
+            #print(original_timestamp)
             #utc_datetime = datetime.strptime(original_timestamp,'%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
             utc_datetime = datetime.strptime(original_timestamp[0:19],'%Y-%m-%dT%H:%M:%S').replace(tzinfo=timezone.utc)
             unix_timestamp=int(utc_datetime.timestamp())

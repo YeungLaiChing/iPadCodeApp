@@ -37,7 +37,7 @@ def process_message(trades,last):
     
     last_id=last
     try:
-        print(trades)
+        #print(trades)
         for data in trades:
             
             original_timestamp = int(data['date'])
@@ -72,8 +72,8 @@ def process_message(trades,last):
                 'volume':last_quantity
             }
             rds.publish(ccix_data_channel,json.dumps(payload))
-            write_to_csv(data_row )
-            print(f"saved data to csv: {data_row}")
+            #write_to_csv(data_row )
+            #print(f"saved data to csv: {data_row}")
     except json.JSONDecodeError as e:
         print(f"{get_current_time()}: JSON decode error: {e}")
     except IOError as e:
