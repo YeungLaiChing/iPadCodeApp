@@ -10,9 +10,9 @@ import requests
 import os
 redis_host=os.environ.get('REDIS_HOST', '192.168.0.3')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
-product_ids=os.environ.get('PROD_ID', "XBTUSD")
+product_ids=os.environ.get('PROD_ID', "BTC")
 crypto_asset=os.environ.get('CRYPTO_ASSET','BTC')
-exchange_name=os.environ.get('EXCHANGE_NAME','kraken')
+exchange_name=os.environ.get('EXCHANGE_NAME','cexio')
 
 rds = redis.Redis(host=redis_host, port=redis_port, db=0,decode_responses=True)
 
@@ -31,24 +31,30 @@ def write_to_csv(data_row):
             csv_writer.writerow(data_row)
             
 
-def process_message(trades):
+def process_message(trades,last):
     #print("received a message:",trades)
+    
+    
+    last_id=last
     try:
-        #print(trades)
+        print(trades)
         for data in trades:
-            original_timestamp = data[2]
+            
+            original_timestamp = int(data['date'])
             utc_datetime = datetime.fromtimestamp((original_timestamp), tz=timezone.utc)
             unix_timestamp=int(utc_datetime.timestamp())
             hkt=timezone(timedelta(hours=8))
             hkt_datetime=utc_datetime.astimezone(hkt)
             hkt_timestamp=hkt_datetime.strftime('%Y-%m-%d %H:%M:%S')
-            trade_id=data[6]
-            last_price=data[0]
-            last_quantity=data[1]
+            trade_id=data['tid']
+            if int(trade_id)>int(last_id):
+                last_id=trade_id
+            last_price=data['price']
+            last_quantity=data['amount']
             side='U'
-            if str(data[3]) == 'b':
+            if str(data['type']) == 'buy':
                 side='B'
-            if str(data[3]) == 's':
+            if str(data['type']) == 'sell':
                 side='S'
             data_row=[original_timestamp,unix_timestamp,hkt_timestamp,trade_id,last_price,last_quantity]
             payload={
@@ -67,11 +73,12 @@ def process_message(trades):
             }
             rds.publish(ccix_data_channel,json.dumps(payload))
             write_to_csv(data_row )
-            #print(f"saved data to csv: {data_row}")
+            print(f"saved data to csv: {data_row}")
     except json.JSONDecodeError as e:
         print(f"{get_current_time()}: JSON decode error: {e}")
     except IOError as e:
         print(f"{get_current_time()}: IOError: {e}")
+    return last_id
 
 def setup_csv_file():
     with open(csv_file_path,mode='a',newline='') as file:
@@ -82,22 +89,20 @@ def setup_csv_file():
 def get_data():
     setup_csv_file()
     last=0
-    print(f"X{product_ids[0:3]}Z{product_ids[3:6]}")
+    
     while True:
-        if last==0:
-            resp = requests.get(f'https://api.kraken.com/0/public/Trades?pair={product_ids}')
-        else:
-            resp = requests.get(f'https://api.kraken.com/0/public/Trades?pair={product_ids}&since={last}')
+        url=f'https://cex.io/api/trade_history/{product_ids}/USD/'
+        if not last==0:
+            url=f'https://cex.io/api/trade_history/{product_ids}/USD/?since={last}'
+        print(url)
+        resp=requests.get(url)
+        
         if resp.status_code==200 :
             content=resp.json()
             
-            if len(content["error"])==0:
-                process_message(content["result"][f"X{product_ids[0:3]}Z{product_ids[3:6]}"])
-                last=content["result"]["last"]
-            else:
-                #print(f"Returned error {content["error"][0]}")
-                exit()
-            time.sleep(60)
+            last=process_message(content,last)
+            
+            time.sleep(30)
         else:
             print(f"Reponse Status error {resp.status_code}")
             exit()
