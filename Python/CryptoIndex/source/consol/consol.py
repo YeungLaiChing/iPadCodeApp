@@ -12,7 +12,7 @@ redis_host=os.environ.get('REDIS_HOST', '192.168.0.3')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
 
 crypto_asset=os.environ.get('CRYPTO_ASSET','BTC')
-exchange_name=os.environ.get('EXCHANGE_NAME','bitfinex')
+exchange_name=os.environ.get('EXCHANGE_NAME','cexio')
 
 csv_file_path=f'./data/{exchange_name.lower()}_{crypto_asset.lower()}.csv'
 ccix_from_data_channel=f'ccix_{exchange_name.lower()}_{crypto_asset.lower()}_data_channel'

@@ -94,7 +94,7 @@ def get_data():
         url=f'https://cex.io/api/trade_history/{product_ids}/USD/'
         if not last==0:
             url=f'https://cex.io/api/trade_history/{product_ids}/USD/?since={last}'
-        print(url)
+        #print(url)
         resp=requests.get(url)
         
         if resp.status_code==200 :
