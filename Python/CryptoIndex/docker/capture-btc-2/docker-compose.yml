@@ -120,6 +120,55 @@ services:
         networks:
             - redis_network
 
+   independentreserve-btc-2:
+        image: vaindex-base
+        container_name: independentreserve-btc-2
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "independentreserve"
+            PROD_ID: "ticker-xbt"
+            CRYPTO_ASSET: "BTC"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/websocket/independentreserve.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+
+   erisx-btc-2:
+        image: vaindex-base
+        container_name: erisx-btc-2
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "erisx"
+            PROD_ID: "BTC/USD"
+            CRYPTO_ASSET: "BTC"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/websocket/erisx.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+
+   cexio-btc-2:
+        image: vaindex-base
+        container_name: cexio-btc-2
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "cexio"
+            PROD_ID: "BTC-USD"
+            CRYPTO_ASSET: "BTC"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/websocket/cexio.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+
+
 networks:
   redis_network:
     name: redis_network

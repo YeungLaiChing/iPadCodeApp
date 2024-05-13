@@ -123,6 +123,53 @@ services:
             - ./data/:/code/data/
         networks:
             - redis_network
+
+   consol-btc-independentreserve:
+        image: vaindex-base
+        container_name: consol-btc-independentreserve
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "independentreserve"
+            CRYPTO_ASSET: "BTC"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/consol/consol.py:/code/app.py
+            - ./data/:/code/data/
+        networks:
+            - redis_network
+
+   consol-btc-cexio:
+        image: vaindex-base
+        container_name: consol-btc-cexio
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "cexio"
+            CRYPTO_ASSET: "BTC"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/consol/consol.py:/code/app.py
+            - ./data/:/code/data/
+        networks:
+            - redis_network
+
+   consol-btc-erisx:
+        image: vaindex-base
+        container_name: consol-btc-erisx
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "erisx"
+            CRYPTO_ASSET: "BTC"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/consol/consol.py:/code/app.py
+            - ./data/:/code/data/
+        networks:
+            - redis_network
+
+            
 networks:
   redis_network:
     name: redis_network

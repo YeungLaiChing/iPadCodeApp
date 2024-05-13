@@ -14,6 +14,7 @@ services:
             - .:/code/
         networks:
             - redis_network
+            
    kraken-btc-rest:
         image: vaindex-base
         container_name: kraken-btc-rest
@@ -29,6 +30,7 @@ services:
             - .:/code/
         networks:
             - redis_network
+
    bitstamp-btc-rest:
         image: vaindex-base
         container_name: bitstamp-btc-rest
@@ -44,6 +46,7 @@ services:
             - .:/code/
         networks:
             - redis_network
+
    itbit-btc-rest:
         image: vaindex-base
         container_name: itbit-btc-rest
@@ -59,6 +62,7 @@ services:
             - .:/code/
         networks:
             - redis_network
+
    lmax-btc-rest:
         image: vaindex-base
         container_name: lmax-btc-rest
@@ -74,6 +78,7 @@ services:
             - .:/code/
         networks:
             - redis_network
+
    bitfinex-btc-rest:
         image: vaindex-base
         container_name: bitfinex-btc-rest
@@ -121,6 +126,40 @@ services:
             - .:/code/
         networks:
             - redis_network
+
+   cexio-btc-rest:
+        image: vaindex-base
+        container_name: cexio-btc-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "cexio"
+            PROD_ID: "BTC"
+            CRYPTO_ASSET: "BTC"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/cexio.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+
+   independentreserve-btc-rest:
+        image: vaindex-base
+        container_name: independentreserve-btc-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "independentreserve"
+            PROD_ID: "xbt"
+            CRYPTO_ASSET: "BTC"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/independentreserve.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+
+            
 networks:
   redis_network:
     name: redis_network

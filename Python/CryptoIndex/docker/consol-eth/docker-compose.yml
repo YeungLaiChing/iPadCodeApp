@@ -125,6 +125,52 @@ services:
             - redis_network
 
 
+   consol-eth-independentreserve:
+        image: vaindex-base
+        container_name: consol-eth-independentreserve
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "independentreserve"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/consol/consol.py:/code/app.py
+            - ./data/:/code/data/
+        networks:
+            - redis_network
+
+   consol-eth-cexio:
+        image: vaindex-base
+        container_name: consol-eth-cexio
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "cexio"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/consol/consol.py:/code/app.py
+            - ./data/:/code/data/
+        networks:
+            - redis_network
+
+   consol-eth-erisx:
+        image: vaindex-base
+        container_name: consol-eth-erisx
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "erisx"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/consol/consol.py:/code/app.py
+            - ./data/:/code/data/
+        networks:
+            - redis_network
+
+            
 networks:
   redis_network:
     name: redis_network

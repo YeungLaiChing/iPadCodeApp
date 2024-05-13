@@ -121,6 +121,40 @@ services:
             - .:/code/
         networks:
             - redis_network
+
+
+   cexio-eth-rest:
+        image: vaindex-base
+        container_name: cexio-eth-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "cexio"
+            PROD_ID: "ETH"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/cexio.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+
+   independentreserve-eth-rest:
+        image: vaindex-base
+        container_name: independentreserve-eth-rest
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "independentreserve"
+            PROD_ID: "eth"
+            CRYPTO_ASSET: "ETH"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/rest/independentreserve.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+
 networks:
   redis_network:
     name: redis_network
