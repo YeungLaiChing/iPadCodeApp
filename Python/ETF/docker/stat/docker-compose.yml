@@ -1,0 +1,41 @@
+services:
+   etf-capture-aum:
+        image: vaindex-base
+        container_name: etf-capture-aum
+        restart: unless-stopped
+        environment:
+            CONFIG_MONGODB_URL: mongodb://testing:testing@mongo:27017/
+        volumes:
+            - ../../source/hkex_aum.py:/code/app.py
+            - .:/code/
+        networks:
+            - mongo_network
+   etf-capture-vol:
+        image: vaindex-base
+        container_name: etf-capture-vol
+        restart: unless-stopped
+        environment:
+            CONFIG_MONGODB_URL: mongodb://testing:testing@mongo:27017/
+        volumes:
+            - ../../source/yahoo_vol.py:/code/app.py
+            - .:/code/
+        networks:
+            - mongo_network
+   etf-stat-rest-api:
+        image: vaindex-base
+        container_name: etf-stat-rest-api
+        restart: unless-stopped
+        environment:
+            CONFIG_MONGODB_URL: mongodb://testing:testing@mongo:27017/
+            LISTENING_PORT: 8099
+        volumes:
+            - ../../source/rest.py:/code/app.py
+            - .:/code/
+        networks:
+            - mongo_network
+
+networks:
+  mongo_network:
+    name: mongo_network
+    external: true
+

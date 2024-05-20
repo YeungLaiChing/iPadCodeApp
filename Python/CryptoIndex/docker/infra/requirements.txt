@@ -5,3 +5,8 @@ websocket-client
 boto3
 requests
 apscheduler
+flask
+openpyxl
+pymongo
+yfinance
+beautifulsoup4
