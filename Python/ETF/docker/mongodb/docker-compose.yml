@@ -2,6 +2,7 @@ services:
   mongo:
     image: bitnami/mongodb
     restart: always
+    user: 0:0
     environment:
       MONGODB_ROOT_USERNAME: testing
       MONGODB_ROOT_PASSWORD: testing
