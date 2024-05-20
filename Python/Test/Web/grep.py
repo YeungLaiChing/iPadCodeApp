@@ -37,7 +37,7 @@ def parse_file(stock_code):
     for col in [3,6,9]:
         if (sheet.cell(row=8,column=col).value):
             code=sheet.cell(row=8,column=col).value
-            if code in codes:
+            if str(code) in codes:
                 report_date=sheet.cell(row=10,column=col).value
                 total_units_outstanding=sheet.cell(row=18,column=col).value
                 ccy=sheet.cell(row=21,column=(col-1)).value
