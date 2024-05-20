@@ -3,8 +3,8 @@ services:
     image: bitnami/mongodb
     restart: always
     environment:
-      MONGODB_USERNAME: testing
-      MONGODB_PASSWORD: testing
+      MONGODB_ROOT_USERNAME: testing
+      MONGODB_ROOT_PASSWORD: testing
     ports:
       - '27017:27017'
     volumes:
