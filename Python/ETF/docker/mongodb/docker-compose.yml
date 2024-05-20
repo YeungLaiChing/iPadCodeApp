@@ -1,14 +1,14 @@
 services:
   mongo:
-    image: mongo
+    image: bitnami/mongodb
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: testing
-      MONGO_INITDB_ROOT_PASSWORD: testing
+      MONGODB_USERNAME: testing
+      MONGODB_PASSWORD: testing
     ports:
       - '27017:27017'
     volumes:
-      - ./data:/data/db
+      - ./data:/bitnami/mongodb
     networks:
       - mongo_network
   mongo-express:
