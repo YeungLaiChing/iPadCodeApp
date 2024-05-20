@@ -25,6 +25,8 @@ services:
         image: vaindex-base
         container_name: etf-stat-rest-api
         restart: unless-stopped
+        ports:
+            - '8099:8099'
         environment:
             CONFIG_MONGODB_URL: mongodb://testing:testing@mongo:27017/
             LISTENING_PORT: 8099
