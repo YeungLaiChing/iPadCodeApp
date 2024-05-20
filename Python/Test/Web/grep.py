@@ -50,6 +50,10 @@ def run():
     stocks["3179"]="1000221232"
     stocks["3046"]="1000221231"
     stocks["3009"]="1000221538"
+    
+    stocks["3066"]="1000179272"
+    stocks["3068"]="1000179273"
+    stocks["3135"]="1000181396"
    
     for stock in stocks.keys():
         download_first_file(stock,stocks[stock],"20240517","20240520")
