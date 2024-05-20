@@ -34,7 +34,7 @@ def parse_file(stock_code):
     file=f"{stock_code}.xlsx"
     wb=openpyxl.load_workbook(file)
     sheet=wb.active
-    for col in [3,6,9]:
+    for col in [3,6,9,12,15]:
         if (sheet.cell(row=8,column=col).value):
             code=sheet.cell(row=8,column=col).value
             if str(code) in codes:
