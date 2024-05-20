@@ -37,8 +37,9 @@ def parse_file(stock_code):
             code=sheet.cell(row=8,column=col).value
             report_date=sheet.cell(row=10,column=col).value
             total_units_outstanding=sheet.cell(row=18,column=col).value
+            ccy=sheet.cell(row=21,column=(col-1)).value
             aum=sheet.cell(row=21,column=col).value
-            print(f"{code},{report_date},{total_units_outstanding},{aum}")
+            print(f"{code},{report_date},{total_units_outstanding},{ccy},{aum}")
 
 def run():
     
