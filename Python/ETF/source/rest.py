@@ -85,6 +85,30 @@ def get_vol():
     return jsonify({'vol': return_val})
 
 
+@app.route('/vol_price', methods=['GET'])
+def get_vol_price():
+    
+    if request.args.get("date"):
+        date=request.args.get("date")
+        print(f"Searching result by given date {date} ...")
+        results=db["etf_vol_table"].find({"Date":date})
+    else :
+        results=db["etf_latest_vol_table"].find()
+    
+    return_val=[]
+    for result in results:
+        r={
+            "Date":result["Date"],
+            "Stock":f'{result["Stock"]}.HK',
+            "Vol":result["Vol"],
+            "Price":result["Price"],
+            "UpdatedTime":result["UpdatedTime"]
+        }
+        return_val.append(r)
+    
+    return jsonify({'vol': return_val})
+
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",port=listening_port,debug=True)
