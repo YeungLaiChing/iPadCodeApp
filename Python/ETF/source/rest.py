@@ -38,6 +38,29 @@ def get_aum():
     
     return jsonify({'aum': return_val})
 
+@app.route('/aum_units', methods=['GET'])
+def get_aum_units():
+    
+    if request.args.get("date"):
+        date=request.args.get("date")
+        print(f"Searching result by given date {date} ...")
+        results=db["etf_aum_table"].find({"Date":date})
+    else :
+        results=db["etf_latest_aum_table"].find()
+    
+    return_val=[]
+    for result in results:
+        r={
+            "Date":result["Date"],
+            "Stock":f'{result["Stock"]}.HK',
+            "AUM":result["AUM"],
+            "Units":result["Units"],
+            "URL":result["Z-Link"]
+        }
+        return_val.append(r)
+    
+    return jsonify({'aum': return_val})
+
 
 @app.route('/vol', methods=['GET'])
 def get_vol():
