@@ -39,11 +39,11 @@ def get_stock_vol(stock_code):
     
     stock = yf.Ticker(f"{stock_code}.HK")
     data=stock.history_metadata
-    trade_date=datetime.fromtimestamp(int(data["regularMarketTime"])).strftime('%Y%m%d')
+    trade_date=datetime.fromtimestamp(int(data["regularMarketTime"])+8*3600).strftime('%Y%m%d')
     result={
         "Date":trade_date,
         "Stock":stock_code,
-        "UpdatedTime":datetime.fromtimestamp(int(data["regularMarketTime"])).strftime('%Y%m%d %H:%M:%S'),
+        "UpdatedTime":datetime.fromtimestamp(int(data["regularMarketTime"])+8*3600).strftime('%Y%m%d %H:%M:%S'),
         "Price":data["regularMarketPrice"],
         "Vol":data["regularMarketVolume"]
     }
@@ -61,7 +61,7 @@ def get_stock_vol(stock_code):
     result={
         "Date":trade_date,
         "Stock":stock_code,
-        "UpdatedTime":datetime.fromtimestamp(int(data["regularMarketTime"])).strftime('%Y%m%d %H:%M:%S'),
+        "UpdatedTime":datetime.fromtimestamp(int(data["regularMarketTime"])+8*3600).strftime('%Y%m%d %H:%M:%S'),
         "Price":data["regularMarketPrice"],
         "Vol":data["regularMarketVolume"]
     }
