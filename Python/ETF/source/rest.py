@@ -55,6 +55,7 @@ def get_aum_units():
             "Stock":f'{result["Stock"]}.HK',
             "AUM":result["AUM"],
             "Units":result["Units"],
+            "Currency":result["Currency"],
             "URL":result["Z-Link"]
         }
         return_val.append(r)
