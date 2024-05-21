@@ -23,6 +23,8 @@ def get_stock_vol(stock_code):
     result={
         "Date":trade_date,
         "Stock":stock_code,
+        "UpdatedTime":trade_date,
+        "Price":0,
         "Vol":0
         
     }
@@ -41,6 +43,8 @@ def get_stock_vol(stock_code):
     result={
         "Date":trade_date,
         "Stock":stock_code,
+        "UpdatedTime":datetime.fromtimestamp(int(data["regularMarketTime"])).strftime('%Y%m%d %H:%M:%S'),
+        "Price":data["regularMarketPrice"],
         "Vol":data["regularMarketVolume"]
     }
     key={
@@ -57,6 +61,8 @@ def get_stock_vol(stock_code):
     result={
         "Date":trade_date,
         "Stock":stock_code,
+        "UpdatedTime":datetime.fromtimestamp(int(data["regularMarketTime"])).strftime('%Y%m%d %H:%M:%S'),
+        "Price":data["regularMarketPrice"],
         "Vol":data["regularMarketVolume"]
     }
     latest_table.update_many(update_latest_key,{"$set": result},upsert=True)
