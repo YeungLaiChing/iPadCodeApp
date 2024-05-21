@@ -83,7 +83,8 @@ if __name__ == "__main__":
         )
         
     trigger = CronTrigger(
-        year="*", month="*", day="*", hour="8,9,10,11,15", minute="30", second="0"
+        ## HKT 18,19,23
+        year="*", month="*", day="*", hour="10,11,15", minute="30", second="0"
     )
     sched.add_job(
         trigger_job,
