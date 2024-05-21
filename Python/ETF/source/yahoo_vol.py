@@ -34,7 +34,7 @@ def get_stock_vol(stock_code):
     }
     
 
-    result=table.update_many(key,{"$set": result},upsert=True)    
+    #result=table.update_many(key,{"$set": result},upsert=True)    
     
     
     stock = yf.Ticker(f"{stock_code}.HK")
