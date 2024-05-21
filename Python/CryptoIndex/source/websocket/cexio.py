@@ -147,7 +147,7 @@ def get_data():
                     on_close=on_close)
     
     
-    sched = BackgroundScheduler(timezone='UCT')
+    sched = BackgroundScheduler(timezone='UTC')
     
     trigger = CronTrigger(
         year="*", month="*", day="*", hour="*", minute="*", second="0,5,10,15,20,25,30,35,40,45,50,55"
