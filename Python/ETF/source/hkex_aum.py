@@ -99,7 +99,10 @@ def trigger_job():
     
 
 if __name__ == "__main__":
-    sched = BackgroundScheduler(timezone='Asia/Hong_Kong')
+    sched = BackgroundScheduler(
+        timezone='Asia/Hong_Kong',
+        job_defaults={'misfire_grace_time': 15*60}
+        )
     
     trigger = CronTrigger(
         year="*", month="*", day="*", hour="8,9,10,12,13,14,17,18,19,23", minute="12", second="0"
