@@ -32,7 +32,7 @@ def extract_content(stock_code,to_date):
     
     search_stock=soup.find(id="txtStockName")
     print(search_stock)
-    print(search_stocck["value")
+    print(search_stock.get("value"))
     
     
     summary_value=soup.find("div",class_="summary-value")
@@ -81,7 +81,7 @@ def parse_file(stock_code,link):
 
 def trigger_job():
     to_date=datetime.fromtimestamp(int(time.time()-24*3600)).strftime('%Y%m%d')
-    to_date="20240521"
+    to_date="20240501"
     stocks={}
     stocks["3008"]="1000221537"
  
