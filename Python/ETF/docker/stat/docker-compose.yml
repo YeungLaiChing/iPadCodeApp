@@ -21,6 +21,19 @@ services:
             - .:/code/
         networks:
             - mongo_network
+
+   etf-capture-ccass:
+        image: vaindex-base
+        container_name: etf-capture-ccass
+        restart: unless-stopped
+        environment:
+            CONFIG_MONGODB_URL: mongodb://testing:testing@mongo:27017/
+        volumes:
+            - ../../source/hkex_ccass_holding.py:/code/app.py
+            - .:/code/
+        networks:
+            - mongo_network
+
    etf-stat-rest-api:
         image: vaindex-base
         container_name: etf-stat-rest-api
@@ -35,6 +48,8 @@ services:
             - .:/code/
         networks:
             - mongo_network
+
+
 
 networks:
   mongo_network:
