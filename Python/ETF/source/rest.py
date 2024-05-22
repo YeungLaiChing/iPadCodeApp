@@ -110,6 +110,30 @@ def get_vol_price():
     return jsonify({'vol': return_val})
 
 
+@app.route('/test', methods=['GET'])
+def get_test():
+    
+    if request.args.get("date"):
+        date=request.args.get("date")
+        print(f"Searching result by given date {date} ...")
+        results=db["etf_vol_table"].find({"Date":date}).sort("Stock")
+    else :
+        results=db["etf_latest_vol_table"].find().sort("Stock").collation(Collation(numericOrdering=False))
+    
+    return_val=[]
+    for result in results:
+        r={
+            "Stock":f'{result["Stock"]}.HK',
+            "Date":result["Date"],
+            "Vol":result["Vol"],
+            "Price":result["Price"],
+            "UpdatedTime":result["UpdatedTime"]
+        }
+        return_val.append(r)
+    
+    return jsonify({'vol': return_val})
+
+
 @app.route('/ccass', methods=['GET'])
 def get_ccass():
     
