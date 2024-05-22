@@ -13,8 +13,8 @@ mongodb_url=os.environ.get('CONFIG_MONGODB_URL', 'mongodb://testing:testing@192.
 
 client=pymongo.MongoClient(mongodb_url)
 db=client["etf_db"]
-table=db["etf_aum_table"]
-latest_table=db["etf_latest_aum_table"]
+table=db["etf_ccass_table"]
+latest_table=db["etf_latest_ccass_table"]
 
 codes=["03008","09008","03009","09009","03042","83042","09042","03046","83046","09046","03439","09439","03179","09179","03066","03068","03135"]
 
@@ -32,56 +32,38 @@ def extract_content(stock_code,to_date):
     if search_stock.get("value"):
 
         search_date=soup.find(id="txtShareholdingDate").get("value").replace("/","")
-        summary_value=soup.find("div",class_="summary-value").text.replace(",","")
-        ind_value=soup.find("div",class_="ccass-search-total").find("div",class_="value").text.replace(",","")
+        total_issued_shares=soup.find("div",class_="summary-value").text.replace(",","")
+        holdings=soup.find("div",class_="ccass-search-total").find("div",class_="value").text.replace(",","")
         
-        print(f"{stock_code} {search_date} {summary_value} {ind_value}")
+        print(f"{stock_code} {search_date} {holdings} {total_issued_shares}")
+        
+        result={
+                    "Date":search_date,
+                    "Stock":int(stock_code),
+                    "Holdings":holdings,
+                    "IssuedShares":total_issued_shares
+                    
+                }
+        key={
+                    "Date":search_date,
+                    "Stock":int(stock_code)
+                }
+        update_latest_key={
+                    "Stock":int(stock_code)
+                }
+        table.update_many(key,{"$set": result},upsert=True)
+        latest_table.update_many(update_latest_key,{"$set": result},upsert=True)
+                
     
     else:
         print(f"no search result for {stock_code} for {to_date}")
 
 
-def parse_file(stock_code,link):
-    file=f"{stock_code}.xlsx"
-    wb=openpyxl.load_workbook(file)
-    sheet=wb.active
-    for col in [3,6,9,12,15]:
-        if (sheet.cell(row=8,column=col).value):
-            code=sheet.cell(row=8,column=col).value
-            if str(code) in codes:
-                report_date=sheet.cell(row=10,column=col).value.strftime("%Y%m%d")
-
-                total_units_outstanding=sheet.cell(row=18,column=col).value
-                ccy=sheet.cell(row=21,column=(col-1)).value
-                aum=sheet.cell(row=21,column=col).value
-                result={
-                    "Date":report_date,
-                    "Stock":code,
-                    "AUM":aum,
-                    "Units":total_units_outstanding,
-                    "Currency":ccy,
-                    "Z-Link":link
-                    
-                }
-                key={
-                    "Date":report_date,
-                    "Stock":code
-                }
-                update_latest_key={
-                    "Stock":code
-                }
-                table.update_many(key,{"$set": result},upsert=True)
-                latest_table.update_many(update_latest_key,{"$set": result},upsert=True)
-                
 
 
 def trigger_job():
-    to_date=datetime.fromtimestamp(int(time.time()-24*3600)).strftime('%Y%m%d')
-    to_date="20240501"
-    stocks={}
-    stocks["03008"]="1000221537"
- 
-    
+    to_date=datetime.fromtimestamp(int(time.time())).strftime('%Y%m%d')
+
     for stock in codes:
         extract_content(stock,to_date)
         time.sleep(5)
@@ -95,7 +77,7 @@ if __name__ == "__main__":
     
     trigger = CronTrigger(
         ### HKT 16,17,19,23,7
-        year="*", month="*", day="*", hour="8,9,11,15,23", minute="45", second="0"
+        year="*", month="*", day="*", hour="8,9,11,15,23", minute="25", second="0"
     )
     sched.add_job(
         trigger_job,
