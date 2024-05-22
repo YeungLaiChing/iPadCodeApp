@@ -24,9 +24,9 @@ def get_aum():
     if request.args.get("date"):
         date=request.args.get("date")
         print(f"Searching result by given date {date} ...")
-        results=db["etf_aum_table"].find({"Date":date})
+        results=db["etf_aum_table"].find({"Date":date}).sort("Stock").collation(Collation(locale="en_US",numericOrdering=False))
     else :
-        results=db["etf_latest_aum_table"].find()
+        results=db["etf_latest_aum_table"].find().sort("Stock").collation(Collation(locale="en_US",numericOrdering=False))
     
     return_val=[]
     for result in results:
@@ -46,9 +46,9 @@ def get_aum_units():
     if request.args.get("date"):
         date=request.args.get("date")
         print(f"Searching result by given date {date} ...")
-        results=db["etf_aum_table"].find({"Date":date})
+        results=db["etf_aum_table"].find({"Date":date}).sort("Stock").collation(Collation(locale="en_US",numericOrdering=False))
     else :
-        results=db["etf_latest_aum_table"].find()
+        results=db["etf_latest_aum_table"].find().sort("Stock").collation(Collation(locale="en_US",numericOrdering=False))
     
     return_val=[]
     for result in results:
@@ -71,9 +71,9 @@ def get_vol():
     if request.args.get("date"):
         date=request.args.get("date")
         print(f"Searching result by given date {date} ...")
-        results=db["etf_vol_table"].find({"Date":date})
+        results=db["etf_vol_table"].find({"Date":date}).sort("Stock").collation(Collation(locale="en_US",numericOrdering=False))
     else :
-        results=db["etf_latest_vol_table"].find()
+        results=db["etf_latest_vol_table"].find().sort("Stock").collation(Collation(locale="en_US",numericOrdering=False))
     
     return_val=[]
     for result in results:
@@ -93,31 +93,7 @@ def get_vol_price():
     if request.args.get("date"):
         date=request.args.get("date")
         print(f"Searching result by given date {date} ...")
-        results=db["etf_vol_table"].find({"Date":date})
-    else :
-        results=db["etf_latest_vol_table"].find()
-    
-    return_val=[]
-    for result in results:
-        r={
-            "Stock":f'{result["Stock"]}.HK',
-            "Date":result["Date"],
-            "Vol":result["Vol"],
-            "Price":result["Price"],
-            "UpdatedTime":result["UpdatedTime"]
-        }
-        return_val.append(r)
-    
-    return jsonify({'vol': return_val})
-
-
-@app.route('/test', methods=['GET'])
-def get_test():
-    
-    if request.args.get("date"):
-        date=request.args.get("date")
-        print(f"Searching result by given date {date} ...")
-        results=db["etf_vol_table"].find({"Date":date}).sort("Stock")
+        results=db["etf_vol_table"].find({"Date":date}).sort("Stock").collation(Collation(locale="en_US",numericOrdering=False))
     else :
         results=db["etf_latest_vol_table"].find().sort("Stock").collation(Collation(locale="en_US",numericOrdering=False))
     
@@ -135,15 +111,17 @@ def get_test():
     return jsonify({'vol': return_val})
 
 
+
+
 @app.route('/ccass', methods=['GET'])
 def get_ccass():
     
     if request.args.get("date"):
         date=request.args.get("date")
         print(f"Searching result by given date {date} ...")
-        results=db["etf_ccass_table"].find({"Date":date})
+        results=db["etf_ccass_table"].find({"Date":date}).sort("Stock").collation(Collation(locale="en_US",numericOrdering=False))
     else :
-        results=db["etf_latest_ccass_table"].find()
+        results=db["etf_latest_ccass_table"].find().sort("Stock").collation(Collation(locale="en_US",numericOrdering=False))
     
     return_val=[]
     for result in results:
