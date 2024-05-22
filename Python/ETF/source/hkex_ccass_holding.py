@@ -87,5 +87,9 @@ if __name__ == "__main__":
     )  
     #sched.add_job(job2,'interval',id='2_sec',seconds=15)
     
-    trigger_job()
+    
+    time.sleep(5)
+    sched.start()
+    while True:
+        time.sleep(10000)
     
