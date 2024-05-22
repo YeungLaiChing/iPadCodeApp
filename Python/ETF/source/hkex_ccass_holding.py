@@ -26,23 +26,19 @@ def extract_content(stock_code,to_date):
     page=requests.get(URL)
     soup=BeautifulSoup(page.content,"html.parser")
     
-    search_date=soup.find(id="txtShareholdingDate")
-    print(search_date)
-    print(search_date["value"])
-    
     search_stock=soup.find(id="txtStockName")
-    print(search_stock)
-    print(search_stock.get("value"))
+
     
+    if search_stock.get("value"):
+
+        search_date=soup.find(id="txtShareholdingDate").get("value").replace("/","")
+        summary_value=soup.find("div",class_="summary-value").txt.replace(",","")
+        ind_value=soup.find("div",class_="ccass-search-total").find("div",class_="value").txt.replace(",","")
+        
+        print(f"{stock_code} {search_date} {summary_value} {ind_value}")
     
-    summary_value=soup.find("div",class_="summary-value")
-    print(summary_value)
-    print(summary_value.text)
-    
-    ind_value=soup.find("div",class_="ccass-search-total").find("div",class_="value")
-    print(ind_value)
-    print(ind_value.text)
-    
+    else:
+        print(f"no search result for {stock_code} for {to_date}")
 
 
 def parse_file(stock_code,link):
