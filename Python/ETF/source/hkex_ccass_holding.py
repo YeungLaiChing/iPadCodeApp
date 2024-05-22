@@ -16,32 +16,34 @@ db=client["etf_db"]
 table=db["etf_aum_table"]
 latest_table=db["etf_latest_aum_table"]
 
-codes=["3008","9008","3009","9009","3042","83042","9042","3046","83046","9046","3439","9439","3179","9179","3066","3068","3135"]
+codes=["03008","09008","03009","09009","03042","83042","09042","03046","83046","09046","03439","09439","03179","09179","03066","03068","03135"]
 
-def download_first_file(stock_code,stock_id,from_date,to_date):
-    site="https://www1.hkexnews.hk/"
-    URL=f"{site}/search/titlesearch.xhtml?lang=EN&category=0&market=SEHK&searchType=1&documentType=-1&t1code=80000&t2Gcode=-2&t2code=-2&stockId={stock_id}&from={from_date}&to={to_date}&MB-Daterange=0&title="
+def extract_content(stock_code,to_date):
+    site="https://www3.hkexnews.hk/"
+    URL=f"{site}/sdw/search/searchsdw.aspx?__EVENTTARGET=btnSearch&txtShareholdingDate={to_date}&txtStockCode={stock_code}"
+    print(URL)
+    
     page=requests.get(URL)
     soup=BeautifulSoup(page.content,"html.parser")
-    elements=soup.find_all("div",class_="doc-link")
-    link=""
+    
+    search_date=soup.find(id="txtShareholdingDate")
+    print(search_date)
+    print(search_date["value"])
+    
+    search_stock=soup.find(id="txtStockName")
+    print(search_stock)
+    print(search_stocck["value")
+    
+    
+    summary_value=soup.find("div",class_="summary-value")
+    print(summary_value)
+    print(summary_value.text)
+    
+    ind_value=soup.find("div",class_="ccass-search-total").find("div",class_="value")
+    print(ind_value)
+    print(ind_value.text)
+    
 
-    for element in elements:
-        content=element.find("a")
-        if content["href"]>link:
-            link=content["href"]
-        
-    download_url=f"{site}/{link}"
-
-    print(download_url)
-
-    filename=f"{stock_code}.xlsx"
-
-    resp=requests.get(download_url)
-    if resp.ok:
-        with open(filename,mode="wb") as file:
-            file.write(resp.content)
-    return download_url
 
 def parse_file(stock_code,link):
     file=f"{stock_code}.xlsx"
@@ -78,23 +80,14 @@ def parse_file(stock_code,link):
 
 
 def trigger_job():
-    to_date=datetime.fromtimestamp(int(time.time())).strftime('%Y%m%d')
-    from_date=datetime.fromtimestamp(int(time.time())-10*3600*24).strftime('%Y%m%d')
+    to_date=datetime.fromtimestamp(int(time.time()-24*3600)).strftime('%Y%m%d')
+    to_date="20240521"
     stocks={}
     stocks["3008"]="1000221537"
-    stocks["3042"]="1000221230"
-    stocks["3439"]="1000221233"
-    stocks["3179"]="1000221232"
-    stocks["3046"]="1000221231"
-    stocks["3009"]="1000221538"
-    
-    stocks["3066"]="1000179272"
-    
-    stocks["3135"]="1000181396"
+ 
     
     for stock in stocks.keys():
-        lnk=download_first_file(stock,stocks[stock],from_date,to_date)
-        parse_file(stock,lnk)
+        extract_content(stock,to_date)
         time.sleep(5)
     
 
@@ -105,8 +98,8 @@ if __name__ == "__main__":
         )
     
     trigger = CronTrigger(
-        ### HKT 9,10,12,13,14,19,23,7
-        year="*", month="*", day="*", hour="1,2,4,5,6,11,15,23", minute="12", second="0"
+        ### HKT 16,17,19,23,7
+        year="*", month="*", day="*", hour="8,9,11,15,23", minute="45", second="0"
     )
     sched.add_job(
         trigger_job,
@@ -115,8 +108,6 @@ if __name__ == "__main__":
         name="trigger job",
     )  
     #sched.add_job(job2,'interval',id='2_sec',seconds=15)
-    time.sleep(5)
-    sched.start()
-    while True:
-        time.sleep(10000)
+    
+    trigger_job()
     
