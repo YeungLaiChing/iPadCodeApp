@@ -119,7 +119,7 @@ def get_test():
         print(f"Searching result by given date {date} ...")
         results=db["etf_vol_table"].find({"Date":date}).sort("Stock")
     else :
-        results=db["etf_latest_vol_table"].find().sort("Stock").collation(Collation(numericOrdering=False))
+        results=db["etf_latest_vol_table"].find().sort("Stock").collation(Collation(locale="en_US",numericOrdering=False))
     
     return_val=[]
     for result in results:
