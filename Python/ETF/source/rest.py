@@ -15,6 +15,7 @@ db=client["etf_db"]
 table=db["etf_aum_table"]
 
 app = Flask(__name__)
+app.json.sort_keys = False
 
 @app.route('/aum', methods=['GET'])
 def get_aum():
@@ -29,8 +30,8 @@ def get_aum():
     return_val=[]
     for result in results:
         r={
-            "Date":result["Date"],
             "Stock":f'{result["Stock"]}.HK',
+            "Date":result["Date"],
             "AUM":result["AUM"],
             "URL":result["Z-Link"]
         }
@@ -51,8 +52,8 @@ def get_aum_units():
     return_val=[]
     for result in results:
         r={
-            "Date":result["Date"],
             "Stock":f'{result["Stock"]}.HK',
+            "Date":result["Date"],
             "AUM":result["AUM"],
             "Units":result["Units"],
             "Currency":result["Currency"],
@@ -76,8 +77,8 @@ def get_vol():
     return_val=[]
     for result in results:
         r={
-            "Date":result["Date"],
             "Stock":f'{result["Stock"]}.HK',
+            "Date":result["Date"],
             "Vol":result["Vol"]
         }
         return_val.append(r)
@@ -98,8 +99,8 @@ def get_vol_price():
     return_val=[]
     for result in results:
         r={
-            "Date":result["Date"],
             "Stock":f'{result["Stock"]}.HK',
+            "Date":result["Date"],
             "Vol":result["Vol"],
             "Price":result["Price"],
             "UpdatedTime":result["UpdatedTime"]
@@ -122,8 +123,8 @@ def get_ccass():
     return_val=[]
     for result in results:
         r={
-            "Date":result["Date"],
             "Stock":f'{result["Stock"]}.HK',
+            "Date":result["Date"],
             "Holdings":result["Holdings"],
             "IssuedShares":result["IssuedShares"]
         }
