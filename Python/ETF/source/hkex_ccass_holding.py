@@ -32,8 +32,8 @@ def extract_content(stock_code,to_date):
     if search_stock.get("value"):
 
         search_date=soup.find(id="txtShareholdingDate").get("value").replace("/","")
-        summary_value=soup.find("div",class_="summary-value").txt.replace(",","")
-        ind_value=soup.find("div",class_="ccass-search-total").find("div",class_="value").txt.replace(",","")
+        summary_value=soup.find("div",class_="summary-value").text.replace(",","")
+        ind_value=soup.find("div",class_="ccass-search-total").find("div",class_="value").text.replace(",","")
         
         print(f"{stock_code} {search_date} {summary_value} {ind_value}")
     
@@ -79,10 +79,10 @@ def trigger_job():
     to_date=datetime.fromtimestamp(int(time.time()-24*3600)).strftime('%Y%m%d')
     to_date="20240501"
     stocks={}
-    stocks["3008"]="1000221537"
+    stocks["03008"]="1000221537"
  
     
-    for stock in stocks.keys():
+    for stock in codes:
         extract_content(stock,to_date)
         time.sleep(5)
     
