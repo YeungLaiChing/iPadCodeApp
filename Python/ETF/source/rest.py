@@ -3,6 +3,7 @@ from datetime import datetime
 
 import time
 import pymongo
+from pymongo.collation import Collation
 import os
 
 mongodb_url=os.environ.get('CONFIG_MONGODB_URL', 'mongodb://testing:testing@192.168.0.9:27017/')
