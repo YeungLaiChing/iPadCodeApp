@@ -109,6 +109,29 @@ def get_vol_price():
     return jsonify({'vol': return_val})
 
 
+@app.route('/ccass', methods=['GET'])
+def get_ccass():
+    
+    if request.args.get("date"):
+        date=request.args.get("date")
+        print(f"Searching result by given date {date} ...")
+        results=db["etf_ccass_table"].find({"Date":date})
+    else :
+        results=db["etf_latest_ccass_table"].find()
+    
+    return_val=[]
+    for result in results:
+        r={
+            "Date":result["Date"],
+            "Stock":f'{result["Stock"]}.HK',
+            "Holdings":result["Holdings"],
+            "IssuedShares":result["IssuedShares"]
+        }
+        return_val.append(r)
+    
+    return jsonify({'ccass': return_val})
+
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",port=listening_port,debug=True)
