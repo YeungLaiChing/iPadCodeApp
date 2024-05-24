@@ -39,15 +39,18 @@ async def main_loop():
                 while True:
                     response = await websocket.recv()
                     parsed = json.loads(response)
-
                     if parsed['action'] == 'partial':
+                        print("Init==========================")
                         processor = OrderBookProcessor(response)
                     elif processor is not None:
+                        print("Update===============================")
                         processor.apply_update(response)
                     if processor is not None:
+                        print("start to create df====================")
                         table = processor.create_df(agg_level=agg_level)
                         print('updated')
                         table.to_sql('book', conn, if_exists='replace', index=False)
+                        print("done ============")
                         sys.stdout.flush()
         except websockets.ConnectionClosed:
             continue

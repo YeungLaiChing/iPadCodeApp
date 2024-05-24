@@ -22,15 +22,21 @@ class OrderBookProcessor():
         self.offers = []
         snapshot_data = json.loads(snapshot)
         px_levels = snapshot_data['data']
+       
         for i in range(len(px_levels)):
             level = px_levels[i]
+    
             if level['side'] == 'Buy':
+                print("append buy ")
                 self.bids.append(level)
             elif level['side'] == 'Sell':
+                print("append sell")
                 self.offers.append(level)
             else:
                 raise IOError()
+        print("done loop")
         self._sort()
+       
 
     def apply_update(self, data):
         event = json.loads(data)
@@ -90,14 +96,22 @@ class OrderBookProcessor():
 
     def create_df(self, agg_level):
 
-        bids_subset = int(len(self.bids)/16)
-        asks_subset = int(len(self.offers)/16)
+        bids_subset = int(len(self.bids)/1)
+        asks_subset = int(len(self.offers)/1)
+        
+        print(len(self.bids))
 
         bids = self.bids[:bids_subset]
         asks = self.offers[:asks_subset]
+        
+        print(bids)
+        print(asks)
 
         bid_df = pd.DataFrame(bids, columns=['price', 'size'], dtype=float)
         ask_df = pd.DataFrame(asks, columns=['price', 'size'], dtype=float)
+        
+        print(bid_df)
+        print(ask_df)
 
         bid_df = self.aggregate_levels(
             bid_df, agg_level=Decimal(agg_level), side='bid')
@@ -119,6 +133,7 @@ class OrderBookProcessor():
         return order_book
 
     def aggregate_levels(self, levels_df, agg_level, side):
+        right=False
         if side == 'bid':
             right = False
             def label_func(x): return x.left
@@ -126,18 +141,20 @@ class OrderBookProcessor():
             right = True
             def label_func(x): return x.right
 
-        min_level = math.floor(Decimal(min(levels_df.px)) / agg_level - 1) * agg_level
-        max_level = math.ceil(Decimal(max(levels_df.px)) / agg_level + 1) * agg_level
+        min_level = math.floor(Decimal(min(levels_df.price)) / agg_level - 1) * agg_level
+        max_level = math.ceil(Decimal(max(levels_df.price)) / agg_level + 1) * agg_level
 
         level_bounds = [float(min_level + agg_level * x)
                         for x in range(int((max_level - min_level) / agg_level) + 1)]
 
-        levels_df['bin'] = pd.cut(levels_df.px, bins=level_bounds, precision=10, right=right)
+        levels_df['bin'] = pd.cut(levels_df.price, bins=level_bounds, precision=10, right=right)
 
-        levels_df = levels_df.groupby('bin').agg(qty=('qty', 'sum')).reset_index()
-
+        levels_df = levels_df.groupby('bin').agg(size=('size', 'sum')).reset_index()
+        print("price")
         levels_df['price'] = levels_df.bin.apply(label_func)
-        levels_df = levels_df[levels_df.qty > 0]
+        print(levels_df)
+        print("DF")
+        levels_df = levels_df[levels_df['size'] > 0]
         levels_df = levels_df[['price', 'size']]
 
         return levels_df
