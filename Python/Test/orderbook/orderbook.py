@@ -21,12 +21,12 @@ class OrderBookProcessor():
         self.bids = []
         self.offers = []
         snapshot_data = json.loads(snapshot)
-        px_levels = snapshot_data['events'][0]['updates']
+        px_levels = snapshot_data['data']
         for i in range(len(px_levels)):
             level = px_levels[i]
-            if level['side'] == 'bid':
+            if level['side'] == 'Buy':
                 self.bids.append(level)
-            elif level['side'] == 'offer':
+            elif level['side'] == 'Sell':
                 self.offers.append(level)
             else:
                 raise IOError()
@@ -34,21 +34,37 @@ class OrderBookProcessor():
 
     def apply_update(self, data):
         event = json.loads(data)
-        if event['channel'] != 'l2_data':
-            return
-        events = event['events']
-        for e in events:
-            updates = e['updates']
-            for update in updates:
+        #if event['channel'] != 'l2_data':
+        #    return
+        action = event['action']
+        if event['action'] != 'delete':
+            for update in event['data']:
                 self._apply(update)
+        else :
+            for update in event['data']:
+                self._delete(update)
         self._filter_closed()
         self._sort()
+        
+    def _delete(self, level):
+        if level['side'] == 'Buy':
+            
+            for i in range(len(self.bids)):
+                if self.bids[i]['price'] == level['price']:
+                    self.bids.pop(i)
+                    break
+        else:
+            for i in range(len(self.offers)):
+                if self.offers[i]['price'] == level['price']:
+                    self.offers.pop(i)
+                    break
+         
 
     def _apply(self, level):
-        if level['side'] == 'bid':
+        if level['side'] == 'Buy':
             found = False
             for i in range(len(self.bids)):
-                if self.bids[i]['px'] == level['px']:
+                if self.bids[i]['price'] == level['price']:
                     self.bids[i] = level
                     found = True
                     break
@@ -57,7 +73,7 @@ class OrderBookProcessor():
         else:
             found = False
             for i in range(len(self.offers)):
-                if self.offers[i]['px'] == level['px']:
+                if self.offers[i]['price'] == level['price']:
                     self.offers[i] = level
                     found = True
                     break
@@ -65,12 +81,12 @@ class OrderBookProcessor():
                 self.offers.append(level)
 
     def _filter_closed(self):
-        self.bids = [x for x in self.bids if abs(float(x['qty'])) > 0]
-        self.offers = [x for x in self.offers if abs(float(x['qty'])) > 0]
+        self.bids = [x for x in self.bids if abs(float(x['size'])) > 0]
+        self.offers = [x for x in self.offers if abs(float(x['size'])) > 0]
 
     def _sort(self):
-        self.bids = sorted(self.bids, key=lambda x: float(x['px']) * -1)
-        self.offers = sorted(self.offers, key=lambda x: float(x['px']))
+        self.bids = sorted(self.bids, key=lambda x: float(x['price']) * -1)
+        self.offers = sorted(self.offers, key=lambda x: float(x['price']))
 
     def create_df(self, agg_level):
 
@@ -80,16 +96,16 @@ class OrderBookProcessor():
         bids = self.bids[:bids_subset]
         asks = self.offers[:asks_subset]
 
-        bid_df = pd.DataFrame(bids, columns=['px', 'qty'], dtype=float)
-        ask_df = pd.DataFrame(asks, columns=['px', 'qty'], dtype=float)
+        bid_df = pd.DataFrame(bids, columns=['price', 'size'], dtype=float)
+        ask_df = pd.DataFrame(asks, columns=['price', 'size'], dtype=float)
 
         bid_df = self.aggregate_levels(
             bid_df, agg_level=Decimal(agg_level), side='bid')
         ask_df = self.aggregate_levels(
             ask_df, agg_level=Decimal(agg_level), side='offer')
 
-        bid_df = bid_df.sort_values('px', ascending=False)
-        ask_df = ask_df.sort_values('px', ascending=False)
+        bid_df = bid_df.sort_values('price', ascending=False)
+        ask_df = ask_df.sort_values('price', ascending=False)
 
         bid_df.reset_index(inplace=True)
         bid_df['id'] = bid_df['index'].index.astype(str) + '_bid'
@@ -120,8 +136,8 @@ class OrderBookProcessor():
 
         levels_df = levels_df.groupby('bin').agg(qty=('qty', 'sum')).reset_index()
 
-        levels_df['px'] = levels_df.bin.apply(label_func)
+        levels_df['price'] = levels_df.bin.apply(label_func)
         levels_df = levels_df[levels_df.qty > 0]
-        levels_df = levels_df[['px', 'qty']]
+        levels_df = levels_df[['price', 'size']]
 
         return levels_df
