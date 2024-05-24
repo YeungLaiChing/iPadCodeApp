@@ -12,17 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import asyncio, websockets, sqlite3, json, hmac, hashlib, base64, os, time, sys
-from dotenv import load_dotenv
 from orderbook import OrderBookProcessor
 
-load_dotenv()
 
-ACCESS_KEY = os.environ.get('API_KEY')
-SECRET_KEY = os.environ.get('SECRET_KEY')
-PASSPHRASE = os.environ.get('PASSPHRASE')
-SVC_ACCOUNTID = os.environ.get('SVC_ACCOUNTID')
-
-URI = 'wss://ws-feed.prime.coinbase.com'
+URI = 'wss://trade-hk.osl.com/ws/v4?subscribe=orderBook:BTCUSD'
 
 timestamp = str(int(time.time()))
 conn = sqlite3.connect('prime_orderbook.db')
@@ -37,17 +30,17 @@ async def main_loop():
     while True:
         try:
             async with websockets.connect(URI, ping_interval=None, max_size=None) as websocket:
-                auth_message = await create_auth_message(
-                    channel,
-                    product_id,
-                    timestamp
-                )
-                await websocket.send(auth_message)
+                #auth_message = await create_auth_message(
+                #    channel,
+                #    product_id,
+                #    timestamp
+                #)
+                #await websocket.send(auth_message)
                 while True:
                     response = await websocket.recv()
                     parsed = json.loads(response)
 
-                    if parsed['channel'] == 'l2_data' and parsed['events'][0]['type'] == 'snapshot':
+                    if parsed['action'] == 'partial':
                         processor = OrderBookProcessor(response)
                     elif processor is not None:
                         processor.apply_update(response)
@@ -60,35 +53,6 @@ async def main_loop():
             continue
 
 
-async def create_auth_message(channel, product_id, timestamp):
-    signature = sign(
-        channel,
-        ACCESS_KEY,
-        SECRET_KEY,
-        SVC_ACCOUNTID,
-        product_id
-    )
-    auth_message = json.dumps({
-        'type': 'subscribe',
-        'channel': channel,
-        'access_key': ACCESS_KEY,
-        'api_key_id': SVC_ACCOUNTID,
-        'timestamp': timestamp,
-        'passphrase': PASSPHRASE,
-        'signature': signature,
-        'product_ids': [product_id],
-    })
-    return auth_message
-
-
-def sign(channel, key, secret, account_id, product_ids):
-    message = channel + key + account_id + timestamp + product_ids
-    signature = hmac.new(
-        SECRET_KEY.encode('utf-8'),
-        message.encode('utf-8'),
-        digestmod=hashlib.sha256).digest()
-    signature_b64 = base64.b64encode(signature).decode()
-    return signature_b64
 
 
 if __name__ == '__main__':
