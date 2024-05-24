@@ -53,6 +53,7 @@ class OrderBookProcessor():
         self._sort()
         
     def _delete(self, level):
+        found = False
         if level['side'] == 'Buy':
             
             for i in range(len(self.bids)):
@@ -66,7 +67,8 @@ class OrderBookProcessor():
                     print(f"Delete ask {level['price']}")
                     self.offers.pop(i)
                     break
-         
+         if not found:
+            print(f"Cannot find {level['side']} item {level['price']} to delete")
 
     def _apply(self, level):
         if level['side'] == 'Buy':
@@ -101,19 +103,17 @@ class OrderBookProcessor():
         bids_subset = int(len(self.bids)/1)
         asks_subset = int(len(self.offers)/1)
         
-        print(len(self.bids))
+        
 
         bids = self.bids[:bids_subset]
         asks = self.offers[:asks_subset]
         
-        print(bids)
-        print(asks)
+    
 
         bid_df = pd.DataFrame(bids, columns=['price', 'size'], dtype=float)
         ask_df = pd.DataFrame(asks, columns=['price', 'size'], dtype=float)
         
-        print(bid_df)
-        print(ask_df)
+   
 
         bid_df = self.aggregate_levels(
             bid_df, agg_level=Decimal(agg_level), side='bid')
@@ -152,10 +152,9 @@ class OrderBookProcessor():
         levels_df['bin'] = pd.cut(levels_df.price, bins=level_bounds, precision=10, right=right)
 
         levels_df = levels_df.groupby('bin').agg(size=('size', 'sum')).reset_index()
-        print("price")
+        
         levels_df['price'] = levels_df.bin.apply(label_func)
-        print(levels_df)
-        print("DF")
+        
         levels_df = levels_df[levels_df['size'] > 0]
         levels_df = levels_df[['price', 'size']]
 
