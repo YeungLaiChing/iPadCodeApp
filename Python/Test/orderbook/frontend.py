@@ -23,34 +23,34 @@ app.layout = html.Div([
     dcc.Interval(id='update', interval=1000),
     dash_table.DataTable(id='my-table',
                          columns=[
-                             {'name': 'Price', 'id': 'px', 'type': 'text'},
-                             {'name': 'Qty', 'id': 'qty', 'type': 'text'},
+                             {'name': 'Price', 'id': 'price', 'type': 'text'},
+                             {'name': 'Qty', 'id': 'size', 'type': 'text'},
                          ],
                          style_data_conditional=[
                              {
                                  'if': {
-                                     'column_id': 'px',
+                                     'column_id': 'price',
                                      'filter_query': '{id} contains "bid"'
                                  },
                                  'backgroundColor': '#50C878'
                              },
                              {
                                  'if': {
-                                     'column_id': 'px',
+                                     'column_id': 'price',
                                      'filter_query': '{id} contains "ask"'
                                  },
                                  'backgroundColor': '#DC143C'
                              },
                              {
                                  'if': {
-                                     'column_id': 'qty',
+                                     'column_id': 'size',
                                      'filter_query': '{id} contains "ask"'
                                  },
                                  'backgroundColor': '#FAA0A0'
                              },
                              {
                                  'if': {
-                                     'column_id': 'qty',
+                                     'column_id': 'size',
                                      'filter_query': '{id} contains "bid"'
                                  },
                                  'backgroundColor': '#C1E1C1'
@@ -69,7 +69,7 @@ app.layout = html.Div([
 def update_mid(intervals):
     df = load_data()
 
-    max_bid = df.loc[df['id'].str.contains('bid'), 'px'].max()
+    max_bid = df.loc[df['id'].str.contains('bid'), 'price'].max()
 
     one_usd = '1'
     if agg_level == one_usd:
@@ -98,8 +98,8 @@ def load_data():
 
     df = pd.DataFrame(data)
 
-    df.columns = ['index', 'px', 'qty', 'id']
-    df = df.sort_values(by=['px'], ascending=False)
+    df.columns = ['index', 'price', 'size', 'id']
+    df = df.sort_values(by=['price'], ascending=False)
 
     return df
 
