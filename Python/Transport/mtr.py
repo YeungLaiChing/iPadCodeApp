@@ -17,9 +17,9 @@ def process_message(message):
             company = "MTR"
             route = 'MTR'
             eta = data['time']
-            utc_datetime = datetime.strptime(eta,'%Y-%m-%d %H:%M:%S')
+            timestamp = int((datetime.strptime(eta,'%Y-%m-%d %H:%M:%S').timestamp()-int(time.time()))/60)
             dest_en = data['dest']
-            print(f"{route} , {dest_en} , {eta}, {utc_datetime}")
+            print(f"{route} , {dest_en} , {eta}, {timestamp}")
     except json.JSONDecodeError as e:
         print(f"{get_current_time()}: JSON decode error: {e}")
     except IOError as e:

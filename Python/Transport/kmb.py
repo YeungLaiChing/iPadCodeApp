@@ -22,7 +22,7 @@ def process_message(message):
             dest_en = data['dest_en']
             timestamp=""
             if eta :
-                timestamp = datetime.strptime(eta,'%Y-%m-%dT%H:%M:%S+08:00')
+                timestamp = int((datetime.strptime(eta,'%Y-%m-%dT%H:%M:%S+08:00').timestamp()-int(time.time()))/60)
             print(f"{route} , {dest_tc} , {eta},{timestamp}")
     except json.JSONDecodeError as e:
         print(f"{get_current_time()}: JSON decode error: {e}")
