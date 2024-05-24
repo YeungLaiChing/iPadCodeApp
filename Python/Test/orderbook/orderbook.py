@@ -27,14 +27,14 @@ class OrderBookProcessor():
             level = px_levels[i]
     
             if level['side'] == 'Buy':
-                print("append buy ")
+                
                 self.bids.append(level)
             elif level['side'] == 'Sell':
-                print("append sell")
+                
                 self.offers.append(level)
             else:
                 raise IOError()
-        print("done loop")
+        
         self._sort()
        
 
@@ -57,11 +57,13 @@ class OrderBookProcessor():
             
             for i in range(len(self.bids)):
                 if self.bids[i]['price'] == level['price']:
+                    print(f"Delete bid {level['price']}")
                     self.bids.pop(i)
                     break
         else:
             for i in range(len(self.offers)):
                 if self.offers[i]['price'] == level['price']:
+                    print(f"Delete ask {level['price']}")
                     self.offers.pop(i)
                     break
          
