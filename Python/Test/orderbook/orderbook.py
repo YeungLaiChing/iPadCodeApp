@@ -67,7 +67,7 @@ class OrderBookProcessor():
                     print(f"Delete ask {level['price']}")
                     self.offers.pop(i)
                     break
-         if not found:
+        if not found:
             print(f"Cannot find {level['side']} item {level['price']} to delete")
 
     def _apply(self, level):
