@@ -33,11 +33,11 @@ def process_message(message):
 def get_data():
     
     stop_id="E92E009DE3307F85"
-    stop_id="002919"
+    stop_id="002929"
     route="98"
     
-    #峻瀅	B3F2EC8E42FA3184
-    #首都	E92E009DE3307F85
+    #峻瀅	002919
+    #首都	002929
     
     
     
