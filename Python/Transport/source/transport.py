@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 header='<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;" /><meta name="apple-mobile-web-app-capable" content="yes" />'
 footer='<button style="font-size: 24px" onClick="window.location.reload();">Refresh Page</button>'
+footer='<button style="font-size: 24px" onClick="location.href=\'/route\';">峻瀅巴士站</button><button style="font-size: 24px" onClick="location.href=\'/route_capitol\';">首都巴士站</button>'
 def get_current_time():
     return datetime.fromtimestamp(int(time.time()+8*3600), tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
