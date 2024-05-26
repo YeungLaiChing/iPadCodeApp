@@ -1,0 +1,204 @@
+import json
+import threading
+from datetime import datetime, timezone, timedelta
+import requests
+import time
+
+lock=threading.Lock()
+def get_current_time():
+    return datetime.fromtimestamp(int(time.time()+8*3600), tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+
+def process_city_message(message):
+    result=[]
+    try:
+        for data in message:
+
+            company = data['co']
+            route = data['route']
+            eta = data['eta']
+            dest_en = data['dest']
+            timestamp=""
+            if eta :
+                timestamp = int((datetime.strptime(eta,'%Y-%m-%dT%H:%M:%S+08:00').timestamp()-int(time.time()))/60)
+            #print(f"{route} , {dest_en} , {eta},{timestamp}")
+                item={
+                    "company":"CTB",
+                    "route":route,
+                    "dest":dest_en,
+                    "eta":eta,
+                    "minutes":timestamp
+                }
+                result.append(item)
+            
+    except json.JSONDecodeError as e:
+        print(f"{get_current_time()}: JSON decode error: {e}")
+    except IOError as e:
+        print(f"{get_current_time()}: IOError: {e}")
+    return result
+            
+def grep_city_bus(stop_id):
+    
+    #stop_id="E92E009DE3307F85"
+    #stop_id="002929"
+    #route="98"
+    
+    #峻瀅	002919
+    #首都	002929
+    
+    result=[]
+    
+    if True:
+        
+        #resp = requests.get(f'https://data.etabus.gov.hk/v1/transport/kmb/eta/{stop_id}/{route}/1')
+        resp = requests.get(f'https://rt.data.gov.hk/v1/transport/batch/stop-eta/CTB/{stop_id}?lang=zh-hant')
+                    
+        if resp.status_code==200 :
+            content=resp.json()
+            if "message" in content: 
+                print(f"Reponse  error {content['message']}")
+                return result
+            else:
+                result=process_city_message(content["data"])
+                
+                return result
+        else:
+            print(f"Reponse Status error {resp.status_code}")
+            
+            return result
+    
+
+def process_kmb_message(message):
+    result=[]
+    try:
+        for data in message:
+
+            company = data['co']
+            route = data['route']
+            eta = data['eta']
+            dest_tc = data['dest_tc']
+            dest_en = data['dest_en']
+            timestamp=""
+            if eta :
+                timestamp = int((datetime.strptime(eta,'%Y-%m-%dT%H:%M:%S+08:00').timestamp()-int(time.time()))/60)
+                item={
+                    "company":"KMB",
+                    "route":route,
+                    "dest":dest_tc,
+                    "eta":eta,
+                    "minutes":timestamp
+                }
+                result.append(item)
+    except json.JSONDecodeError as e:
+        print(f"{get_current_time()}: JSON decode error: {e}")
+    except IOError as e:
+        print(f"{get_current_time()}: IOError: {e}")
+    return result
+            
+def grep_kmb(stop_id):
+    result=[]
+    
+    #峻瀅	B3F2EC8E42FA3184
+    #首都	E92E009DE3307F85
+    
+    
+    
+    if True:
+        
+        #resp = requests.get(f'https://data.etabus.gov.hk/v1/transport/kmb/eta/{stop_id}/{route}/1')
+        resp = requests.get(f'https://data.etabus.gov.hk/v1/transport/kmb/stop-eta/{stop_id}')
+                    
+        if resp.status_code==200 :
+            content=resp.json()
+            if "message" in content: 
+                print(f"Reponse  error {content['message']}")
+                return result
+            else:
+                result=process_kmb_message(content["data"])
+                return result
+        else:
+            print(f"Reponse Status error {resp.status_code}")
+            
+            return result
+
+def process_mtr_message(message):
+    result=[]
+    try:
+        for data in message:
+            company = "MTR"
+            route = 'LHP'
+            eta = data['time']
+            timestamp = int((datetime.strptime(eta,'%Y-%m-%d %H:%M:%S').timestamp()-int(time.time()))/60)
+            dest_en = data['dest']
+            #print(f"{route} , {dest_en} , {eta}, {timestamp}")
+            item={
+                    "company":"MTR",
+                    "route":route,
+                    "dest":dest_en,
+                    "eta":eta,
+                    "minutes":timestamp
+                }
+            result.append(item)
+    except json.JSONDecodeError as e:
+        print(f"{get_current_time()}: JSON decode error: {e}")
+    except IOError as e:
+        print(f"{get_current_time()}: IOError: {e}")
+    return result
+            
+def grep_mtr(stop_id):
+        result=[]
+
+        #resp = requests.get(f'https://data.etabus.gov.hk/v1/transport/kmb/eta/{stop_id}/{route}/1')
+        resp = requests.get(f'https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?line=TKL&sta={stop_id}&lang=TC')
+                    
+        if resp.status_code==200 :
+            content=resp.json()
+            if "error" in content: 
+                print(f"Reponse  error {content['error']}")
+                return result
+            else:
+                result=process_mtr_message(content["data"]["TKL-LHP"]["DOWN"])
+                return result
+        else:
+            print(f"Reponse Status error {resp.status_code}")
+            
+            return result
+
+def format_bus(route_list,eta_list):
+    all={}
+    for eta in eta_list:
+        if eta["route"] in route_list:
+            if eta["route"] in all.keys():
+                tmp=all[eta["route"]]
+                t=f"{eta["minutes"]}({eta["company"]})"
+                if t != all[eta["route"]]["last"]:
+                    
+                    all[eta["route"]]={"dest":eta["dest"],"eta":f"{all[eta["route"]]["eta"]} , {eta["minutes"]}({eta["company"]})","last":f"{eta["minutes"]}({eta["company"]})"}
+                
+            else :
+                all[eta["route"]]={"dest":eta["dest"],"eta":f"{eta["minutes"]}({eta["company"]})","last":f"{eta["minutes"]}({eta["company"]})"}
+    print(all)
+  
+if __name__ == "__main__":
+    #峻瀅	002919
+    #首都	002929
+    city_bus_list={}
+    city_bus_list["capitol"]="002929"
+    bus=[]
+    bus.extend(grep_city_bus(city_bus_list["capitol"]))
+    
+    
+    kmb_bus_list={}
+    kmb_bus_list["capitol"]="E92E009DE3307F85"
+    #峻瀅	B3F2EC8E42FA3184
+    #首都	E92E009DE3307F85
+    bus.extend(grep_kmb(kmb_bus_list["capitol"]))
+    bus.extend(grep_mtr("LHP"))
+    bus = sorted(bus, key=lambda x: float(x['minutes']))
+    
+    format_bus(["98","797","LHP"],bus)
+    
+    mtr=grep_mtr("LHP")
+    #print(bus)
+    #print(mtr)
+    
+    
