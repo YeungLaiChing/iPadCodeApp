@@ -177,7 +177,7 @@ def format_bus(route_list,eta_list):
         if eta["route"] in route_array or len(route_list)==0:
             if eta["route"] in all.keys():
                 tmp=all[eta["route"]]
-                t=f"{eta["minutes"]}({eta["company"]})"
+                t=f'{eta["minutes"]}({eta["company"]})'
                 if t != all[eta["route"]]["last"]:
                     
                     all[eta["route"]]={"dest":eta["dest"],"eta":f"{all[eta["route"]]["eta"]} , {eta["minutes"]}({eta["company"]})","last":f"{eta["minutes"]}({eta["company"]})"}
