@@ -180,10 +180,10 @@ def format_bus(route_list,eta_list):
                 t=f'{eta["minutes"]}({eta["company"]})'
                 if t != all[eta["route"]]["last"]:
                     
-                    all[eta["route"]]={"dest":eta["dest"],"eta":f"{all[eta["route"]]["eta"]} , {eta["minutes"]}({eta["company"]})","last":f"{eta["minutes"]}({eta["company"]})"}
+                    all[eta["route"]]={"dest":eta["dest"],"eta":f'{all[eta["route"]]["eta"]} , {eta["minutes"]}({eta["company"]})',"last":f'{eta["minutes"]}({eta["company"]})'}
                 
             else :
-                all[eta["route"]]={"dest":eta["dest"],"eta":f"{eta["minutes"]}({eta["company"]})","last":f"{eta["minutes"]}({eta["company"]})"}
+                all[eta["route"]]={"dest":eta["dest"],"eta":f'{eta["minutes"]}({eta["company"]})',"last":f'{eta["minutes"]}({eta["company"]})'}
     return all
 
 @app.route('/route', methods=['GET'])
