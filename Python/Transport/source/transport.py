@@ -191,7 +191,7 @@ def get_route():
     result=get_result("ba","")
     output="<tr><td>路線</td><td>終點站</td><td>預計到站時間（分鐘）</td></tr>"
     for item in result.keys():
-        output=f"{output}<tr><td>{item}</td><td>{result[item]["dest"]}</td><td>{result[item]["eta"]}</td></tr> "
+        output=f'{output}<tr><td>{item}</td><td>{result[item]["dest"]}</td><td>{result[item]["eta"]}</td></tr> '
    
     return f"<html><head>{header}</head><body><h1>峻瀅 ({get_current_time()})</h1><table border=1 margin='0 auto'>{output}</table></body></html>"
         
@@ -202,7 +202,7 @@ def get_route_capitol():
     output="<tr><td>Route</td><td>Destination</td><td>ETA</td></tr>"
     output="<tr><td>路線</td><td>終點站</td><td>預計到站時間（分鐘）</td></tr>"
     for item in result.keys():
-        output=f"{output}<tr><td>{item}</td><td>{result[item]["dest"]}</td><td>{result[item]["eta"]}</td></tr> "
+        output=f'{output}<tr><td>{item}</td><td>{result[item]["dest"]}</td><td>{result[item]["eta"]}</td></tr> '
     return f"<html><head>{header}</head><body><h1>首都 ({get_current_time()})</h1><table border=1 margin='0 auto'>{output}</table></body></html>"
         
   
