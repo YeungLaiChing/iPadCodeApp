@@ -165,8 +165,10 @@ def grep_mtr(stop_id):
 
 def format_bus(route_list,eta_list):
     all={}
+    route_array=route_list.split(",")
+    print(len(route_array))
     for eta in eta_list:
-        if eta["route"] in route_list:
+        if eta["route"] in route_array or len(route_array)==1:
             if eta["route"] in all.keys():
                 tmp=all[eta["route"]]
                 t=f"{eta["minutes"]}({eta["company"]})"
@@ -183,19 +185,26 @@ if __name__ == "__main__":
     #首都	002929
     city_bus_list={}
     city_bus_list["capitol"]="002929"
-    bus=[]
-    bus.extend(grep_city_bus(city_bus_list["capitol"]))
-    
-    
+    city_bus_list["ba"]="002919"
     kmb_bus_list={}
     kmb_bus_list["capitol"]="E92E009DE3307F85"
+    
+    kmb_bus_list["ba"]="B3F2EC8E42FA3184"
     #峻瀅	B3F2EC8E42FA3184
     #首都	E92E009DE3307F85
-    bus.extend(grep_kmb(kmb_bus_list["capitol"]))
+    target="capitol"
+    target="ba"
+    
+    bus=[]
+    bus.extend(grep_city_bus(city_bus_list[target]))
+    bus.extend(grep_kmb(kmb_bus_list[target]))
     bus.extend(grep_mtr("LHP"))
     bus = sorted(bus, key=lambda x: float(x['minutes']))
     
-    format_bus(["98","797","LHP"],bus)
+    format_bus("98,797,LHP",bus)
+    
+    format_bus("",bus)
+    format_bus("797",bus)
     
     mtr=grep_mtr("LHP")
     #print(bus)
