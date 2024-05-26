@@ -1,0 +1,13 @@
+services:
+   bus-eta:
+        image: vaindex-base
+        container_name: bus-eta
+        restart: unless-stopped
+        ports:
+            - '5009:5009'
+        environment:
+            LISTENING_PORT: 5009
+        volumes:
+            - ../source/transport.py:/code/app.py
+            - .:/code/
+        

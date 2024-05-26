@@ -1,10 +1,15 @@
+from flask import Flask
 import json
-import threading
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 import requests
 import time
 
-lock=threading.Lock()
+import os
+listening_port=int(os.environ.get('LISTENING_PORT', '5009'))
+app = Flask(__name__)
+
+header='<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;" /><meta name="apple-mobile-web-app-capable" content="yes" />'
+
 def get_current_time():
     return datetime.fromtimestamp(int(time.time()+8*3600), tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -166,9 +171,9 @@ def grep_mtr(stop_id):
 def format_bus(route_list,eta_list):
     all={}
     route_array=route_list.split(",")
-    print(len(route_array))
+    
     for eta in eta_list:
-        if eta["route"] in route_array or len(route_array)==1:
+        if eta["route"] in route_array or len(route_list)==0:
             if eta["route"] in all.keys():
                 tmp=all[eta["route"]]
                 t=f"{eta["minutes"]}({eta["company"]})"
@@ -178,9 +183,29 @@ def format_bus(route_list,eta_list):
                 
             else :
                 all[eta["route"]]={"dest":eta["dest"],"eta":f"{eta["minutes"]}({eta["company"]})","last":f"{eta["minutes"]}({eta["company"]})"}
-    print(all)
+    return all
+
+@app.route('/route', methods=['GET'])
+def get_route():
+    result=get_result("ba","")
+    output="<tr><td>路線</td><td>終點站</td><td>預計到站時間（分鐘）</td></tr>"
+    for item in result.keys():
+        output=f"{output}<tr><td>{item}</td><td>{result[item]["dest"]}</td><td>{result[item]["eta"]}</td></tr> "
+   
+    return f"<html><head>{header}</head><body><h1>峻瀅 ({get_current_time()})</h1><table border=1 margin='0 auto'>{output}</table></body></html>"
+        
+      
+@app.route('/route_capitol', methods=['GET'])
+def get_route_capitol():
+    result=get_result("capitol","")
+    output="<tr><td>Route</td><td>Destination</td><td>ETA</td></tr>"
+    output="<tr><td>路線</td><td>終點站</td><td>預計到站時間（分鐘）</td></tr>"
+    for item in result.keys():
+        output=f"{output}<tr><td>{item}</td><td>{result[item]["dest"]}</td><td>{result[item]["eta"]}</td></tr> "
+    return f"<html><head>{header}</head><body><h1>首都 ({get_current_time()})</h1><table border=1 margin='0 auto'>{output}</table></body></html>"
+        
   
-if __name__ == "__main__":
+def get_result(stop_id,route):
     #峻瀅	002919
     #首都	002929
     city_bus_list={}
@@ -188,26 +213,19 @@ if __name__ == "__main__":
     city_bus_list["ba"]="002919"
     kmb_bus_list={}
     kmb_bus_list["capitol"]="E92E009DE3307F85"
-    
     kmb_bus_list["ba"]="B3F2EC8E42FA3184"
-    #峻瀅	B3F2EC8E42FA3184
-    #首都	E92E009DE3307F85
-    target="capitol"
-    target="ba"
+
     
     bus=[]
-    bus.extend(grep_city_bus(city_bus_list[target]))
-    bus.extend(grep_kmb(kmb_bus_list[target]))
+    bus.extend(grep_city_bus(city_bus_list[stop_id]))
+    bus.extend(grep_kmb(kmb_bus_list[stop_id]))
     bus.extend(grep_mtr("LHP"))
     bus = sorted(bus, key=lambda x: float(x['minutes']))
     
-    format_bus("98,797,LHP",bus)
-    
-    format_bus("",bus)
-    format_bus("797",bus)
-    
-    mtr=grep_mtr("LHP")
-    #print(bus)
-    #print(mtr)
+    return format_bus(route,bus)
     
     
+    
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0",port=listening_port,debug=True)
