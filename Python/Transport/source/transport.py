@@ -97,6 +97,7 @@ def process_kmb_message(message):
         print(f"{get_current_time()}: JSON decode error: {e}")
     except IOError as e:
         print(f"{get_current_time()}: IOError: {e}")
+    print(result)
     return result
             
 def grep_kmb(stop_id):
