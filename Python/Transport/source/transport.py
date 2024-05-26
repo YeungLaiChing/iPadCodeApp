@@ -9,7 +9,7 @@ listening_port=int(os.environ.get('LISTENING_PORT', '5009'))
 app = Flask(__name__)
 
 header='<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;" /><meta name="apple-mobile-web-app-capable" content="yes" />'
-
+footer='<button onClick="window.location.reload();">Refresh Page</button>'
 def get_current_time():
     return datetime.fromtimestamp(int(time.time()+8*3600), tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -193,7 +193,7 @@ def get_route():
     for item in result.keys():
         output=f'{output}<tr><td>{item}</td><td>{result[item]["dest"]}</td><td>{result[item]["eta"]}</td></tr> '
    
-    return f"<html><head>{header}</head><body><h1>峻瀅 ({get_current_time()})</h1><table border=1 margin='0 auto'>{output}</table></body></html>"
+    return f"<html><head>{header}</head><body><h1>峻瀅 ({get_current_time()})</h1><table border=1 margin='0 auto'>{output}</table><br/>{footer}</body></html>"
         
       
 @app.route('/route_capitol', methods=['GET'])
@@ -203,7 +203,7 @@ def get_route_capitol():
     output="<tr><td>路線</td><td>終點站</td><td>預計到站時間（分鐘）</td></tr>"
     for item in result.keys():
         output=f'{output}<tr><td>{item}</td><td>{result[item]["dest"]}</td><td>{result[item]["eta"]}</td></tr> '
-    return f"<html><head>{header}</head><body><h1>首都 ({get_current_time()})</h1><table border=1 margin='0 auto'>{output}</table></body></html>"
+    return f"<html><head>{header}</head><body><h1>首都 ({get_current_time()})</h1><table border=1 margin='0 auto'>{output}</table><br/>{footer}</body></html>"
         
   
 def get_result(stop_id,route):
