@@ -7,6 +7,7 @@ services:
             - '5009:5009'
         environment:
             LISTENING_PORT: 5009
+            TS: Asia/Hong_Kong
         volumes:
             - ../source/transport.py:/code/app.py
             - .:/code/
