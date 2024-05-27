@@ -177,8 +177,8 @@ def get_gmb_route_info(route_id,seq):
     if resp.status_code==200 :
         content=resp.json()
         if "message" not in content:
-            route=content['route_code']
-            for direction in content['directions']:
+            route=content['data'][0]['route_code']
+            for direction in content['data'][0]['directions']:
                 if seq == direction['route_seq']:
                     dest=direction['dest_tc']
                 
