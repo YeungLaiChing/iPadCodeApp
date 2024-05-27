@@ -192,7 +192,7 @@ def process_gmb_message(message):
         seq = data['route_seq']
         route,dest=get_gmb_route_info(route_id,seq)
         
-          for eta_data in data['eta']:
+        for eta_data in data['eta']:
             eta = eta_data['timestamp']
             timestamp = int((datetime.strptime(eta,'%Y-%m-%dT%H:%M:%S.%f+08:00').timestamp()-int(time.time()))/60)
             
