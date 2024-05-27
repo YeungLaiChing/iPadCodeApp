@@ -169,6 +169,68 @@ def grep_mtr(stop_id):
             print(f"Reponse Status error {resp.status_code}")
             
             return result
+def get_gmb_route_info(route_id,seq):
+    route=route_id
+    dest="Unknown"
+    resp = requests.get(f'https://data.etagmb.gov.hk/route/{route_id}')
+                    
+    if resp.status_code==200 :
+        content=resp.json()
+        if "message" not in content:
+            route=content['route_code']
+            for direction in content['directions']:
+                if seq == direction['route_seq']:
+                    dest=direction['dest_tc']
+                
+    return (route,dest)
+def process_gmb_message(message):
+    result=[]
+    try:
+      for data in message:
+        company = "Mini"
+        route_id = data['route_id']
+        seq = data['route_seq']
+        route,dest=get_gmb_route_info(route_id,seq)
+        
+          for eta_data in data['eta']:
+            eta = eta_data['timestamp']
+            timestamp = int((datetime.strptime(eta,'%Y-%m-%dT%H:%M:%S.%f+08:00').timestamp()-int(time.time()))/60)
+            
+            #print(f"{route} , {dest_en} , {eta}, {timestamp}")
+            item={
+                    "company":company,
+                    "route":route,
+                    "dest":dest,
+                    "eta":eta,
+                    "minutes":timestamp
+                }
+            result.append(item)
+    except json.JSONDecodeError as e:
+        print(f"{get_current_time()}: JSON decode error: {e}")
+    except IOError as e:
+        print(f"{get_current_time()}: IOError: {e}")
+    return result
+def grep_gmb(stop_id):
+        result=[]
+
+        #resp = requests.get(f'https://data.etabus.gov.hk/v1/transport/kmb/eta/{stop_id}/{route}/1')
+        resp = requests.get(f'https://data.etagmb.gov.hk/eta/stop/{stop_id}')
+                    
+        if resp.status_code==200 :
+            content=resp.json()
+            if "message" in content: 
+                print(f"Reponse  error {content['error']}")
+                return result
+            else:
+                result=process_gmb_message(content["data"])
+                return result
+        else:
+            print(f"Reponse Status error {resp.status_code}")
+            
+            return result
+
+
+
 
 def format_bus(route_list,eta_list):
     all={}
@@ -205,7 +267,8 @@ def get_route_capitol():
     for item in result.keys():
         output=f'{output}<tr><td>{item}</td><td>{result[item]["dest"]}</td><td>{result[item]["eta"]}</td></tr> '
     return f"<html><head>{header}</head><body><h1>首都 ({get_current_time()})</h1><table border=1 margin='0 auto'>{output}</table><br/>{footer}</body></html>"
-        
+
+
   
 def get_result(stop_id,route):
     #峻瀅	002919
@@ -222,6 +285,8 @@ def get_result(stop_id,route):
     bus.extend(grep_city_bus(city_bus_list[stop_id]))
     bus.extend(grep_kmb(kmb_bus_list[stop_id]))
     bus.extend(grep_mtr("LHP"))
+    if stop_id=="capitol":
+        bus.extend(grep_gmb('20002647'))
     bus = sorted(bus, key=lambda x: float(x['minutes']))
     
     return format_bus(route,bus)
