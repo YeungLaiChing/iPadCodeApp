@@ -1,0 +1,2 @@
+strategy_name,code,action_time_mm,action_time_ss,para,unique_id
+interest_zscore,BTC,0,0,zscore_length=128|zscore_threshold=1.8|initial_capital=100|mdd_in_sample=20|stra_start_date=2023-08-01,83964815560971214714
