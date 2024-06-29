@@ -1,6 +1,7 @@
 services:
   redis-va: 
     image: redislabs/redismod
+    restart: unless-stopped
     volumes:
       - ./redis-cache:/data
     ports:
