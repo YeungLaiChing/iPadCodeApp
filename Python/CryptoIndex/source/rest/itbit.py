@@ -86,7 +86,7 @@ def get_data():
     
     while True:
         
-        resp = requests.get(f'https://api.paxos.com/v2/markets/BTCUSD/recent-executions')
+        resp = requests.get(f'https://api.paxos.com/v2/markets/{product_ids}/recent-executions')
                     
         if resp.status_code==200 :
             content=resp.json()
