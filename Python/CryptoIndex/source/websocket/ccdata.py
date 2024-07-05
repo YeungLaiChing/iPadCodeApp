@@ -80,7 +80,7 @@ def process_message(message):
             
             data_row=[original_timestamp,unix_timestamp,hkt_timestamp,timestamp_recv,
             instrument,ccseq,index_value,last_update_qty,last_update_ccseq,
-            current_hour_high,current_hour_low,current_change,current_hour_updates,
+            current_hour_high,current_hour_low,current_hour_change,current_hour_updates,
             moving_24_hour_high,moving_24_hour_low,moving_24_hour_change,moving_24_hour_updates]
             
             payload={
