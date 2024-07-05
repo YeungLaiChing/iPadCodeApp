@@ -19,6 +19,32 @@ services:
             - ../../source/capture/config/consol-kraken.json:/code/config.json
         networks:
             - redis_network
+  ccdata-wss-1:
+        image: vaindex-base
+        container_name: ccdata-wss-1
+        restart: unless-stopped
+        environment:
+            EXCHANGE_NAME: "CCDATA"
+            PROD_ID_1: "HKEXBTC-USD"
+            PROD_ID_2: "HKEXETH-USD"
+            PROD_ID_3: "HKEXBTC-USD"
+            PROD_ID_4: "HKEXETH-USD"
+            CRYPTO_ASSET: "CCHKEX"
+            APIKEY: ""
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+        volumes:
+            - ../../source/websocket/ccdata.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+
+
+
+networks:
+  redis_network:
+    name: redis_network
+    external: true
 networks:
   dynamodb_network:
     name: dynamodb_network
