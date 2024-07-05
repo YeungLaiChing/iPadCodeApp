@@ -30,7 +30,7 @@ services:
             PROD_ID_3: "HKEXBTC-USD"
             PROD_ID_4: "HKEXETH-USD"
             CRYPTO_ASSET: "CCHKEX"
-            APIKEY: ""
+            APIKEY: "1e0f131269d411f25453ad0820d526e937df1a7c1a929ee46f8b2fbf8cd2d387"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
         volumes:
@@ -39,12 +39,6 @@ services:
         networks:
             - redis_network
 
-
-
-networks:
-  redis_network:
-    name: redis_network
-    external: true
 networks:
   dynamodb_network:
     name: dynamodb_network
