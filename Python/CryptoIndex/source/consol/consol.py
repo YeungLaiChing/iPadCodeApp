@@ -105,7 +105,7 @@ def main_process(exchange,rds):
                         setup_csv_file(file_list[str(hr)])
                     # csv_writer.writerow(['unit_ts','tradeid','side','price','quantity'])
                     websocket="Y"
-                    if payload['source']=="REST":
+                    if payload.get('source')=="REST":
                         websocket="N"
                     data_row=[payload['timestamp'],payload['timestamp_hkt'],payload['trade_id'],payload['side'],payload['price'],payload['volume'],str(acc_vol),payload['timestamp_recv'],websocket]
                     write_to_csv(file_list[str(hr)],data_row)
