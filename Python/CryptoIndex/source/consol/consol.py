@@ -97,7 +97,7 @@ def main_process(exchange,rds):
                     rds.hset(payload['from_symbol'],exchange,f"{str(payload['timestamp'])}@{price}")
                     payload['acc_vol']=str(acc_vol)
                     #rds.publish(ccix_consol_data_channel,message['data'])
-                    rds.publish(ccix_consol_data_channel,json.dumps(payload))
+                    rds.publish(ccix_consol_data_channel,json.dumps(payload,use_decimal=True))
                     if str(hr) not in file_list:
                         file_name=f"{exchange}_{crypto_asset.lower()}_{hr}.csv"
                         file_list[str(hr)]=f"{get_path_by_time(hr)}/{file_name}"
