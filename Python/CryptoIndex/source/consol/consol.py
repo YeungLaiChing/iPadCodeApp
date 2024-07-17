@@ -83,6 +83,9 @@ def main_process(exchange,rds):
                 #key=f"{payload['exchange']}_{payload['timestamp_org']}_{payload['from_symbol']}_{payload['to_symbol']}_{payload['side']}_{payload['trade_id']}_{float(payload['price'])}_{float(payload['volume'])}"
                 
                 #key=f"{payload['exchange']}_{payload['timestamp']}_{payload['from_symbol']}_{payload['to_symbol']}_{payload['trade_id']}_{float(payload['price'])}_{float(payload['volume'])}"
+                # use trade_id + price + volume as key. 
+                # ignore timestamp : due to the difference between REST and WebSocket for some exchanges
+                # ignore buy/sell side: due to the difference between REST and WebSocket for some exchanges
                 key=f"{payload['exchange']}_{payload['from_symbol']}_{payload['to_symbol']}_{payload['trade_id']}_{float(payload['price'])}_{float(payload['volume'])}"
                 #print(key)
                 if rds.setnx(key,"1"):
