@@ -73,7 +73,8 @@ def process_message(message):
                 'from_symbol':crypto_asset.upper(),
                 'to_symbol':'USD',
                 'price':last_price,
-                'volume':last_quantity
+                'volume':last_quantity,
+                'source':'WebSocket'
             }
             rds.publish(ccix_data_channel,json.dumps(payload))
             global file_list

@@ -69,7 +69,8 @@ def process_message(message, last):
                 'from_symbol':crypto_asset.upper(),
                 'to_symbol':'USD',
                 'price':last_price,
-                'volume':last_quantity
+                'volume':last_quantity,
+                'source':'REST'
             }
             rds.publish(ccix_data_channel,json.dumps(payload))
             #write_to_csv(data_row )

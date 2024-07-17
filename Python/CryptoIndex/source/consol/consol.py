@@ -31,7 +31,7 @@ def setup_csv_file(csv_file_path):
     with open(csv_file_path,mode='a',newline='') as file:
         if file.tell() == 0:
             csv_writer=csv.writer(file)
-            csv_writer.writerow(['unit_ts','hkt','tradeid','side','price','quantity'])
+            csv_writer.writerow(['unit_ts','hkt','tradeid','side','price','quantity','acc_vol','recv_ts','websocket'])
             
 def write_to_csv(csv_file_path,data_row):
     with open(csv_file_path,mode='a', newline='') as file:
@@ -95,13 +95,18 @@ def main_process(exchange,rds):
                     rds.hset(hr,exchange,acc_vol)
                     
                     rds.hset(payload['from_symbol'],exchange,f"{str(payload['timestamp'])}@{price}")
-                    rds.publish(ccix_consol_data_channel,message['data'])
+                    payload['acc_vol']=str(acc_vol)
+                    #rds.publish(ccix_consol_data_channel,message['data'])
+                    rds.publish(ccix_consol_data_channel,json.dumps(payload))
                     if str(hr) not in file_list:
                         file_name=f"{exchange}_{crypto_asset.lower()}_{hr}.csv"
                         file_list[str(hr)]=f"{get_path_by_time(hr)}/{file_name}"
                         setup_csv_file(file_list[str(hr)])
                     # csv_writer.writerow(['unit_ts','tradeid','side','price','quantity'])
-                    data_row=[payload['timestamp'],payload['timestamp_hkt'],payload['trade_id'],payload['side'],payload['price'],payload['volume']]
+                    websocket="Y"
+                    if payload['source']=="REST":
+                        websocket="N"
+                    data_row=[payload['timestamp'],payload['timestamp_hkt'],payload['trade_id'],payload['side'],payload['price'],payload['volume'],payload['acc_vol'],payload['timestamp_recv'],websocket]
                     write_to_csv(file_list[str(hr)],data_row)
                 else:
                     rds.publish("duplicated_data_channel",message['data'])
