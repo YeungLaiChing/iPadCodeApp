@@ -75,6 +75,7 @@ def main_process(exchange,rds):
                 exit()
             if message['data']!=1 :
                 payload=json.loads(message['data'],parse_float=Decimal)
+                payload_temp=json.loads(message['data'])
                 price=float(payload["price"])
                 volume=float(payload["volume"])
                 hr=payload["timestamp_hrs"]
@@ -95,9 +96,9 @@ def main_process(exchange,rds):
                     rds.hset(hr,exchange,acc_vol)
                     
                     rds.hset(payload['from_symbol'],exchange,f"{str(payload['timestamp'])}@{price}")
-                    payload['acc_vol']=str(acc_vol)
+                    payload_temp['acc_vol']=str(acc_vol)
                     #rds.publish(ccix_consol_data_channel,message['data'])
-                    rds.publish(ccix_consol_data_channel,json.dumps(payload,use_decimal=True))
+                    rds.publish(ccix_consol_data_channel,json.dumps(payload_temp))
                     if str(hr) not in file_list:
                         file_name=f"{exchange}_{crypto_asset.lower()}_{hr}.csv"
                         file_list[str(hr)]=f"{get_path_by_time(hr)}/{file_name}"
@@ -106,7 +107,7 @@ def main_process(exchange,rds):
                     websocket="Y"
                     if payload['source']=="REST":
                         websocket="N"
-                    data_row=[payload['timestamp'],payload['timestamp_hkt'],payload['trade_id'],payload['side'],payload['price'],payload['volume'],payload['acc_vol'],payload['timestamp_recv'],websocket]
+                    data_row=[payload['timestamp'],payload['timestamp_hkt'],payload['trade_id'],payload['side'],payload['price'],payload['volume'],str(acc_vol),payload['timestamp_recv'],websocket]
                     write_to_csv(file_list[str(hr)],data_row)
                 else:
                     rds.publish("duplicated_data_channel",message['data'])
