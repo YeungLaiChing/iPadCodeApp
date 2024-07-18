@@ -21,7 +21,7 @@ exchange_name=os.environ.get('EXCHANGE_NAME','CCDATA')
 
 api_key=os.environ.get('APIKEY','1e0f131269d411f25453ad0820d526e937df1a7c1a929ee46f8b2fbf8cd2d387')
 
-rds = redis.Redis(host=redis_host, port=redis_port, db=0,decode_responses=True)
+#rds = redis.Redis(host=redis_host, port=redis_port, db=0,decode_responses=True)
 
 data_path="./data/"
 file_list={}
@@ -93,7 +93,7 @@ def process_message(message):
                 'ccseq':ccseq,
                 'index_value':index_value
             }
-            rds.publish(ccix_data_channel,json.dumps(payload))
+            #rds.publish(ccix_data_channel,json.dumps(payload))
             global file_list
             partition=get_date_partition(unix_timestamp)
             if partition not in file_list:
