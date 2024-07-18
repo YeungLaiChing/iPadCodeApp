@@ -4,8 +4,10 @@ import numpy as np
 import redis
 import json
 import sys
+import os
 
-topic = 'ccix_btc_data_channel'
+crypto_asset=os.environ.get('CRYPTO_ASSET','BTC')
+topic = f'ccix_{crypto_asset.lower()}_data_channel'
 if len(sys.argv) > 1:
     topic=sys.argv[1]
 
@@ -38,8 +40,9 @@ for i in range(25):
     hrs=int(int(current/3600)*3600-3600*(i))
     df2.loc[i,"timestamp_hrs"]=hrs
     for exchange in exchange_list :
-        if rds.hget(hrs,exchange) :
-            df2.loc[i,exchange]=float(rds.hget(hrs,exchange))
+        acc_vol_key=f"{exchange}_{crypto_asset}"
+        if rds.hget(hrs,acc_vol_key) :
+            df2.loc[i,exchange]=float(rds.hget(hrs,acc_vol_key))
             
 
 df3=df2[(df2.timestamp_hrs < current) & (df2.timestamp_hrs >= int(int(current/3600)*3600-3600*(23)))].drop(columns=['timestamp_hrs']).T
@@ -56,8 +59,8 @@ threshold=0.1
 
 
 for index,row in df.iterrows():
-    if rds.hget("BTC",index):
-        vals=rds.hget("BTC",index).split("@")
+    if rds.hget(crypto_asset,index):
+        vals=rds.hget(crypto_asset,index).split("@")
         df.loc[index,'last_update_time']=int(vals[0])
         df.loc[index,'current_price']=float(vals[1])
         
@@ -89,11 +92,11 @@ def endprocess():
 last_index=64773
 last_index_time=64773
 
-if rds.hget("BTC","last_index"):
-    last_index=rds.hget("BTC","last_index")
+if rds.hget(crypto_asset,"last_index"):
+    last_index=rds.hget(crypto_asset,"last_index")
     
-if rds.hget("BTC","last_index_time"):
-    last_index_time=rds.hget("BTC","last_index_time")
+if rds.hget(crypto_asset,"last_index_time"):
+    last_index_time=rds.hget(crypto_asset,"last_index_time")
 
 while True:
     message = mobile.get_message(timeout=5)
@@ -106,8 +109,8 @@ while True:
             payload=json.loads(message['data'])
             exchange=payload["exchange"]
             if exchange in exchange_list:
-                if rds.hget("BTC","last_index"):
-                    last_index=float(rds.hget("BTC","last_index"))
+                if rds.hget(crypto_asset,"last_index"):
+                    last_index=float(rds.hget(crypto_asset,"last_index"))
                     
                 price=float(payload["price"])
                 volume=float(payload["volume"])
@@ -119,8 +122,9 @@ while True:
                     i=len(df2.index)
                     df2.loc[i,"timestamp_hrs"]=hr
                     for ex in exchange_list :
-                        if rds.hget(hr,ex) :
-                            df2.loc[i,ex]=float(rds.hget(hr,ex))
+                        acc_vol_key=f"{ex}_{crypto_asset}"
+                        if rds.hget(hr,acc_vol_key) :
+                            df2.loc[i,ex]=float(rds.hget(hr,acc_vol_key))
                     print(f"Weighting table init for new hour {hr}")
                     
                     print(df2)
@@ -164,11 +168,11 @@ while True:
       
 
                 if int(payload['timestamp']) > int(last_index_time) or 1==1:
-                    rds.hset("BTC","last_index",last_index)
-                    rds.hset("BTC","last_index_time",payload['timestamp'])
+                    rds.hset(crypto_asset,"last_index",last_index)
+                    rds.hset(crypto_asset,"last_index_time",payload['timestamp'])
                     last_index_time=payload['timestamp']
                     pl={
-                        'index':'BTCIndex',
+                        'index':f'{crypto_asset}Index',
                         'exchange':payload["exchange"],
                         'timestamp_hkt':payload["timestamp_hkt"],
                         'indexValue':last_index
