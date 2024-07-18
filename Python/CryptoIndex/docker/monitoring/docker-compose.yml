@@ -38,6 +38,14 @@ services:
             - .:/code/
         networks:
             - redis_network
+  redisinsight:
+    image: redislabs/redisinsight:1.13.0
+    ports:
+      - '8001:8001'
+    volumes:
+      - redisinsight_db:/db
+    networks:
+      - redis_network
 
 networks:
   dynamodb_network:
