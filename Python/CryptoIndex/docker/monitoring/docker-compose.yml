@@ -39,11 +39,11 @@ services:
         networks:
             - redis_network
   redisinsight:
-    image: redislabs/redisinsight:1.13.0
+    image: redis/redisinsight:latest
     ports:
-      - '8001:8001'
+      - '5540:5540'
     volumes:
-      - redisinsight_db:/db
+      - redisinsight_db:/data
     networks:
       - redis_network
 
