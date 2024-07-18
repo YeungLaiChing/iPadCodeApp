@@ -7,11 +7,14 @@ import sys
 import os
 
 crypto_asset=os.environ.get('CRYPTO_ASSET','BTC')
+redis_host=os.environ.get('REDIS_HOST', '192.168.0.3')
+redis_port=int(os.environ.get('REDIS_PORT', '6379'))
+
 topic = f'ccix_{crypto_asset.lower()}_data_channel'
 if len(sys.argv) > 1:
     topic=sys.argv[1]
 
-rds = redis.Redis(host='192.168.0.3', port=6379, db=0,decode_responses=True)
+rds = redis.Redis(host=redis_host,port=redis_port, db=0,decode_responses=True)
 
 def apply_time_penalty_factor(value):
     if value < 300:
