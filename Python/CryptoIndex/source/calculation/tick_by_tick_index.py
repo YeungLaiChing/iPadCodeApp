@@ -13,9 +13,9 @@ import os
 crypto_asset=os.environ.get('CRYPTO_ASSET','ETH')
 redis_host=os.environ.get('REDIS_HOST', '192.168.0.55')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
-exchange_list=['bitstamp','coinbase','itbit','kraken','lmax']
-topic = f'ccix_{crypto_asset.lower()}_data_channel'
-dissem_topic = f'ccix_{crypto_asset.lower()}_index_channel'
+topic=os.environ.get('DATA_CHANNEL',f'ccix_{crypto_asset.lower()}_data_channel')
+dissem_topic = os.environ.get('INDEX_CHANNEL',f'ccix_{crypto_asset.lower()}_index_channel')
+exchange_list= os.environ.get('EXCHANGE_LIST',"bitstamp,coinbase,itbit,kraken,lmax").split(",")
 
 rds = redis.Redis(host=redis_host,port=redis_port, db=0,decode_responses=True)
 data_path="./data/"
