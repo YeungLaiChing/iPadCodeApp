@@ -229,8 +229,8 @@ def start():
         
 
                     if int(payload['timestamp']) > int(last_index_time) or 1==1:
-                        rds.hset(crypto_asset,"last_index",last_index)
-                        rds.hset(crypto_asset,"last_index_time",payload['timestamp'])
+                        rds.hset(crypto_asset,"last_index",float(last_index))
+                        rds.hset(crypto_asset,"last_index_time",int(payload['timestamp']))
                         last_index_time=payload['timestamp']
                         pl={
                             'id':f'{crypto_asset}Index',
