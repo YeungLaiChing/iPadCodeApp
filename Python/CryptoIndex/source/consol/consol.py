@@ -95,7 +95,7 @@ def main_process(exchange,rds):
                     if rds.hget(hr,acc_vol_key) :
                         acc_vol=volume+float(rds.hget(hr,acc_vol_key))
                     rds.hset(hr,acc_vol_key,acc_vol)
-                    
+                    rds.expire(hr,3600*48)
                     rds.hset(payload['from_symbol'],exchange,f"{str(payload['timestamp'])}@{price}")
                     payload_temp['acc_vol']=str(acc_vol)
                     #rds.publish(ccix_consol_data_channel,message['data'])
