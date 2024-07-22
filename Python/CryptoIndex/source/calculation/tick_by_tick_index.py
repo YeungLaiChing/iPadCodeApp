@@ -200,9 +200,9 @@ def start():
                         
                         print(df2) 
 
-                    for exchange in exchange_list :
-                        if last_acc_vol_list.get(f"{exchange}_{hr}"):
-                            df2.loc[(df2['timestamp_hrs'] == hr), exchange] = last_acc_vol_list[f"{exchange}_{hr}"]
+                    for ex in exchange_list :
+                        if last_acc_vol_list.get(f"{ex}_{hr}"):
+                            df2.loc[(df2['timestamp_hrs'] == hr), ex] = last_acc_vol_list[f"{ex}_{hr}"]
                         
                     #print(df2) 
 
