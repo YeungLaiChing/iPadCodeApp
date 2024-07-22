@@ -117,7 +117,7 @@ def start():
             acc_vol_key=f"{exchange}_{crypto_asset}"
             if rds.hget(hrs,acc_vol_key) :
                 df2.loc[i,exchange]=float(rds.hget(hrs,acc_vol_key))
-                last_acc_vol_list[f"{exchange}_{hr}"]=df2.loc[i,exchange]
+                last_acc_vol_list[f"{exchange}_{hrs}"]=df2.loc[i,exchange]
                 
 
     df3=df2[(df2.timestamp_hrs < current) & (df2.timestamp_hrs >= int(int(current/3600)*3600-3600*(23)))].drop(columns=['timestamp_hrs']).T
