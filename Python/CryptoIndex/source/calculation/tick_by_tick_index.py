@@ -33,6 +33,9 @@ def get_path_by_time(now):
     Path(path).mkdir(parents=True, exist_ok=True)
     return path
 
+def get_table_partition(input):
+    return int(input/3600)*3600
+
 def get_current_time():
     return get_format_hkt(time.time())
 
@@ -164,6 +167,8 @@ def start():
         if message:
             current=int(time.time())
             current_hkt=get_format_hkt(current)
+            current_hr=get_table_partition(current)
+
             if message['data']=="SHUTDOWN":
                 endprocess()
                 exit()
@@ -196,9 +201,8 @@ def start():
                         if last_acc_vol_list.get(f"{exchange}_{hr}"):
                             df2.loc[(df2['timestamp_hrs'] == hr), exchange] = last_acc_vol_list[f"{exchange}_{hr}"]
                         
-                    current=int(payload["timestamp"])
-                    current=int(time.time())
-                    
+                    #print(df2) 
+
                     df3=df2[(df2.timestamp_hrs < current) & (df2.timestamp_hrs >= int(int(current/3600)*3600-3600*(23)))].drop(columns=['timestamp_hrs']).T
                     if current == int(current/3600)*3600:
                         df3=df2[(df2.timestamp_hrs < current) & (df2.timestamp_hrs >= int(int(current/3600)*3600-3600*(24)))].drop(columns=['timestamp_hrs']).T
@@ -262,12 +266,19 @@ def start():
                         
                         rds.publish(dissem_topic,json.dumps(pl))
                         
-                        partition=get_date_partition(current)
-                        if partition not in file_list:
-                            file_list[partition]=f"{get_path_by_time(current)}/{file_name}"
-                            setup_csv_file(file_list[partition])
-                            
-                        write_to_csv(file_list[partition],data_row)
+                        #partition=get_date_partition(current)
+                        #if partition not in file_list:
+                        #    file_list[partition]=f"{get_path_by_time(current)}/{file_name}"
+                        #    setup_csv_file(file_list[partition])
+
+                        
+
+                        if str(current_hr) not in file_list:
+                            file_name=f"{crypto_asset.lower()}_{current_hr}.csv"
+                            file_list[str(current_hr)]=f"{get_path_by_time(current_hr)}/{file_name}"
+                            setup_csv_file(file_list[str(current_hr)])
+
+                        write_to_csv(file_list[str(current_hr)],data_row)
                         
                         #print(pl)
                 #else:
