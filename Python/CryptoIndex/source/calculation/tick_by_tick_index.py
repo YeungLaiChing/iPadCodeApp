@@ -20,6 +20,7 @@ exchange_list= os.environ.get('EXCHANGE_LIST',"bitstamp,coinbase,itbit,kraken,lm
 rds = redis.Redis(host=redis_host,port=redis_port, db=0,decode_responses=True)
 data_path="./data/"
 file_list={}
+last_acc_vol_list={}
 file_name=f'{crypto_asset.lower()}_index.csv'
 lock=threading.Lock()
 
@@ -99,6 +100,7 @@ def start():
     df2["timestamp_hrs"]=str(current/3600)*3600
     
     global file_list
+    global last_acc_vol_list
     file_list[get_date_partition(current)]=f"{get_path_by_time(current)}/{file_name}"
     setup_csv_file(file_list[get_date_partition(current)])
     
@@ -109,6 +111,7 @@ def start():
             acc_vol_key=f"{exchange}_{crypto_asset}"
             if rds.hget(hrs,acc_vol_key) :
                 df2.loc[i,exchange]=float(rds.hget(hrs,acc_vol_key))
+                last_acc_vol_list[f"{exchange}_{hr}"]=df2.loc[i,exchange]
                 
 
     df3=df2[(df2.timestamp_hrs < current) & (df2.timestamp_hrs >= int(int(current/3600)*3600-3600*(23)))].drop(columns=['timestamp_hrs']).T
@@ -177,6 +180,7 @@ def start():
                     volume=float(payload["volume"])
                     acc_vol=float(payload["acc_vol"])
                     hr=payload["timestamp_hrs"]
+                    last_acc_vol_list[f"{exchange}_{hr}"]=acc_vol
                 
                     if hr not in df2['timestamp_hrs'].values:
                         print(f"try to find {hr}")
@@ -188,6 +192,9 @@ def start():
                         
                         print(df2) 
 
+                    for exchange in exchange_list :
+                        if last_acc_vol_list.get(f"{exchange}_{hr}"):
+                            df2.loc[(df2['timestamp_hrs'] == hr), exchange] = last_acc_vol_list[f"{exchange}_{hr}"]
                         
                     current=int(payload["timestamp"])
                     current=int(time.time())
