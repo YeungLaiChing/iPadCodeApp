@@ -98,14 +98,17 @@ def endprocess():
 def start():
     current=int(time.time())
     current_hkt=get_format_hkt(current)
+    current_hr=get_table_partition(current)
+
     df = pd.DataFrame(exchange_list, columns=['exchange']).set_index("exchange")
     df2 = pd.DataFrame(columns=exchange_list)
     df2["timestamp_hrs"]=str(current/3600)*3600
     
     global file_list
     global last_acc_vol_list
-    file_list[get_date_partition(current)]=f"{get_path_by_time(current)}/{file_name}"
-    setup_csv_file(file_list[get_date_partition(current)])
+    
+    file_list[str(current_hr)]=f"{get_path_by_time(current_hr)}/{crypto_asset.lower()}_{current_hr}.csv"
+    setup_csv_file(file_list[str(current_hr)])
     
     for i in range(25):
         hrs=int(int(current/3600)*3600-3600*(i))
@@ -274,8 +277,8 @@ def start():
                         
 
                         if str(current_hr) not in file_list:
-                            file_name=f"{crypto_asset.lower()}_{current_hr}.csv"
-                            file_list[str(current_hr)]=f"{get_path_by_time(current_hr)}/{file_name}"
+                            #file_name=f"{crypto_asset.lower()}_{current_hr}.csv"
+                            file_list[str(current_hr)]=f"{get_path_by_time(current_hr)}/{crypto_asset.lower()}_{current_hr}.csv"
                             setup_csv_file(file_list[str(current_hr)])
 
                         write_to_csv(file_list[str(current_hr)],data_row)
