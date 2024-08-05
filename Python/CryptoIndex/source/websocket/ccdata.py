@@ -53,25 +53,25 @@ def write_to_csv(csv_file_path,data_row):
 def process_message(message):
     try:
         data = json.loads(message)
-        if data['TYPE'] == '1105':
-            instrument=data['INSTRUMENT']
-            ccseq=data['CCSEQ']
+        if data.get('TYPE') == '1105':
+            instrument=data.get('INSTRUMENT')
+            ccseq=data.get('CCSEQ')
             
-            index_value=data['VALUE']
-            last_update_qty=data['LAST_UPDATE_QUANTITY']
-            last_update_ccseq=data['LAST_UPDATE_CCSEQ']
-            current_hour_vol=data['CURRENT_HOUR_VOLUME']
-            current_hour_high=data['CURRENT_HOUR_HIGH']
-            current_hour_low=data['CURRENT_HOUR_LOW']
-            current_hour_change=data['CURRENT_HOUR_CHANGE']
-            current_hour_updates=data['CURRENT_HOUR_TOTAL_INDEX_UPDATES']
-            moving_24_hour_vol=data['MOVING_24_HOUR_VOLUME']
-            moving_24_hour_high=data['MOVING_24_HOUR_HIGH']
-            moving_24_hour_low=data['MOVING_24_HOUR_LOW']
-            moving_24_hour_change=data['MOVING_24_HOUR_CHANGE']
-            moving_24_hour_updates=data['MOVING_24_HOUR_TOTAL_INDEX_UPDATES']
+            index_value=data.get('VALUE')
+            last_update_qty=data.get('LAST_UPDATE_QUANTITY')
+            last_update_ccseq=data.get('LAST_UPDATE_CCSEQ')
+            current_hour_vol=data.get('CURRENT_HOUR_VOLUME')
+            current_hour_high=data.get('CURRENT_HOUR_HIGH')
+            current_hour_low=data.get('CURRENT_HOUR_LOW')
+            current_hour_change=data.get('CURRENT_HOUR_CHANGE')
+            current_hour_updates=data.get('CURRENT_HOUR_TOTAL_INDEX_UPDATES')
+            moving_24_hour_vol=data.get('MOVING_24_HOUR_VOLUME')
+            moving_24_hour_high=data.get('MOVING_24_HOUR_HIGH')
+            moving_24_hour_low=data.get('MOVING_24_HOUR_LOW')
+            moving_24_hour_change=data.get('MOVING_24_HOUR_CHANGE')
+            moving_24_hour_updates=data.get('MOVING_24_HOUR_TOTAL_INDEX_UPDATES')
             
-            original_timestamp = int(data['VALUE_LAST_UPDATE_TS'])
+            original_timestamp = int(data.get('VALUE_LAST_UPDATE_TS'))
             utc_datetime = datetime.fromtimestamp(original_timestamp,tz=timezone.utc)
             unix_timestamp=int(utc_datetime.timestamp())
             hkt=timezone(timedelta(hours=8))
