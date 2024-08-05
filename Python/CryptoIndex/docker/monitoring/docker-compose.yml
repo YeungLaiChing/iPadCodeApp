@@ -25,10 +25,11 @@ services:
         restart: unless-stopped
         environment:
             EXCHANGE_NAME: "CCDATA"
+            END_POINT: "wss://client-axfioiyn05.ccdata.io"
             PROD_ID_1: "HKEXBTC-USD"
             PROD_ID_2: "HKEXETH-USD"
-            PROD_ID_3: "HKEXBTC-USD"
-            PROD_ID_4: "HKEXETH-USD"
+            PROD_ID_3: "HKEXBRR-USD"
+            PROD_ID_4: "HKEXERR-USD"
             CRYPTO_ASSET: "CCHKEX"
             APIKEY: "1e0f131269d411f25453ad0820d526e937df1a7c1a929ee46f8b2fbf8cd2d387"
             REDIS_HOST: "redis-va"
