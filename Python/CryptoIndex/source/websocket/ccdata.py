@@ -18,6 +18,7 @@ product_id3=os.environ.get('PROD_ID_3', 'HKEXBTC-USD')
 product_id4=os.environ.get('PROD_ID_4', 'HKEXETH-USD')
 crypto_asset=os.environ.get('CRYPTO_ASSET','CCHKEX')
 exchange_name=os.environ.get('EXCHANGE_NAME','CCDATA')
+end_point=os.environ.get('END_POINT','wss://data-streamer.cryptocompare.com/')
 
 api_key=os.environ.get('APIKEY','1e0f131269d411f25453ad0820d526e937df1a7c1a929ee46f8b2fbf8cd2d387')
 
@@ -134,6 +135,7 @@ def on_open(ws):
         "type": "index_cc_v1_latest_tick",
         "groups": ["VALUE","LAST_UPDATE","CURRENT_HOUR","MOVING_24_HOUR"],
         "market": "cchkex",
+        "tick_interval":1,
         "instruments": [product_id1,product_id2,product_id3,product_id4]
     })
     ws.send(subscribe_message)
@@ -163,7 +165,7 @@ def get_ccdata_data():
     file_list[get_date_partition(now)]=f"{get_path_by_time(now)}/{file_name}"
     setup_csv_file(file_list[get_date_partition(now)])
    
-    ws=WebSocketApp(f"wss://data-streamer.cryptocompare.com/?api_key={api_key}",
+    ws=WebSocketApp(f"{end_point}?api_key={api_key}",
                     on_open=on_open,
                     on_message=on_message,
                     on_ping=on_ping,
