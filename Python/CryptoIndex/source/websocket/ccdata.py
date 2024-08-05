@@ -14,11 +14,11 @@ redis_host=os.environ.get('REDIS_HOST', '192.168.0.3')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
 product_id1=os.environ.get('PROD_ID_1', 'HKEXBTC-USD')
 product_id2=os.environ.get('PROD_ID_2', 'HKEXETH-USD')
-product_id3=os.environ.get('PROD_ID_3', 'HKEXBTC-USD')
-product_id4=os.environ.get('PROD_ID_4', 'HKEXETH-USD')
+product_id3=os.environ.get('PROD_ID_3', 'HKEXERR-USD')
+product_id4=os.environ.get('PROD_ID_4', 'HKEXBRR-USD')
 crypto_asset=os.environ.get('CRYPTO_ASSET','CCHKEX')
 exchange_name=os.environ.get('EXCHANGE_NAME','CCDATA')
-end_point=os.environ.get('END_POINT','wss://data-streamer.cryptocompare.com/')
+end_point=os.environ.get('END_POINT','wss://client-axfioiyn05.ccdata.io')
 
 api_key=os.environ.get('APIKEY','1e0f131269d411f25453ad0820d526e937df1a7c1a929ee46f8b2fbf8cd2d387')
 
@@ -140,6 +140,7 @@ def on_open(ws):
     })
     ws.send(subscribe_message)
     print(f"{get_current_time()}: sent subscribe")
+    print(f"{subscribe_message}")
 
 def setup_csv_file(csv_file_path):
     with open(csv_file_path,mode='a',newline='') as file:

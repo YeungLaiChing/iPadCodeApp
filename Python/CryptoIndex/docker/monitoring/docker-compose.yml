@@ -37,8 +37,7 @@ services:
         volumes:
             - ../../source/websocket/ccdata.py:/code/app.py
             - .:/code/
-        networks:
-            - redis_network
+
   redisinsight:
     image: redis/redisinsight:latest
     ports:
