@@ -55,7 +55,7 @@ def log(info):
     log_file_path=f"{get_path_by_time(time.time())}/{exchange_name.lower()}_{crypto_asset.lower()}.log"
     with lock:
         with open(log_file_path,mode='a', newline='') as file:
-            file.write(info)
+            file.writelines(info);
             print(info)
             
 
@@ -120,7 +120,7 @@ def process_message(message):
         log(f"{get_current_time()}: IOError: {e}")
     
 def on_message(ws,message):
-    log(message)
+    #log(message) 
     #threading.Thread(target=process_message, args=(message,)).start()
     process_message(message)
     
@@ -132,11 +132,11 @@ def on_close(ws,close_status_code,close_msg):
     
 def on_ping(ws,msg):
     if msg=='hello':
-        log(f"Got a ping msg={msg}. A pong reply has already been automatically sent.")    
+        log(f"{get_current_time()}: Got a ping msg={msg}. A pong reply has already been automatically sent.")    
 
 def on_pong(ws,msg):
     if msg=='hello':
-        log(f"Got a pong msg={msg}. No need to respond")
+        log(f"{get_current_time()}: Got a pong msg={msg}. No need to respond")
 
     
 def on_open(ws):
