@@ -25,6 +25,8 @@ api_key=os.environ.get('APIKEY','1e0f131269d411f25453ad0820d526e937df1a7c1a929ee
 #rds = redis.Redis(host=redis_host, port=redis_port, db=0,decode_responses=True)
 
 data_path="./data/"
+
+
 file_list={}
 def get_date_partition(input):
     return f"{datetime.fromtimestamp(int(input+16*3600), tz=timezone.utc).strftime('%Y%m%d')}"
@@ -48,6 +50,13 @@ def write_to_csv(csv_file_path,data_row):
         with open(csv_file_path,mode='a', newline='') as file:
             csv_writer = csv.writer(file)
             csv_writer.writerow(data_row)
+            
+def log(info):
+    log_file_path=f"{get_path_by_time(time.time())}/{exchange_name.lower()}_{crypto_asset.lower()}.log"
+    with lock:
+        with open(log_file_path,mode='a', newline='') as file:
+            file.write(info)
+            print(info)
             
 
 def process_message(message):
@@ -106,27 +115,28 @@ def process_message(message):
         else:
             print(data)
     except json.JSONDecodeError as e:
-        print(f"{get_current_time()}: JSON decode error: {e}")
+        log(f"{get_current_time()}: JSON decode error: {e}")
     except IOError as e:
-        print(f"{get_current_time()}: IOError: {e}")
+        log(f"{get_current_time()}: IOError: {e}")
     
 def on_message(ws,message):
-    #print("received a message")
-    threading.Thread(target=process_message, args=(message,)).start()
+    log(message)
+    #threading.Thread(target=process_message, args=(message,)).start()
+    process_message(message)
     
 def on_error(ws,error):
-    print(f"{get_current_time()}: Encountereed an error :{error}")
+    log(f"{get_current_time()}: Encountereed an error :{error}")
     
 def on_close(ws,close_status_code,close_msg):
-    print(f"{get_current_time()}: closed connection.code={close_status_code}.msg={close_msg}")
+    log(f"{get_current_time()}: closed connection.code={close_status_code}.msg={close_msg}")
     
 def on_ping(ws,msg):
     if msg=='hello':
-        print(f"Got a ping msg={msg}. A pong reply has already been automatically sent.")    
+        log(f"Got a ping msg={msg}. A pong reply has already been automatically sent.")    
 
 def on_pong(ws,msg):
     if msg=='hello':
-        print(f"Got a pong msg={msg}. No need to respond")
+        log(f"Got a pong msg={msg}. No need to respond")
 
     
 def on_open(ws):
@@ -139,8 +149,8 @@ def on_open(ws):
         "instruments": [product_id1,product_id2,product_id3,product_id4]
     })
     ws.send(subscribe_message)
-    print(f"{get_current_time()}: sent subscribe")
-    print(f"{subscribe_message}")
+    log(f"{get_current_time()}: sent subscribe")
+    log(f"{subscribe_message}")
 
 def setup_csv_file(csv_file_path):
     with open(csv_file_path,mode='a',newline='') as file:
