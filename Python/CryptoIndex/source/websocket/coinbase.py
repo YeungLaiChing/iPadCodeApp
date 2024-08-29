@@ -131,7 +131,7 @@ def get_coinbase_data():
     file_list[get_date_partition(now)]=f"{get_path_by_time(now)}/{file_name}"
     setup_csv_file(file_list[get_date_partition(now)])
    
-    ws=WebSocketApp("wss://ws-feed.pro.coinbase.com",
+    ws=WebSocketApp("wss://ws-feed.exchange.coinbase.com",
                     on_open=on_open,
                     on_message=on_message,
                     on_ping=on_ping,

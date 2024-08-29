@@ -12,8 +12,8 @@ from pathlib import Path
 
 redis_host=os.environ.get('REDIS_HOST', '192.168.0.3')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
-product_id1=os.environ.get('PROD_ID_1', 'HKEXBTC-USD')
-product_id2=os.environ.get('PROD_ID_2', 'HKEXETH-USD')
+product_id1=os.environ.get('PROD_ID_1', 'HKBTCI-USD')
+product_id2=os.environ.get('PROD_ID_2', 'HKETHI-USD')
 product_id3=os.environ.get('PROD_ID_3', 'HKEXERR-USD')
 product_id4=os.environ.get('PROD_ID_4', 'HKEXBRR-USD')
 crypto_asset=os.environ.get('CRYPTO_ASSET','CCHKEX')
