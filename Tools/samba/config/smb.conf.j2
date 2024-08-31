@@ -1,0 +1,21 @@
+[global]
+   domain logons = {{ DOMAIN_LOGONS }}
+   logon drive = {{ LOGON_DRIVE }}:
+   netbios name = {{ NETBIOS_NAME }}
+   server string = {{ SERVER_STRING }}
+   workgroup = {{ WORKGROUP }}
+
+   dns proxy = no 
+   domain master = no
+   encrypt passwords = yes
+   security = user
+   server min protocol = NT1
+
+[recording]
+   path = /data
+   browsable = yes
+   read only = no
+   guest ok = no
+   delete veto files = yes
+   valid users = recording
+

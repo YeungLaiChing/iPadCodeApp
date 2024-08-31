@@ -1,0 +1,14 @@
+services:
+  samba-app:
+    image: instantlinux/samba:4.13.7-r0
+    volumes:
+      - ./data:/data
+      - ./config/conf.d:/etc/samba/conf.d
+      - ./config/smb.conf.j2:/root/smb.conf.j2
+    ports:
+      - '139:139/tcp'
+      - '137:137/udp'
+      - '138:138/udp'
+      - '445:445/tcp'
+    environment:
+      TZ: "Asia/Hong_Kong"
