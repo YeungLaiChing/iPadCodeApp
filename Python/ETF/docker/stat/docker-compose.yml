@@ -5,6 +5,7 @@ services:
         restart: unless-stopped
         environment:
             CONFIG_MONGODB_URL: mongodb://testing:testing@mongo:27017/
+            APP_NAME: "etf-capture-aum"
         volumes:
             - ../../source/hkex_aum.py:/code/app.py
             - .:/code/
@@ -16,6 +17,7 @@ services:
         restart: unless-stopped
         environment:
             CONFIG_MONGODB_URL: mongodb://testing:testing@mongo:27017/
+            APP_NAME: "etf-capture-vol"
         volumes:
             - ../../source/yahoo_vol.py:/code/app.py
             - .:/code/
@@ -28,6 +30,7 @@ services:
         restart: unless-stopped
         environment:
             CONFIG_MONGODB_URL: mongodb://testing:testing@mongo:27017/
+            APP_NAME: "etf-capture-ccass"
         volumes:
             - ../../source/hkex_ccass_holding.py:/code/app.py
             - .:/code/
@@ -42,6 +45,7 @@ services:
             - '8099:8099'
         environment:
             CONFIG_MONGODB_URL: mongodb://testing:testing@mongo:27017/
+            APP_NAME: "etf-stat-rest-api"
             LISTENING_PORT: 8099
         volumes:
             - ../../source/rest.py:/code/app.py
