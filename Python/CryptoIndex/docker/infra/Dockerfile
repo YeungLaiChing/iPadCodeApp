@@ -1,3 +1,5 @@
+ARG APP_NAME
+
 #The Flask application container will use python:3.10-alpine as the base image
 FROM python:3.10.12
 
@@ -14,4 +16,5 @@ RUN pip install -r requirements.txt --no-cache-dir
 COPY . /code
 
 #This command will start the Python Flask application Docker container
-CMD python app.py config.json
+CMD python app.py config.json  "${APP_NAME}"
+

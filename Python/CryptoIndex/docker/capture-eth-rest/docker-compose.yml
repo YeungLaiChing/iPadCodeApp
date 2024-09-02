@@ -9,6 +9,7 @@ services:
             CRYPTO_ASSET: "ETH"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "coinbase-eth-rest"
         volumes:
             - ../../source/rest/coinbase.py:/code/app.py
             - .:/code/
@@ -24,6 +25,7 @@ services:
             CRYPTO_ASSET: "ETH"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "kraken-eth-rest"
         volumes:
             - ../../source/rest/kraken.py:/code/app.py
             - .:/code/
@@ -39,6 +41,7 @@ services:
             CRYPTO_ASSET: "ETH"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "bitstamp-eth-rest"
         volumes:
             - ../../source/rest/bitstamp.py:/code/app.py
             - .:/code/
@@ -54,6 +57,7 @@ services:
             CRYPTO_ASSET: "ETH"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "itbit-eth-rest"
         volumes:
             - ../../source/rest/itbit.py:/code/app.py
             - .:/code/
@@ -69,6 +73,7 @@ services:
             CRYPTO_ASSET: "ETH"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "lmax-eth-rest"
         volumes:
             - ../../source/rest/lmax.py:/code/app.py
             - .:/code/
@@ -84,6 +89,7 @@ services:
             CRYPTO_ASSET: "ETH"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "bitfinex-eth-rest"
         volumes:
             - ../../source/rest/bitfinex.py:/code/app.py
             - .:/code/
@@ -100,6 +106,7 @@ services:
             CRYPTO_ASSET: "ETH"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "cryptodotcom-eth-rest"
         volumes:
             - ../../source/rest/cryptodotcom.py:/code/app.py
             - .:/code/
@@ -116,6 +123,7 @@ services:
             CRYPTO_ASSET: "ETH"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "gemini-eth-rest"
         volumes:
             - ../../source/rest/gemini.py:/code/app.py
             - .:/code/
@@ -133,6 +141,7 @@ services:
             CRYPTO_ASSET: "ETH"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "cexio-eth-rest"
         volumes:
             - ../../source/rest/cexio.py:/code/app.py
             - .:/code/
@@ -149,6 +158,7 @@ services:
             CRYPTO_ASSET: "ETH"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "independentreserve-eth-rest"
         volumes:
             - ../../source/rest/independentreserve.py:/code/app.py
             - .:/code/

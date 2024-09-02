@@ -9,6 +9,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "coinbase-btc-2"
         volumes:
             - ../../source/websocket/coinbase.py:/code/app.py
             - .:/code/
@@ -24,6 +25,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "kraken-btc-2"
         volumes:
             - ../../source/websocket/kraken.py:/code/app.py
             - .:/code/
@@ -39,6 +41,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "bitstamp-btc-2"
         volumes:
             - ../../source/websocket/bitstamp.py:/code/app.py
             - .:/code/
@@ -54,6 +57,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "itbit-btc-2"
         volumes:
             - ../../source/websocket/itbit.py:/code/app.py
             - .:/code/
@@ -69,6 +73,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "lmax-btc-2"
         volumes:
             - ../../source/websocket/lmax.py:/code/app.py
             - .:/code/
@@ -84,6 +89,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "cryptodotcom-btc-2"
         volumes:
             - ../../source/websocket/cryptodotcom.py:/code/app.py
             - .:/code/
@@ -99,6 +105,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "bitfinex-btc-2"
         volumes:
             - ../../source/websocket/bitfinex.py:/code/app.py
             - .:/code/
@@ -114,6 +121,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "gemini-btc-2"
         volumes:
             - ../../source/websocket/gemini.py:/code/app.py
             - .:/code/
@@ -130,6 +138,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "independentreserve-btc-2"
         volumes:
             - ../../source/websocket/independentreserve.py:/code/app.py
             - .:/code/
@@ -146,6 +155,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "erisx-btc-2"
         volumes:
             - ../../source/websocket/erisx.py:/code/app.py
             - .:/code/
@@ -162,6 +172,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "cexio-btc-2"
         volumes:
             - ../../source/websocket/cexio.py:/code/app.py
             - .:/code/

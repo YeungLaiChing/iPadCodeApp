@@ -14,6 +14,7 @@ services:
             APIKEY: "1e0f131269d411f25453ad0820d526e937df1a7c1a929ee46f8b2fbf8cd2d387"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "ccdata-wss-5"
         volumes:
             - ../../source/websocket/ccdata.py:/code/app.py
             - .:/code/

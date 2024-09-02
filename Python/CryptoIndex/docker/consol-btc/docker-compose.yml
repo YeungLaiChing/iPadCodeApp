@@ -8,6 +8,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "consol-btc-coinbase"
         volumes:
             - ../../source/consol/consol.py:/code/app.py
             - ./data/:/code/data/
@@ -23,6 +24,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "consol-btc-kraken"
         volumes:
             - ../../source/consol/consol.py:/code/app.py
             - ./data/:/code/data/
@@ -39,6 +41,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "consol-btc-lmax"
         volumes:
             - ../../source/consol/consol.py:/code/app.py
             - ./data/:/code/data/
@@ -55,6 +58,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "consol-btc-bitstamp"
         volumes:
             - ../../source/consol/consol.py:/code/app.py
             - ./data/:/code/data/
@@ -71,6 +75,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "consol-btc-itbit"
         volumes:
             - ../../source/consol/consol.py:/code/app.py
             - ./data/:/code/data/
@@ -87,6 +92,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "consol-btc-cryptodotcom"
         volumes:
             - ../../source/consol/consol.py:/code/app.py
             - ./data/:/code/data/
@@ -103,6 +109,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "consol-btc-bitfinex"
         volumes:
             - ../../source/consol/consol.py:/code/app.py
             - ./data/:/code/data/
@@ -118,6 +125,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "consol-btc-gemini"
         volumes:
             - ../../source/consol/consol.py:/code/app.py
             - ./data/:/code/data/
@@ -133,6 +141,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "consol-btc-independentreserve"
         volumes:
             - ../../source/consol/consol.py:/code/app.py
             - ./data/:/code/data/
@@ -148,6 +157,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "consol-btc-cexio"
         volumes:
             - ../../source/consol/consol.py:/code/app.py
             - ./data/:/code/data/
@@ -163,6 +173,7 @@ services:
             CRYPTO_ASSET: "BTC"
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
+            APP_NAME: "consol-btc-erisx"
         volumes:
             - ../../source/consol/consol.py:/code/app.py
             - ./data/:/code/data/
