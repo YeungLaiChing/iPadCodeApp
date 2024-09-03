@@ -28,7 +28,7 @@ payloads = {
 #  }
 #}'
 
-r = requests.post(url=url, headers=headers, data=json.dumps(payloads))
+r = requests.post(url=url, headers=headers, json=payloads)
 
 print("===== login resp text=========")
 print(r.text)
@@ -40,7 +40,16 @@ print(cook)
 print(cook.get_dict())
 
 
-# get data
-# url = "https://tickdata.hkex.datahex.rozettatech.com/api/data/v1/datasets/tick/security_types"
+get data
+url = "https://tickdata.hkex.datahex.rozettatech.com/api/data/v1/datasets/tick/security_types"
 
-# r=requests.get(url=url,cookies=cook)
+r=requests.get(url=url,cookies=cook)
+print("===== login resp text=========")
+print(r.text)
+print("===== login resp header=========")
+print(r.headers)
+print("===== login resp cookies=========")
+cook=r.cookies
+print(cook)
+print(cook.get_dict())
+
