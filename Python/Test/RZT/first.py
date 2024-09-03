@@ -35,21 +35,16 @@ print(r.text)
 print("===== login resp header=========")
 print(r.headers)
 print("===== login resp cookies=========")
-cook=r.cookies
-print(cook)
-print(cook.get_dict())
+cookies=r.cookies
+print(cookies)
+print(cookies.get_dict())
 
 
-get data
+#get data
 url = "https://tickdata.hkex.datahex.rozettatech.com/api/data/v1/datasets/tick/security_types"
 
-r=requests.get(url=url,cookies=cook)
-print("===== login resp text=========")
+r=requests.get(url=url,cookies=cookies)
+print("===== GET resp text=========")
 print(r.text)
-print("===== login resp header=========")
-print(r.headers)
-print("===== login resp cookies=========")
-cook=r.cookies
-print(cook)
-print(cook.get_dict())
+
 
