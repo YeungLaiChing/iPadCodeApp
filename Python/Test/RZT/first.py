@@ -1,4 +1,5 @@
 import requests
+import json
 # login
 url = "https://tickdata.hkex.datahex.rozettatech.com/api/auth/login"
 
@@ -27,7 +28,7 @@ payloads = {
 #  }
 #}'
 
-r = requests.post(url=url, headers=headers, data=payloads)
+r = requests.post(url=url, headers=headers, data=json.dumps(payloads))
 
 print("===== login resp text=========")
 print(r.text)
