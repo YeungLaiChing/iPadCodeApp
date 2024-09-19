@@ -19,6 +19,8 @@ product_id4=os.environ.get('PROD_ID_4', 'HKEXBRR-USD')
 crypto_asset=os.environ.get('CRYPTO_ASSET','CCHKEX')
 exchange_name=os.environ.get('EXCHANGE_NAME','CCDATA')
 end_point=os.environ.get('END_POINT','wss://client-axfioiyn05.ccdata.io')
+end_point=os.environ.get('END_POINT','wss://client-axfioiyn06.ccdata.io')
+end_point=os.environ.get('END_POINT','wss://data-streamer.cryptocompare.com')
 
 api_key=os.environ.get('APIKEY','1e0f131269d411f25453ad0820d526e937df1a7c1a929ee46f8b2fbf8cd2d387')
 
