@@ -1,10 +1,10 @@
 services:
   nginx-app:
     image: nginx:1.19.2-alpine
+    network_mode: bridge
     volumes:
-      - ./nginx.conf /etc/nginx/conf.d/default.conf
-      - ./localhost.crt /etc/nginx/nginx/files/localhost.crt
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - '80:80/tcp'
+      - '8888:80/tcp'
     environment:
       TZ: "Asia/Hong_Kong"
