@@ -38,7 +38,7 @@ async def send(websocket, message):
         
 async def broadcast(message):
     for queue in CLIENTS:
-        queue.put_nowait(message+ " @ "+str(len(CLIENTS)))
+        queue.put_nowait(message)
         
 def getMessage():
     message="Hello"

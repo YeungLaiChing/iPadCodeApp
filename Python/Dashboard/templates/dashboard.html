@@ -55,8 +55,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
 <script>
 
-   const socket = new WebSocket(location.origin.replace(/^http/, 'ws') + "/wss");
-   //const socket = new WebSocket('ws://localhost:8000');
+   //const socket = new WebSocket(location.origin.replace(/^http/, 'ws') + ":8765/wss");
+   const socket = new WebSocket('ws://localhost:8765');
  
     /**
      * HashMap - HashMap Class for JavaScript
@@ -284,12 +284,12 @@
 <div>
   <table>
     <tr>
-      <td align="right">TECH_Sim_Tick_by_Tick</td>
-      <td><p id='TECH_Sim_Tick_by_Tick'></p></td>
+      <td align="right">BTCIndex</td>
+      <td><p id='BTCIndex'></p></td>
     </tr>
     <tr>
-      <td align="right">HS TECH</td>
-      <td><p id='HSTECH'></p></td>
+      <td align="right">ETHIndex</td>
+      <td><p id='ETHIndex'></p></td>
     </tr>
     <tr>
       <td align="right">TECH_Sim_2s</td>
@@ -499,7 +499,7 @@ socket.addEventListener('message', function (event) {
     da=JSON.parse(event.data)
     console.log(da)
     
-        if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'HSTECH') {
+        if (da['indexName']==='BTCIndex' ) {
         //if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'TECH_Sim_Tick_by_Tick'|| da['indexName']=== 'HSTECH') {
         document.getElementById(da['indexName']).innerHTML = " : " + (da['exchangeTime']).substring(0,19)+" : "+da['indexValue']
         tradeDate=da['exchangeTime']
