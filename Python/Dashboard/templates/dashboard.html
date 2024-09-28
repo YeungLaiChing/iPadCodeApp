@@ -55,7 +55,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
 <script>
 
-   const socket = new WebSocket('ws://joeyching.mooo.com:8000');
+   const socket = new WebSocket(location.origin.replace(/^http/, 'ws') + "/wss");
    //const socket = new WebSocket('ws://localhost:8000');
  
     /**
