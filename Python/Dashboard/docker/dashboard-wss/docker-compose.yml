@@ -1,0 +1,22 @@
+services:
+   dashboard-wss:
+        image: vaindex-base
+        container_name: dashboard-wss
+        restart: unless-stopped
+        ports:
+            - '8765:8765'
+        environment:
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+            APP_NAME: "dashboard-wss"
+        volumes:
+            - ../../source/ws_server.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+
+networks:
+  redis_network:
+    name: redis_network
+    external: true
+

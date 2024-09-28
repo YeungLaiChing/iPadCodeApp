@@ -1,0 +1,22 @@
+services:
+   dashboard-web:
+        image: vaindex-base
+        container_name: dashboard-web
+        restart: unless-stopped
+        ports:
+            - '8766:5000'
+        environment:
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+            APP_NAME: "dashboard-web"
+        volumes:
+            - ../../source/dashboard.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+
+networks:
+  redis_network:
+    name: redis_network
+    external: true
+

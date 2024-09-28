@@ -6,15 +6,18 @@ import json
 import random
 import time
 import redis
+import os
 
 #pip install websockets
 #python -m websockets --version
 #This tutorial is written for websockets 13.1.
 #If you installed another version, you should switch to the corresponding version of the documentation.
+redis_host=os.environ.get('REDIS_HOST', '192.168.0.55')
+redis_port=int(os.environ.get('REDIS_PORT', '6379'))
 
 r = redis.Redis(
-    host='192.168.0.55',
-    port=6379,
+    host=redis_host,
+    port=redis_port,
     decode_responses=True
 )
 last={}
