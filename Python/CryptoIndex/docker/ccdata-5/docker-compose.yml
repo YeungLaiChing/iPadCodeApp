@@ -15,6 +15,15 @@ services:
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
             APP_NAME: "ccdata-wss-5"
+            DIST_REDIS: "Y"
+            INDEX_CHANNEL: "crypto_index"
         volumes:
             - ../../source/websocket/ccdata.py:/code/app.py
             - .:/code/
+        networks:
+            - redis_network
+networks:
+  redis_network:
+    name: redis_network
+    external: true
+

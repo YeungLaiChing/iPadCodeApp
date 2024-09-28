@@ -5,11 +5,21 @@ from datetime import datetime
 import json
 import random
 import time
+import redis
 
 #pip install websockets
 #python -m websockets --version
 #This tutorial is written for websockets 13.1.
 #If you installed another version, you should switch to the corresponding version of the documentation.
+
+r = redis.Redis(
+    host='192.168.0.55',
+    port=6379,
+    decode_responses=True
+)
+last={}
+last['BTCIndex']="0"
+last['ETHIndex']="0"
 
 CLIENTS = set()
 def getFormattedTime(ns):
@@ -68,13 +78,37 @@ def getMessage():
     return message
 
 async def broadcast_messages():
-    
+    mobile = r.pubsub()
+    mobile.subscribe('calc_btc_index')
+    mobile2 = r.pubsub()
+    mobile2.subscribe('calc_eth_index')
     while True:
-        await asyncio.sleep(1)
-        c = datetime.now()
-        # Displays Time
-        message = get_message('Hello')
-        await broadcast(message)
+        await asyncio.sleep(0.001)
+        message =  mobile.get_message()
+        if message:
+            current=time.time_ns()
+            if message['data']!=1 :
+                payload=json.loads(message['data'])
+                if last['BTCIndex']<payload.get('hkt') :
+                    last['BTCIndex']=payload.get('hkt')
+                    output = {'indexName': payload.get('id'), 'exchangeTime' : payload.get('hkt')+".000000000", 'indexValue' : payload.get('idx')}
+                    await broadcast(json.dumps(output))
+                #output = {'indexName': name, 'exchangeTime' : getFormattedTime(current), 'indexValue' : result}
+        message2 =  mobile2.get_message()
+        if message2:
+            current=time.time_ns()
+            if message2['data']!=1 :
+                payload=json.loads(message2['data'])
+                output = {'indexName': payload.get('id'), 'exchangeTime' : payload.get('hkt')+".000000000", 'indexValue' : payload.get('idx')}
+                await broadcast(json.dumps(output))
+                #output = {'indexName': name, 'exchangeTime' : getFormattedTime(current), 'indexValue' : result}
+        time.sleep(0.01)
+    #while True:
+    #    data = await mobile.rec.recv()
+    #    c = datetime.now()
+    #    # Displays Time
+    #    message = get_message('Hello')
+    #    await broadcast(message)
 
 async def main():
     async with serve(handler, "localhost", 8765):

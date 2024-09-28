@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 
 
+distribution_redis=os.environ.get('DIST_REDIS', 'N')
 redis_host=os.environ.get('REDIS_HOST', '192.168.0.3')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
 product_id1=os.environ.get('PROD_ID_1', 'HKBTCI-USD')
@@ -21,6 +22,7 @@ exchange_name=os.environ.get('EXCHANGE_NAME','CCDATA')
 end_point=os.environ.get('END_POINT','wss://client-axfioiyn05.ccdata.io')
 end_point=os.environ.get('END_POINT','wss://client-axfioiyn06.ccdata.io')
 end_point=os.environ.get('END_POINT','wss://data-streamer.cryptocompare.com')
+dissem_topic = os.environ.get('INDEX_CHANNEL',f'crypto_index')
 
 api_key=os.environ.get('APIKEY','1e0f131269d411f25453ad0820d526e937df1a7c1a929ee46f8b2fbf8cd2d387')
 
@@ -28,6 +30,14 @@ api_key=os.environ.get('APIKEY','1e0f131269d411f25453ad0820d526e937df1a7c1a929ee
 
 data_path="./data/"
 
+redis_conn = ""
+
+if (distribution_redis!="N"):
+    redis_conn = redis.Redis(
+        host=redis_host,
+        port=redis_port,
+        decode_responses=True
+    )
 
 file_list={}
 def get_date_partition(input):
@@ -113,6 +123,9 @@ def process_message(message):
                 setup_csv_file(file_list[partition])
                 
             write_to_csv(file_list[partition],data_row)
+            if (distribution_redis!="N"):
+                pl={'exchangeTime':hkt_timestamp,'indexName':instrument,'indexValue':index_value}
+                redis_conn.publish(dissem_topic+"_"+instrument,json.dumps(pl))
             #print(f"saved data to csv: {data_row}")
         else:
             print(data)
