@@ -10,3 +10,4 @@ openpyxl
 pymongo
 yfinance
 beautifulsoup4
+websockets
