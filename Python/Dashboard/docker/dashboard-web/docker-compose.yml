@@ -11,6 +11,7 @@ services:
             APP_NAME: "dashboard-web"
         volumes:
             - ../../source/dashboard.py:/code/app.py
+            - ../../source/templates:/code/templates
             - .:/code/
         networks:
             - redis_network
