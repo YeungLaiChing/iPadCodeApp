@@ -81,7 +81,7 @@ async def broadcast_messages():
     mobile = r.pubsub()
     mobile.subscribe('calc_btc_index')
     mobile2 = r.pubsub()
-    mobile2.subscribe('calc_eth_index')
+    mobile2.subscribe('crypto_index_HKBTCI-USD')
     while True:
         await asyncio.sleep(0.001)
         message =  mobile.get_message()
@@ -99,7 +99,7 @@ async def broadcast_messages():
             current=time.time_ns()
             if message2['data']!=1 :
                 payload=json.loads(message2['data'])
-                output = {'indexName': payload.get('id'), 'exchangeTime' : payload.get('hkt')+".000000000", 'indexValue' : payload.get('idx')}
+                output = {'indexName': payload.get('indexName'), 'exchangeTime' : payload.get('exchangeTime')+".000000000", 'indexValue' : payload.get('indexValue')}
                 await broadcast(json.dumps(output))
                 #output = {'indexName': name, 'exchangeTime' : getFormattedTime(current), 'indexValue' : result}
         time.sleep(0.01)
