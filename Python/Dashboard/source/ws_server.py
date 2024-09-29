@@ -14,6 +14,7 @@ import os
 #If you installed another version, you should switch to the corresponding version of the documentation.
 redis_host=os.environ.get('REDIS_HOST', '192.168.0.55')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
+asset=os.environ.get('VIRTUAL_ASSET','BTC')
 
 r = redis.Redis(
     host=redis_host,
@@ -21,8 +22,7 @@ r = redis.Redis(
     decode_responses=True
 )
 last={}
-last['BTCIndex']="0"
-last['ETHIndex']="0"
+last[asset]="0"
 
 CLIENTS = set()
 def getFormattedTime(ns):
@@ -82,9 +82,9 @@ def getMessage():
 
 async def broadcast_messages():
     mobile = r.pubsub()
-    mobile.subscribe('calc_btc_index')
+    mobile.subscribe(f'calc_{asset.lower()}_index')
     mobile2 = r.pubsub()
-    mobile2.subscribe('crypto_index_HKBTCI-USD')
+    mobile2.subscribe(f'crypto_index_HK{asset}I-USD')
     while True:
         await asyncio.sleep(0.001)
         message =  mobile.get_message()
@@ -92,8 +92,10 @@ async def broadcast_messages():
             current=time.time_ns()
             if message['data']!=1 :
                 payload=json.loads(message['data'])
-                if last['BTCIndex']<payload.get('hkt') :
-                    last['BTCIndex']=payload.get('hkt')
+                print("Payload ID = "+payload.get('id'))
+                print("Index = "+asset+"Index")
+                if last[asset]<payload.get('hkt') : 
+                    last[asset]=payload.get('hkt')
                     output = {'indexName': payload.get('id'), 'exchangeTime' : payload.get('hkt')+".000000000", 'indexValue' : payload.get('idx')}
                     await broadcast(json.dumps(output))
                 #output = {'indexName': name, 'exchangeTime' : getFormattedTime(current), 'indexValue' : result}
@@ -114,7 +116,7 @@ async def broadcast_messages():
     #    await broadcast(message)
 
 async def main():
-    async with serve(handler, "localhost", 8765):
+    async with serve(handler, "0.0.0.0", 8765):
         await broadcast_messages()  # runs forever
 
 if __name__ == "__main__":

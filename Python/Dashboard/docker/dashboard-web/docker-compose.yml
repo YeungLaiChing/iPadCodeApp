@@ -1,21 +1,38 @@
 services:
-   dashboard-web:
+   dashboard-web-btc:
         image: vaindex-base
-        container_name: dashboard-web
+        container_name: dashboard-web-btc
         restart: unless-stopped
         ports:
-            - '8766:5000'
+            - '8786:5000'
         environment:
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
-            APP_NAME: "dashboard-web"
+            APP_NAME: "dashboard-web-btc"
         volumes:
             - ../../source/dashboard.py:/code/app.py
-            - ../../source/templates:/code/templates
+            - ../../source/templates-btc:/code/templates
             - .:/code/
         networks:
             - redis_network
 
+
+   dashboard-web-eth:
+        image: vaindex-base
+        container_name: dashboard-web-eth
+        restart: unless-stopped
+        ports:
+            - '8776:5000'
+        environment:
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+            APP_NAME: "dashboard-web-eth"
+        volumes:
+            - ../../source/dashboard.py:/code/app.py
+            - ../../source/templates-eth:/code/templates
+            - .:/code/
+        networks:
+            - redis_network
 networks:
   redis_network:
     name: redis_network

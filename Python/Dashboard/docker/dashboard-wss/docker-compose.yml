@@ -1,14 +1,31 @@
 services:
-   dashboard-wss:
+   dashboard-wss-btc:
         image: vaindex-base
-        container_name: dashboard-wss
+        container_name: dashboard-wss-btc
         restart: unless-stopped
         ports:
-            - '8765:8765'
+            - '8785:8765'
         environment:
             REDIS_HOST: "redis-va"
             REDIS_PORT: "6379"
-            APP_NAME: "dashboard-wss"
+            VIRTUAL_ASSET: "BTC"
+            APP_NAME: "dashboard-wss-btc"
+        volumes:
+            - ../../source/ws_server.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+   dashboard-wss-eth:
+        image: vaindex-base
+        container_name: dashboard-wss-eth
+        restart: unless-stopped
+        ports:
+            - '8775:8765'
+        environment:
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+            VIRTUAL_ASSET: "ETH"
+            APP_NAME: "dashboard-wss-eth"
         volumes:
             - ../../source/ws_server.py:/code/app.py
             - .:/code/
