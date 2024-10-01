@@ -33,6 +33,23 @@ services:
             - .:/code/
         networks:
             - redis_network
+
+   dashboard-web-all:
+        image: vaindex-base
+        container_name: dashboard-web-all
+        restart: unless-stopped
+        ports:
+            - '8796:5000'
+        environment:
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+            APP_NAME: "dashboard-web-all"
+        volumes:
+            - ../../source/dashboard.py:/code/app.py
+            - ../../source/templates-all:/code/templates
+            - .:/code/
+        networks:
+            - redis_network
 networks:
   redis_network:
     name: redis_network

@@ -31,6 +31,22 @@ services:
             - .:/code/
         networks:
             - redis_network
+   dashboard-wss-all:
+        image: vaindex-base
+        container_name: dashboard-wss-all
+        restart: unless-stopped
+        ports:
+            - '8795:8765'
+        environment:
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+            VIRTUAL_ASSET: "ALL"
+            APP_NAME: "dashboard-wss-all"
+        volumes:
+            - ../../source/ws_server_all.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
 
 networks:
   redis_network:
