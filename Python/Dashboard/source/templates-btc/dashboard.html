@@ -55,8 +55,6 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
 <script>
 
-   const socket = new WebSocket(location.origin.replace(/^http/, 'ws') + "/wss-btc");
-   //const socket = new WebSocket('ws://192.168.0.55:8765/wss');
  
     /**
      * HashMap - HashMap Class for JavaScript
@@ -472,53 +470,69 @@ function renderStep() {
 renderStep();
 
 
-
-socket.addEventListener('open', function (event) {
- 
-    socket.send('Connection Established');
- 
-});
- 
- 
- 
-socket.addEventListener('message', function (event) {
-    // remove all data points which are no longer visible
-    var range = graph2d.getWindow();
-    var interval = range.end - range.start;
-    var oldIds = dataset.getIds({
-        filter: function (item) {
-            return item.x < range.start - interval;
-        }
-    });
-    
-    dataset.remove(oldIds);
-    
-    da=JSON.parse(event.data)
-    console.log(da)
-    
-        if (da['indexName']==='BTCIndex'  || da['indexName']=== 'HKBTCI-USD') {
-        //if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'TECH_Sim_Tick_by_Tick'|| da['indexName']=== 'HSTECH') {
-        document.getElementById(da['indexName']).innerHTML = " : " + (da['exchangeTime']).substring(0,19)+" : "+da['indexValue']
-        tradeDate=da['exchangeTime']
-
-        dataset.add({
-            x: tradeDate,
-            y:parseFloat(da['indexValue']),
-            group: da['indexName'] ,
-            label: da['indexName']
-        });
-    }
-
  
 
-    
- 
-});
- 
- 
+var socket;
+//const socket = new WebSocket(location.origin.replace(/^http/, 'ws') + "/wss-btc");
+//const socket = new WebSocket('ws://192.168.0.55:8765/wss');
 //socket.send("Initialize");
  
+const socketMessageListener = (event) => {
+ // remove all data points which are no longer visible
+ var range = graph2d.getWindow();
+ var interval = range.end - range.start;
+ var oldIds = dataset.getIds({
+     filter: function (item) {
+         return item.x < range.start - interval;
+     }
+ });
+ 
+ dataset.remove(oldIds);
+ 
+ da=JSON.parse(event.data)
+ console.log(da)
+ 
+    // if (da['indexName']==='BTCIndex'  || da['indexName']=== 'HKBTCI-USD') {
+     //if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'TECH_Sim_Tick_by_Tick'|| da['indexName']=== 'HSTECH') {
+     document.getElementById(da['indexName']).innerHTML = " : " + (da['exchangeTime']).substring(0,19)+" : "+da['indexValue']
+     tradeDate=da['exchangeTime']
 
+     dataset.add({
+         x: tradeDate,
+         y:parseFloat(da['indexValue']),
+         group: da['indexName'] ,
+         label: da['indexName']
+     });
+ //}
+
+
+};
+
+const socketOpenListener = (event) => {
+  console.log('Connected');
+  socket.send('Connection Established');
+};
+
+const socketCloseListener = (event) => {
+  if (socket) {
+    console.error('Disconnected.');
+  }
+  //socket = new WebSocket('ws://localhost:8080');
+
+  setTimeout((function() {
+    socket = new WebSocket(location.origin.replace(/^http/, 'ws') + "/wss-btc");
+    //socket = new WebSocket("ws://192.168.0.55:8765/wss-btc");
+    socket.addEventListener('open', socketOpenListener);
+    socket.addEventListener('message', socketMessageListener);
+    socket.addEventListener('close', socketCloseListener);
+}
+).bind(this), 5000)
+
+
+
+};
+
+socketCloseListener();
 
 </script>
 
