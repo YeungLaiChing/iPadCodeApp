@@ -508,7 +508,7 @@ const socketMessageListener = (event) => {
      }
      //val=(parseFloat(da['indexValue'])/pre[da['indexName']]-1)*100
      val=parseFloat((parseFloat(da['indexValue'])/pre[da['indexName']]-1)*100).toFixed(3)
-     document.getElementById(da['indexName']).innerHTML = " : " + (da['exchangeTime']).substring(0,19)+" : "+da['indexValue'] +" (vs "+pre[da['indexName']]+" = "+val+"%)"
+     document.getElementById(da['indexName']).innerHTML = " : " + (da['exchangeTime']).substring(0,19).substring(10)+" : "+da['indexValue'] +" (vs "+pre[da['indexName']]+" = "+val+"%)"
     
      dataset.add({
          x: tradeDate,
