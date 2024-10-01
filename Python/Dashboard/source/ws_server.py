@@ -1,7 +1,7 @@
 import asyncio
 from websockets.asyncio.server import serve
 from websockets import ConnectionClosed
-from datetime import datetime
+from datetime import datetime,timezone,timedelta
 import json
 import random
 import time
@@ -26,8 +26,12 @@ last[asset]="0"
 
 CLIENTS = set()
 def getFormattedTime(ns):
-    dt = datetime.fromtimestamp(ns//1000000000)
-    formatted_time = dt.strftime('%Y-%m-%d %H:%M:%S')
+
+    
+    dt = datetime.fromtimestamp(ns//1000000000,tz=timezone.utc)
+    hkt=dt.astimezone(timezone(timedelta(hours=8)))
+    formatted_time = hkt.strftime('%Y-%m-%d %H:%M:%S')
+
     nanoseconds_part = str(int(ns % 1_000_000_000)).zfill(9)
     formatted_time += '.' + nanoseconds_part
     return formatted_time
@@ -96,7 +100,8 @@ async def broadcast_messages():
                 print("Index = "+asset+"Index")
                 if last[asset]<payload.get('hkt') : 
                     last[asset]=payload.get('hkt')
-                    output = {'indexName': payload.get('id'), 'exchangeTime' : payload.get('hkt')+".000000000", 'indexValue' : payload.get('idx')}
+                    recv=getFormattedTime(int(payload.get('rcv')))
+                    output = {'indexName': payload.get('id'), 'exchangeTime' : recv, 'indexValue' : payload.get('idx')}
                     await broadcast(json.dumps(output))
                 #output = {'indexName': name, 'exchangeTime' : getFormattedTime(current), 'indexValue' : result}
         message2 =  mobile2.get_message()
