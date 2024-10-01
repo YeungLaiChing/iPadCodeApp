@@ -55,7 +55,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
 <script>
 
- 
+    var enable_log=false
     /**
      * HashMap - HashMap Class for JavaScript
      * @author Ariel Flesler <aflesler@gmail.com>
@@ -490,7 +490,9 @@ const socketMessageListener = (event) => {
  dataset.remove(oldIds);
  
  da=JSON.parse(event.data)
+ if (enable_log === true){
  console.log(da)
+ }
  
      //if (da['indexName']==='BTCIndex'  || da['indexName']=== 'HKI-USD') {
      //if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'TECH_Sim_Tick_by_Tick'|| da['indexName']=== 'HSTECH') {
@@ -503,6 +505,9 @@ const socketMessageListener = (event) => {
          group: da['indexName'] ,
          label: da['indexName']
      });
+     if (document.getElementsByClassName('vis-legend-text').length>0) {
+      document.getElementsByClassName('vis-legend-text')[0].innerHTML=document.getElementsByClassName('vis-legend-text')[0].innerHTML.replaceAll('default','')
+     }
  //}
 
 
