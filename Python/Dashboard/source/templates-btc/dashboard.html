@@ -520,7 +520,7 @@ const socketCloseListener = (event) => {
   //socket = new WebSocket('ws://localhost:8080');
 
   setTimeout((function() {
-    socket = new WebSocket(location.origin.replace(/^http/, 'ws') + "/wss-btc");
+    socket = new WebSocket(location.origin.replace(/^http/, 'wss') + "/wss-btc");
     //socket = new WebSocket("ws://192.168.0.55:8765/wss-btc");
     socket.addEventListener('open', socketOpenListener);
     socket.addEventListener('message', socketMessageListener);
