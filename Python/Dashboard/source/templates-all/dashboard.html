@@ -533,8 +533,14 @@ var seconds = now.getSeconds();
     
     var range=graph2d.getWindow();
     var interval = range.end-range.start;
+    console.log(range.start);
+    console.log(range.end);
+    console.log(interval);
     var oldIds = dataset.getIds({
     		filter: function (item) {
+          
+            console.log(item.x);
+            console.log(range.start-interval);
         		return item.x < range.start - interval;
         }
     });
