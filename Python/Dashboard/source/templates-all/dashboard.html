@@ -503,12 +503,17 @@ const socketMessageListener = (event) => {
  if (enable_log === true){
   console.log(da)
   }
- 
+  var now=new Date();
+ var hours = now.getHours();
+ var minutes = now.getMinutes();
+ var seconds = now.getSeconds();
+
+
     // if (da['indexName']==='BTCIndex'  || da['indexName']=== 'HKBTCI-USD') {
      //if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'TECH_Sim_Tick_by_Tick'|| da['indexName']=== 'HSTECH') {
      //document.getElementById(da['indexName']).innerHTML = " : " + (da['exchangeTime']).substring(0,19)+" : "+da['indexValue']
      tradeDate=da['exchangeTime']
-     if (!pre[da['indexName']]){
+     if ((!pre[da['indexName']]) || (minutes === 0 && seconds < 5)){
           pre[da['indexName']]=parseFloat(da['indexValue'])
      }
      //val=(parseFloat(da['indexValue'])/pre[da['indexName']]-1)*100
@@ -525,6 +530,15 @@ const socketMessageListener = (event) => {
     if (document.getElementsByClassName('vis-legend-text').length>0) {
       document.getElementsByClassName('vis-legend-text')[0].innerHTML=document.getElementsByClassName('vis-legend-text')[0].innerHTML.replaceAll('default','')
     }
+    
+    var range=graph2d.getWindow();
+    var interval = range.end-range.start;
+    var oldIds = dataset.getIds({
+    		filter: function (item) {
+        		return item.x < range.start - interval;
+        }
+    });
+    dataset.remove(oldIds);
  //}
 
 
