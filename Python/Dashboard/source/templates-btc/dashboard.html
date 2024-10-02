@@ -486,7 +486,7 @@ const socketMessageListener = (event) => {
  var interval = range.end - range.start;
  var oldIds = dataset.getIds({
      filter: function (item) {
-         return item.x < range.start - interval;
+         return   vis.moment(item.x).utcOffset('+08:00')  < range.start - interval;
      }
  });
  
@@ -514,14 +514,7 @@ const socketMessageListener = (event) => {
     }
  //}
     
-    var range=graph2d.getWindow();
-    var interval = range.end-range.start;
-    var oldIds = dataset.getIds({
-    		filter: function (item) {
-        		return item.x < range.start - interval;
-        }
-    });
-    dataset.remove(oldIds);
+
 
 };
 
