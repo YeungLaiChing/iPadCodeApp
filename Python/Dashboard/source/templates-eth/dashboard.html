@@ -511,7 +511,15 @@ const socketMessageListener = (event) => {
       document.getElementsByClassName('vis-legend-text')[0].innerHTML=document.getElementsByClassName('vis-legend-text')[0].innerHTML.replaceAll('default','')
      }
  //}
-
+    
+    var range=graph2d.getWindow();
+    var interval = range.end-range.start;
+    var oldIds = dataset.getIds({
+    		filter: function (item) {
+        		return item.x < range.start - interval;
+        }
+    });
+    dataset.remove(oldIds);
 
 };
 
