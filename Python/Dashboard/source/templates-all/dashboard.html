@@ -493,9 +493,7 @@ const socketMessageListener = (event) => {
  var interval = range.end - range.start;
  var oldIds = dataset.getIds({
      filter: function (item) {
-         var result=(vis.moment(item.x) < range.start - interval);
-         console.log(result);
-         return result;
+         return (vis.moment(item.x).utcOffset('+08:00') < range.start - interval);
      }
  });
  
