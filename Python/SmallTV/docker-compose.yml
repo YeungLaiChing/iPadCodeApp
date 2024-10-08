@@ -1,0 +1,40 @@
+services:
+   small-tv-1:
+        image: vaindex-base
+        container_name: small-tv-1
+        restart: unless-stopped
+        ports:
+            - '8443:443'
+        environment:
+            LISTENING_PORT: "443"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+            APP_NAME: "small-tv-1"
+        volumes:
+            - ./fake_api.py:/code/app.py
+        networks:
+            - redis_network
+
+   small-tv-2:
+        image: vaindex-base
+        container_name: small-tv-2
+        restart: unless-stopped
+        ports:
+            - '8444:443'
+        environment:
+            LISTENING_PORT: "443"
+            REDIS_HOST: "redis-va"
+            REDIS_PORT: "6379"
+            APP_NAME: "small-tv-2"
+        volumes:
+            - ./fake_api.py:/code/app.py
+        networks:
+            - redis_network
+
+
+
+networks:
+  redis_network:
+    name: redis_network
+    external: true
+

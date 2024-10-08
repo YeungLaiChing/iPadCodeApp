@@ -77,7 +77,7 @@ def process_message(message):
         if data.get('TYPE') == '1105':
             instrument=data.get('INSTRUMENT')
             ccseq=data.get('CCSEQ')
-            
+            current_time_ns=time.time_ns() 
             index_value=data.get('VALUE')
             last_update_qty=data.get('LAST_UPDATE_QUANTITY')
             last_update_ccseq=data.get('LAST_UPDATE_CCSEQ')
@@ -124,8 +124,10 @@ def process_message(message):
                 
             write_to_csv(file_list[partition],data_row)
             if (distribution_redis!="N"):
-                pl={'exchangeTime':hkt_timestamp,'indexName':instrument,'indexValue':index_value}
+                pl={'exchangeTime':hkt_timestamp,'rcv':current_time_ns,'indexName':instrument,'indexValue':index_value}
                 redis_conn.publish(dissem_topic+"_"+instrument,json.dumps(pl))
+                redis_conn.hset(instrument,"last_index",float(index_value))
+                redis_conn.hset(instrument,"last_index_time",int(unix_timestamp))
             #print(f"saved data to csv: {data_row}")
         else:
             print(data)
