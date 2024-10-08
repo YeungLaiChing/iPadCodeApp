@@ -188,8 +188,9 @@ var pre=[];
 
 function fetchData(crypto){
   var sym="BTC";
-  var now=Date.now();
-  var hours=now.getHours();
+  var day=new Date();
+  var now=day.now();
+  var hours=day.getHours();
   var unix = Math.floor(now / 1000);
   var hour_index=25-1;
   switch (compare_hour.value) {
