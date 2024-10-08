@@ -53,220 +53,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
-<script>
 
-  
-    /**
-     * HashMap - HashMap Class for JavaScript
-     * @author Ariel Flesler <aflesler@gmail.com>
-     * @version 2.0.6
-     * Homepage: https://github.com/flesler/hashmap
-     */
-
-    (function(factory) {
-        if (typeof define === 'function' && define.amd) {
-            // AMD. Register as an anonymous module.
-            define([], factory);
-        } else if (typeof module === 'object') {
-            // Node js environment
-            var HashMap = module.exports = factory();
-            // Keep it backwards compatible
-            HashMap.HashMap = HashMap;
-        } else {
-            // Browser globals (this is window)
-            this.HashMap = factory();
-        }
-    }(function() {
-
-        function HashMap(other) {
-            this.clear();
-            switch (arguments.length) {
-                case 0: break;
-                case 1: {
-                    if ('length' in other) {
-                        // Flatten 2D array to alternating key-value array
-                        multi(this, Array.prototype.concat.apply([], other));
-                    } else { // Assumed to be a HashMap instance
-                        this.copy(other);
-                    }
-                    break;
-                }
-                default: multi(this, arguments); break;
-            }
-        }
-
-        var proto = HashMap.prototype = {
-            constructor:HashMap,
-
-            get:function(key) {
-                var data = this._data[this.hash(key)];
-                return data && data[1];
-            },
-
-            set:function(key, value) {
-                // Store original key as well (for iteration)
-                var hash = this.hash(key);
-                if ( !(hash in this._data) ) {
-                    this.size++;
-                }
-                this._data[hash] = [key, value];
-            },
-
-            multi:function() {
-                multi(this, arguments);
-            },
-
-            copy:function(other) {
-                for (var hash in other._data) {
-                    if ( !(hash in this._data) ) {
-                        this.size++;
-                    }
-                    this._data[hash] = other._data[hash];
-                }
-            },
-
-            has:function(key) {
-                return this.hash(key) in this._data;
-            },
-
-            search:function(value) {
-                for (var key in this._data) {
-                    if (this._data[key][1] === value) {
-                        return this._data[key][0];
-                    }
-                }
-
-                return null;
-            },
-
-            delete:function(key) {
-                var hash = this.hash(key);
-                if ( hash in this._data ) {
-                    this.size--;
-                    delete this._data[hash];
-                }
-            },
-
-            type:function(key) {
-                var str = Object.prototype.toString.call(key);
-                var type = str.slice(8, -1).toLowerCase();
-                // Some browsers yield DOMWindow or Window for null and undefined, works fine on Node
-                if (!key && (type === 'domwindow' || type === 'window')) {
-                    return key + '';
-                }
-                return type;
-            },
-
-            keys:function() {
-                var keys = [];
-                this.forEach(function(_, key) { keys.push(key); });
-                return keys;
-            },
-
-            values:function() {
-                var values = [];
-                this.forEach(function(value) { values.push(value); });
-                return values;
-            },
-
-            entries:function() {
-                var entries = [];
-                this.forEach(function(value, key) { entries.push([key, value]); });
-                return entries;
-            },
-
-            // TODO: This is deprecated and will be deleted in a future version
-            count:function() {
-                return this.size;
-            },
-
-            clear:function() {
-                // TODO: Would Object.create(null) make any difference
-                this._data = {};
-                this.size = 0;
-            },
-
-            clone:function() {
-                return new HashMap(this);
-            },
-
-            hash:function(key) {
-                switch (this.type(key)) {
-                    case 'undefined':
-                    case 'null':
-                    case 'boolean':
-                    case 'number':
-                    case 'regexp':
-                        return key + '';
-
-                    case 'date':
-                        return '♣' + key.getTime();
-
-                    case 'string':
-                        return '♠' + key;
-
-                    case 'array':
-                        var hashes = [];
-                        for (var i = 0; i < key.length; i++) {
-                            hashes[i] = this.hash(key[i]);
-                        }
-                        return '♥' + hashes.join('⁞');
-
-                    default:
-                        // TODO: Don't use expandos when Object.defineProperty is not available?
-                        if (!key.hasOwnProperty('_hmuid_')) {
-                            key._hmuid_ = ++HashMap.uid;
-                            hide(key, '_hmuid_');
-                        }
-
-                        return '♦' + key._hmuid_;
-                }
-            },
-
-            forEach:function(func, ctx) {
-                for (var key in this._data) {
-                    var data = this._data[key];
-                    func.call(ctx || this, data[1], data[0]);
-                }
-            }
-        };
-
-        HashMap.uid = 0;
-
-        //- Add chaining to all methods that don't return something
-
-        ['set','multi','copy','delete','clear','forEach'].forEach(function(method) {
-            var fn = proto[method];
-            proto[method] = function() {
-                fn.apply(this, arguments);
-                return this;
-            };
-        });
-
-        //- Backwards compatibility
-
-        // TODO: remove() is deprecated and will be deleted in a future version
-        HashMap.prototype.remove = HashMap.prototype.delete;
-
-        //- Utils
-
-        function multi(map, args) {
-            for (var i = 0; i < args.length; i += 2) {
-                map.set(args[i], args[i+1]);
-            }
-        }
-
-        function hide(obj, prop) {
-            // Make non iterable if supported
-            if (Object.defineProperty) {
-                Object.defineProperty(obj, prop, {enumerable:false});
-            }
-        }
-
-        return HashMap;
-    }));
-
-</script>
 
 <p>
 
@@ -281,121 +68,36 @@
 </p>
 <div>
   <table>
-    <tr>
+    <tbody><tr>
       <td align="right">BTCIndex</td>
-      <td><p id='BTCIndex'></p></td>
+      <td><p id="BTCIndex"> </p></td>
+      <td><p id="pre_BTCIndex_pct"></p></td>
+      <td><input type=text id="pre_BTCIndex"  style="width:9ch"></input></td>
+      <td><p id="pre_BTCIndex_time"></p></td>
+      <td>&nbsp;</td>
       <td align="right">ETHIndex</td>
-      <td><p id='ETHIndex'></p></td>
+      <td><p id="ETHIndex"> </p></td>
+      <td><p id="pre_ETHIndex_pct"></p></td>
+      <td><input type=text  id="pre_ETHIndex" style="width:9ch"> </input></td>
+      <td><p id="pre_ETHIndex_time"></p></td>
     </tr>
     <tr>
       <td align="right">HKBTCI-USD</td>
-      <td><p id='HKBTCI-USD'></p></td>
+      <td><p id="HKBTCI-USD"> </p></td>
+      <td><p id="pre_HKBTCI-USD_pct"></p></td>
+      <td><input type=text  id="pre_HKBTCI-USD" style="width:9ch"> </input></td>
+      <td><p id="pre_HKBTCI-USD_time"></p></td>
+      <td>&nbsp;</td>
       <td align="right">HKETHI-USD</td>
-      <td><p id='HKETHI-USD'></p></td>
+      <td><p id="HKETHI-USD"> </p></td>
+      <td><p id="pre_HKETHI-USD_pct"></p></td>
+      <td><input type=text  id="pre_HKETHI-USD" style="width:9ch"> </input></td>
+      <td><p id="pre_HKETHI-USD_time"></p></td>
     </tr>
 
 
-  </table>
+  </tbody></table>
 </div>
-<div style="display: none">
-
-<div class="">
-  <table class="ui celled padded table">
-    <thead>
-    <tr><th class="single line">Predictor pair </th>
-      <th>Exchange</th>
-      <th>Predictor accuracy</th>
-      <th>Exchange -> BigTable latency avg. 5 mins</th>
-      <th>BigTable query latency avg. 5 mins</th>
-      <th>Graph update rate</th>
-      <th>Graph interval (sec)</th>
-      <th><a class="ui image label">
-        <img src="https://semantic-ui.com/images/avatar/small/steve.jpg">
-        DeLeo
-      </a>Second AI prediction </th>
-      <th><a class="ui image label">
-        <img src="https://semantic-ui.com/images/avatar/small/elliot.jpg">
-        Mike
-      </a>Minute AI prediction</th>
-      <th><a class="ui image label">
-        <img src="https://semantic-ui.com/images/avatar/small/helen.jpg">
-        Harish
-      </a>Hour AI prediction</th>
-    </tr></thead>
-    <tbody>
-    <tr>
-      <td>
-        <h2 class="ui center aligned header">BTC/USD</h2>
-      </td>
-      <td class="single line">
-        BitFinex
-      </td>
-      <td>
-        <div class="ui star rating" data-rating="3" data-max-rating="5"></div>
-      </td>
-      <td class="right aligned">
-        451 ms
-      </td>
-      <td class="right aligned">
-        10 ms
-      </td>
-      <td class="right aligned">
-        500 ms
-      </td>
-      <td class="right aligned">
-        300 s
-      </td>
-      <td>
-        +0.1%
-      <td>
-        +0.1%
-      </td>
-      <td>
-        -3.1%
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <h2 class="ui center aligned header">BTC/USD</h2>
-      </td>
-      <td class="single line">
-        BitStamp
-      </td>
-      <td>
-        <div class="ui star rating" data-rating="4" data-max-rating="5"></div>
-      </td>
-      <td class="right aligned">
-        140 ms
-      </td>
-      <td class="right aligned">
-        10 ms
-      </td>
-      <td class="right aligned">
-        500 ms
-      </td>
-      <td class="right aligned">
-        300 s
-      </td>
-      <td>
-        -0.2%
-      <td>
-        +0.3%
-      </td>
-      <td>
-        -2.1%
-      </td>
-    </tr>
-    </tbody>
-    <tfoot>
-    <tr>
-    </tr></tfoot>
-  </table>
-</div>
-
-</div>
-
-
-
 
 
 <span>
@@ -417,21 +119,21 @@ var container = document.getElementById('visualization');
 var dataset = new vis.DataSet();
 
 var timeWindowSec = -300;
-var dataHashMap =  new HashMap();
+
 var TTL = 7  * 1000; /* Time to keep the data in our sytem 3 sec */
 var lock = false;
-
-var familyname = "market";
 
 var options = {
     start: vis.moment().add(timeWindowSec, 'seconds'), // changed so its faster
     end: vis.moment(),
+    defaultGroup:'',
     dataAxis: {
         left: {
 
         }
     },
     drawPoints: {
+        size: 1,
         style: 'circle' // square, circle
     },
     shaded: {
@@ -442,11 +144,46 @@ var options = {
 
 };
 
-
-
 var graph2d = new vis.Graph2d(container, dataset, options);
 
 
+function fetchData(crypto){
+  var sym="BTC";
+  var hour_index=25-1;
+  if (crypto === "ETH") {
+     sym="ETH";
+  }
+  var crypto='BTC';
+  var unix = Math.floor(Date.now() / 1000);
+  var jsonData = $.ajax({
+      url: "https://min-api.cryptocompare.com/data/v2/histohour?fsym="+sym+"&limit=24&tsym=USD&e=coinbase&toTs="+unix,
+      dataType: "json",
+      async: false
+  }).responseText;
+
+  da = JSON.parse(jsonData);
+  console.log(da['Data']['Data'][hour_index]['close']);
+  document.getElementById('pre_HK'+sym+'I-USD').value=parseFloat(da['Data']['Data'][hour_index]['close']);
+  document.getElementById('pre_'+sym+'Index').value=parseFloat(da['Data']['Data'][hour_index]['close']);
+  document.getElementById('pre_HK'+sym+'I-USD_time').innerHTML="@"+(new Date(parseInt(da['Data']['Data'][hour_index]['time'])*1000)).toLocaleString();
+  document.getElementById('pre_'+sym+'Index_time').innerHTML="@"+(new Date(parseInt(da['Data']['Data'][hour_index]['time'])*1000)).toLocaleString();
+  pre['pre_HK'+sym+'I-USD']=parseFloat(da['Data']['Data'][hour_index]['close']);
+  pre['pre_'+sym+'Index']=parseFloat(da['Data']['Data'][hour_index]['close']);
+  console.log('Retrieve '+crypto+' data @ '+new Date().toLocaleString());
+};
+
+function fetchDataAll(){
+    fetchData('BTC');
+    fetchData('ETH');
+    var now=new Date();
+    var hours = now.getHours();
+    var minutes = now.getMinutes();
+    var seconds = now.getSeconds();
+    setTimeout(fetchDataAll, 3600*1000-((seconds+minutes*60)*1000));
+
+};
+
+fetchDataAll();
 
 function renderStep() {
     // move the window (you can think of different strategies).
@@ -488,38 +225,37 @@ var socket;
 //socket.send("Initialize");
  
 const socketMessageListener = (event) => {
- // remove all data points which are no longer visible
- var range = graph2d.getWindow();
- var interval = range.end - range.start;
- var oldIds = dataset.getIds({
-     filter: function (item) {
-         return (vis.moment(item.x).utcOffset('+08:00') < range.start - interval);
-     }
- });
- 
- dataset.remove(oldIds);
- 
- da=JSON.parse(event.data)
- if (enable_log === true){
-  console.log(da)
-  }
-var now=new Date();
-var hours = now.getHours();
-var minutes = now.getMinutes();
-var seconds = now.getSeconds();
+    // remove all data points which are no longer visible
+    var range = graph2d.getWindow();
+    var interval = range.end - range.start;
+    var oldIds = dataset.getIds({
+        filter: function (item) {
+            return (vis.moment(item.x).utcOffset('+08:00') < range.start - interval);
+        }
+    });
+
+    dataset.remove(oldIds);
+
+    da=JSON.parse(event.data)
+    if (enable_log === true){
+      console.log(da)
+      }
+    var now=new Date();
+    var hours = now.getHours();
+    var minutes = now.getMinutes();
+    var seconds = now.getSeconds();
 
 
-    // if (da['indexName']==='BTCIndex'  || da['indexName']=== 'HKBTCI-USD') {
-     //if (da['indexName']==='TECH_Sim_2s' || da['indexName']=== 'TECH_Sim_Tick_by_Tick'|| da['indexName']=== 'HSTECH') {
-     //document.getElementById(da['indexName']).innerHTML = " : " + (da['exchangeTime']).substring(0,19)+" : "+da['indexValue']
      tradeDate=da['exchangeTime']
-     if ((!pre[da['indexName']]) || (minutes === 0 && seconds < 5)){
-          pre[da['indexName']]=parseFloat(da['indexValue'])
+     if (!document.getElementById('pre_'+da['indexName']).value === ""){
+        document.getElementById('pre_'+da['indexName']).value=parseFloat(da['indexValue']);
      }
-     //val=(parseFloat(da['indexValue'])/pre[da['indexName']]-1)*100
+     pre[da['indexName']]=document.getElementById('pre_'+da['indexName']).value
+     
      val=parseFloat((parseFloat(da['indexValue'])/pre[da['indexName']]-1)*100).toFixed(3)
-     document.getElementById(da['indexName']).innerHTML = " : " + (da['exchangeTime']).substring(0,19).substring(10)+" : "+da['indexValue'] +" (vs "+pre[da['indexName']]+" = "+val+"%)"
-    
+     document.getElementById('pre_'+da['indexName']+"_pct").innerHTML=" ("+val+"%)"
+     document.getElementById(da['indexName']).innerHTML = " : " + (da['exchangeTime']).substring(0,19).substring(10)+" : "+da['indexValue']
+
      dataset.add({
          x: tradeDate,
          y:val,
@@ -527,12 +263,6 @@ var seconds = now.getSeconds();
          label: da['indexName']
      });
 
-    if (document.getElementsByClassName('vis-legend-text').length>0) {
-      document.getElementsByClassName('vis-legend-text')[0].innerHTML=document.getElementsByClassName('vis-legend-text')[0].innerHTML.replaceAll('default','')
-    }
-    
-
- //}
 
 
 };
