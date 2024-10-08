@@ -96,7 +96,7 @@
     <option value="22" >22 Hours</option>
     <option value="23" >23 Hours</option>
     <option value="24" >24 Hours</option>
-    <!--option value="GMT0000" >GMT 00:00</option-->
+    <option value="GMT0000" >GMT 00:00</option>
   </select>
 </p>
 <div>
@@ -195,9 +195,11 @@ function fetchData(crypto){
   var hour_index=25-1;
   switch (compare_hour.value) {
     case 'GMT0000':
-        // continuously move the window
-        graph2d.setWindow(now - interval, now, {animation: false});
-        requestAnimationFrame(renderStep);
+        if (hours>7) {
+          hour_index=25-(hours-7)
+        } else {
+          hour_index=25-(hours+24-7)
+        }
         break;
 
     case 'HKT1600':
