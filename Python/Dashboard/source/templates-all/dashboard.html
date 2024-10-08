@@ -56,14 +56,26 @@
 
 
 <p>
-
-
   <label for="strategy">Graph options:</label>
   <select id="strategy"  name="strategy" class="  dropdown">
 
     <option value="continuous" >Continuous (CPU intensive)</option>
     <option value="discrete" >Discrete</option>
     <option value="static" selected >Static</option>
+  </select>
+  <label for="compare_exchange">Compare Crypto Exchange : </label>
+  <select id="compare_exchange"  name="compare_exchange" class="  dropdown" onchange="fetchDataAll()">
+    <option value="coinbase" selected>Coinbase</option>
+    <option value="CCCAGG" >CCCAGG</option>
+    <option value="kraken" >kraken</option>
+  </select>
+  <label for="compare_hour">Compare with : </label>
+  <select id="compare_hour"  name="compare_hour" class="  dropdown" onchange="fetchDataAll()">
+    <option value="1" selected>1 Hour</option>
+    <option value="2" selected>2 Hour</option>
+    <option value="24" selected>24 Hour</option>
+    <!--option value="HKT1600" >HKT 16:00</option>
+    <option value="GMT0000" >GMT 00:00</option-->
   </select>
 </p>
 <div>
@@ -113,6 +125,8 @@ var DELAY = 500; // delay in ms to add new data points
 
 var strategy = document.getElementById('strategy');
 
+var compare_exchange = document.getElementById('compare_exchange');
+var compare_hour = document.getElementById('compare_hour');
 // create a graph2d with an (currently empty) dataset
 var container = document.getElementById('visualization');
 
@@ -153,27 +167,45 @@ var pre=[];
 
 function fetchData(crypto){
   var sym="BTC";
+  var now=Date.now();
+  var unix = Math.floor(now / 1000);
   var hour_index=25-1;
+  switch (compare_hour.value) {
+    case 'GMT0000':
+        // continuously move the window
+        graph2d.setWindow(now - interval, now, {animation: false});
+        requestAnimationFrame(renderStep);
+        break;
+
+    case 'HKT1600':
+        graph2d.setWindow(now - interval, now, {animation: false});
+        setTimeout(renderStep, DELAY);
+        break;
+
+    default: // 'static'
+        hour_index=25-parseInt(compare_hour.value);
+        break;
+}  
   if (crypto === "ETH") {
      sym="ETH";
   }
   var crypto='BTC';
-  var unix = Math.floor(Date.now() / 1000);
+  
   var jsonData = $.ajax({
-      url: "https://min-api.cryptocompare.com/data/v2/histohour?fsym="+sym+"&limit=24&tsym=USD&e=coinbase&toTs="+unix,
+      url: "https://min-api.cryptocompare.com/data/v2/histohour?fsym="+sym+"&limit=24&tsym=USD&e="+compare_exchange.value+"&toTs="+unix,
       dataType: "json",
       async: false
   }).responseText;
 
   da = JSON.parse(jsonData);
-  console.log(da['Data']['Data'][hour_index]['close']);
+  console.log('Retrieve '+crypto+' data from '+compare_exchange.value+' @ '+new Date().toLocaleString()+" : "+da['Data']['Data'][hour_index]['close']);
   document.getElementById('pre_HK'+sym+'I-USD').value=parseFloat(da['Data']['Data'][hour_index]['close']);
   document.getElementById('pre_'+sym+'Index').value=parseFloat(da['Data']['Data'][hour_index]['close']);
   document.getElementById('pre_HK'+sym+'I-USD_time').innerHTML="@"+(new Date(parseInt(da['Data']['Data'][hour_index]['time'])*1000)).toLocaleString();
   document.getElementById('pre_'+sym+'Index_time').innerHTML="@"+(new Date(parseInt(da['Data']['Data'][hour_index]['time'])*1000)).toLocaleString();
   pre['pre_HK'+sym+'I-USD']=parseFloat(da['Data']['Data'][hour_index]['close']);
   pre['pre_'+sym+'Index']=parseFloat(da['Data']['Data'][hour_index]['close']);
-  console.log('Retrieve '+crypto+' data @ '+new Date().toLocaleString());
+
 };
 
 function fetchDataAll(){
