@@ -145,7 +145,11 @@ var options = {
 };
 
 var graph2d = new vis.Graph2d(container, dataset, options);
+var cal1=0;
+var cal2=0;
 
+var val=0;
+var pre=[];
 
 function fetchData(crypto){
   var sym="BTC";
@@ -213,11 +217,7 @@ function renderStep() {
 }
 renderStep();
 
-var cal1=0;
-var cal2=0;
 
-var val=0;
-var pre=[];
 
 var socket;
 //const socket = new WebSocket(location.origin.replace(/^http/, 'ws') + "/wss-btc");
