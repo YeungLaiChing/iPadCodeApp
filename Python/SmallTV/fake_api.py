@@ -6,7 +6,7 @@ import time
 import os
 import redis
 
-listening_port=int(os.environ.get('LISTENING_PORT', '443'))
+listening_port=int(os.environ.get('LISTENING_PORT', '80'))
 eligible_list={'BTC','ETH','HKBTCI-USD','HKETHI-USD','HKEXBTC-USD','HKEXETH-USD'}
 
 redis_host=os.environ.get('REDIS_HOST', '192.168.0.55')
@@ -25,6 +25,55 @@ app.json.sort_keys = False
 def get_aum2():
     return get_aum()
   
+@app.route('/v1/test/getcrumb', methods=['GET'])
+def yahoo_quote_crum():
+  ret="4kTCSw9aFp6"
+  return ret
+
+
+@app.route('/v7/finance/quote', methods=['GET'])
+def yahoo_quote():
+  ret={
+    "quoteResponse": {
+      "result": [
+        {
+          #"language": "en-US",
+          #"region": "US",
+          #"quoteType": "CRYPTOCURRENCY",
+          #"typeDisp": "Cryptocurrency",
+          #"quoteSourceName": "CoinMarketCap",
+          #"triggerable": "true",
+          #"customPriceAlertConfidence": "HIGH",
+          #"sourceInterval": 15,
+          #"exchangeDataDelayedBy": 0,
+          #"regularMarketChange": -489.27734,
+          #"regularMarketTime": 1728478800,
+          #"regularMarketPreviousClose": 62122.836,
+          #"hasPrePostMarketData": "false",
+          #"firstTradeDateMilliseconds": 1410912000000,
+          #"currency": "USD",
+          #"exchange": "CCC",
+          #"exchangeTimezoneName": "UTC",
+          #"exchangeTimezoneShortName": "UTC",
+          #"gmtOffSetMilliseconds": 0,
+          #"market": "ccc_market",
+          #"esgPopulated": "false",
+          #"tradeable": "false",
+          #"cryptoTradeable": "true",
+          #"marketState": "REGULAR",
+          "regularMarketChangePercent": -10.78383887,
+          "regularMarketPrice": 61931.664,
+          #"fullExchangeName": "CCC",
+          "symbol": "BTC-USD"
+        }
+      ],
+      "error": "null"
+    }
+    
+  }
+  return ret
+  
+#https://query1.finance.yahoo.com/v7/finance/quote?&symbols=BTC-USD&fields=currency,regularMarketChange,regularMarketChangePercent,regularMarketPrice&crumb=4kTCSw9aFp6
 
 @app.route('/api/v3/uiKlines', methods=['GET'])
 def chart():
@@ -331,4 +380,4 @@ def get_aum():
     return jsonify(ret)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=listening_port,debug=False,ssl_context='adhoc')
+    app.run(host="0.0.0.0",port=listening_port,debug=False)
