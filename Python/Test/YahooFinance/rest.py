@@ -45,13 +45,18 @@ def get_yahoo_crumb(cookie):
 
     return crumb
 
-def get_yahoo_data(crumb_number):
+def get_yahoo_data(crumb_number,cookies):
+    user_agent_key = "User-Agent"
+    user_agent_value = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+
+    headers = {user_agent_key: user_agent_value}
+    
     url = f"https://query1.finance.yahoo.com/v7/finance/quote?&symbols=BTC-USD&fields=currency,regularMarketChange,regularMarketChangePercent,regularMarketPrice&crumb={crumb_number}"
-    r=requests.get(url=url,cookies=cookies)
+    r=requests.get(url=url,headers=headers,cookies=cookies)
     print("===== GET resp text=========")
     print(r.text)
 
 # Usage
 cookie = get_yahoo_cookie()
 crumb = get_yahoo_crumb(cookie)
-get_yahoo_data(crumb_number=crumb)
+get_yahoo_data(crumb_number=crumb,cookies=cookie)
