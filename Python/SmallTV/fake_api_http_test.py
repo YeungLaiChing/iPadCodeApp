@@ -17,6 +17,7 @@ def get_aum2():
 #/v8/finance/chart/BTC-USD?interval=1d&range=44d
 
 
+
 @app.route('/v8/finance/chart/<symbol>', methods=['GET'])
 def chart_2(symbol):
     ret={
