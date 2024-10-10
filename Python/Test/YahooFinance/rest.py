@@ -2,8 +2,13 @@ import requests
 import json
 # login
 crumb = "https://query1.finance.yahoo.com/v1/test/getcrumb"
+headers = {
+    #'Content-Tpye':'application/json',
+    #'accept': 'application/json',
+    'User-Agent':'AppleWebKit/537.36 (KHTML, like Gecko)'
+}
 
-r = requests.get(url=crumb)
+r = requests.get(url=crumb,headers=headers)
 print("===== login resp text=========")
 print(r.text)
 print("===== login resp header=========")
