@@ -2,10 +2,11 @@ import requests
 import json
 # login
 crumb = "https://query1.finance.yahoo.com/v1/test/getcrumb"
+
+#'Content-Tpye':'application/json',
+#'accept': 'application/json',
 headers = {
-    #'Content-Tpye':'application/json',
-    #'accept': 'application/json',
-    'User-Agent':'AppleWebKit/537.36 (KHTML, like Gecko)'
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
 }
 
 r = requests.get(url=crumb,headers=headers)
