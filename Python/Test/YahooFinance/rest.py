@@ -52,7 +52,7 @@ def get_yahoo_data(crumb_number,cookies):
     headers = {user_agent_key: user_agent_value}
     
     url = f"https://query1.finance.yahoo.com/v7/finance/quote?&symbols=BTC-USD&fields=currency,regularMarketChange,regularMarketChangePercent,regularMarketPrice&crumb={crumb_number}"
-    r=requests.get(url=url,headers=headers,cookies=cookies)
+    r=requests.get(url=url,headers=headers,cookies={cookie.name: cookie.value})
     print("===== GET resp text=========")
     print(r.text)
 
