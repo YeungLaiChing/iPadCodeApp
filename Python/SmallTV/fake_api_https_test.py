@@ -13,20 +13,14 @@ app.json.sort_keys = False
 
 @app.route('/v2/assets/<symbol>',methods=['GET'])
 def coincap(symbol):
+  
   ret={
   "data": {
     "id": "bitcoin",
-    "rank": "1",
     "symbol": 'HKEXBTC',
     "name": "Bitcoin",
-    "supply": "19765684.0000000000000000",
-    "maxSupply": "21000000.0000000000000000",
-    "marketCapUsd": "1203754021081.9019016923095276",
-    "volumeUsd24Hr": "16695029746.4428768022259227",
-    "priceUsd": "60901.2074199861690439",
-    "changePercent24Hr": "-1.4449574285404459",
-    "vwap24Hr": "61220.4687090180114336",
-    "explorer": "https://blockchain.info/"
+    "priceUsd": "2440.38",
+    "changePercent24Hr": "1.4"
   },
   "timestamp": 1728565096360
 }
@@ -34,6 +28,25 @@ def coincap(symbol):
 
 @app.route('/v2/assets/<symbol>/history',methods=['GET'])
 def coincap_history(symbol):
+  ret={
+  "data": [
+    {
+      "priceUsd": "2440.38"
+    },{
+      "priceUsd": "2441.38"
+    },{
+      "priceUsd": "2542.38"
+    },{
+      "priceUsd": "2043.38"
+    },{
+      "priceUsd": "2144.38"
+    }
+  ],
+  "timestamp": 1728417600000
+}
+  return ret
+@app.route('/v2/assets/<symbol>/xxhistory',methods=['GET'])
+def coincap_xxhistory(symbol):
   ret={
   "data": [
     {

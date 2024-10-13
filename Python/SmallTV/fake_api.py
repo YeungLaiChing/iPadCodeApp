@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from datetime import datetime
 import requests
+import json
 
 import time
 import os
@@ -20,6 +21,8 @@ redis_conn = redis.Redis(
 
 app = Flask(__name__)
 app.json.sort_keys = False
+ether=[]
+bitcoin=[]
 
 @app.route('/test', methods=['GET'])
 def get_aum2():
@@ -318,14 +321,78 @@ def get_kline_from_redis(symbol):
     
 @app.route('/api/v3/ticker/24hr', methods=['GET'])
 def binance():
-  
     symbol=request.args.get('symbol')
     if (symbol in eligible_list) :
       ret=get_value_from_redis(symbol)
     else :
       ret=get_value_from_binance(symbol)
     return jsonify(ret)
+
+
+@app.route('/v2/assets/<symbol>',methods=['GET'])
+def coincap(symbol):
+    global ether
+    global bitcoin
+    ticker="HKBTCI-USD"
+    if symbol=="ethereum" :
+      ticker="HKETHI-USD"
+      
+    
+    val=redis_conn.hget(ticker,"last_index")
+    if symbol=="ethereum" :
+      ether.append(val)
+      tmp=ether[-60:]
+      ether=tmp
+    else :
+      bitcoin.append(val)
+      tmp=bitcoin[-60:]
+      bitcoin=tmp
+      
+    close=get_close_value(ticker)
+    diff=0;
+    if close>0 :
+      diff=(float(val)/float(close)-1)*100
   
+    ret={
+    "data": {
+      "id": symbol,
+      "symbol": ticker,
+      "name": ticker,
+      "priceUsd": val,
+      "changePercent24Hr": diff
+    },
+    "timestamp": 1728565096360
+    }
+    return ret
+
+@app.route('/v2/assets/<symbol>/history',methods=['GET'])
+def coincap_history(symbol):
+  global ether
+  global bitcoin
+  ret={
+  "data": [
+    {
+      "priceUsd": "2440.38"
+    }
+  ],
+  "timestamp": 1728417600000
+  }
+  ret_all={}
+  ret_val=[]
+  if symbol=="ethereum" :
+    for item in ether:
+      ret_val.append({"priceUsd":item})
+  else:
+    for item in bitcoin:
+      ret_val.append({"priceUsd":item})
+  ret_all={
+      "data": ret_val,
+      "timestamp": 1728417600000
+  }
+  #print(json.dumps(ret_all))
+  ret=json.dumps(ret_all)
+    
+  return ret
 @app.route('/data/2.5/weather', methods=['GET'])
 def get_aum():
     ret={
