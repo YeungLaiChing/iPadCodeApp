@@ -8,8 +8,7 @@ import os
 import redis
 
 listening_port=int(os.environ.get('LISTENING_PORT', '80'))
-eligible_list={'BTC','ETH','HKBTCI-USD','HKETHI-USD','HKEXBTC-USD','HKEXETH-USD','HKBTCI','HKETHI','HKEXBTC','HKEXETH'}
-append_list={'HKBTCI','HKETHI','HKEXBTC','HKEXETH'}
+eligible_list={'BTC','ETH','HKBTCI-USD','HKETHI-USD','HKEXBTC-USD','HKEXETH-USD'}
 
 redis_host=os.environ.get('REDIS_HOST', '192.168.0.55')
 redis_port=int(os.environ.get('REDIS_PORT', '6379'))
@@ -111,7 +110,7 @@ def get_close_value_from_rest(symbol):
 def get_close_value(symbol):
   global last_close_value
   global last_time
-  current=int(time.time()/24/3600)*24*3600-8*3600
+  current=int(time.time()/24/3600)*24*3600
   rt_val=0;
   if (last_time.get(symbol) is None) or (int(last_time.get(symbol)) != current) :
       rt_val=get_close_value_from_rest(symbol)
@@ -135,10 +134,7 @@ def get_kline_from_binance(symbol,interval,limit):
       return content
       
 def get_value_from_redis(symbol):
-    if (symbol in append_list):
-      val=redis_conn.hget(f"{symbol}-USD","last_index")
-    else:
-       val=redis_conn.hget(symbol,"last_index")
+    val=redis_conn.hget(symbol,"last_index")
     close=get_close_value(symbol)
     diff=0;
     if close>0 :
