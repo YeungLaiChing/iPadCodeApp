@@ -3,9 +3,15 @@ import json
 # login
 url = "https://core.hkexstaging.datahex.rozettatech.com/realms/datahex/protocol/openid-connect/token"
 
+#headers = {
+#    'Content-Tpye':'application/x-www-form-urlencoded'
+#}
+
 headers = {
-    'Content-Tpye':'application/x-www-form-urlencoded'
+    'Content-Tpye':'application/json',
+    'accept': 'application/json'
 }
+
 
 payloads = {
   "grant_type": "password",
