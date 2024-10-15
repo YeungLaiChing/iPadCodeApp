@@ -95,25 +95,27 @@ last_close_value={}
 def get_close_value_from_rest(symbol):
   global last_close_value
   global last_time
+  day_ts=int((time.time()-8*3600-5*60)/24/3600)*24*3600+8*3600
   instrument="BTC-USD"
   if "ETH" in symbol:
     instrument="ETH-USD"
-  url=f'https://data-api.ccdata.io/index/cc/v1/historical/days?market=ccix&instrument={instrument}&limit=1'
+  url=f'https://data-api.ccdata.io/index/cc/v1/historical/days?market=ccix&instrument={instrument}&limit=1&toTs={day_ts}'
   resp=requests.get(url)
   rt_val=0;
   if resp.status_code==200 :
       content=resp.json()
-      ts=content['Data'][0]['TIMESTAMP']
-      rt_val=float(content['Data'][0]['CLOSE'])
-      last_close_value[symbol]=rt_val
-      last_time[symbol]=ts
-      print(f"updated last time {ts} and last close {rt_val} for symbol {symbol}")
+      ts=content['Data'][1]['TIMESTAMP']
+      if str(ts) == str(day_ts) :
+          rt_val=float(content['Data'][1]['CLOSE'])
+          last_close_value[symbol]=rt_val
+          last_time[symbol]=ts
+          print(f"updated last time {ts} and last close {rt_val} for symbol {symbol}")
   return rt_val
       
 def get_close_value(symbol):
   global last_close_value
   global last_time
-  current=int(time.time()/24/3600)*24*3600
+  current=int((time.time()-8*3600-5*60)/24/3600)*24*3600+8*3600
   rt_val=0;
   if (last_time.get(symbol) is None) or (int(last_time.get(symbol)) != current) :
       rt_val=get_close_value_from_rest(symbol)
