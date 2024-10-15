@@ -48,7 +48,12 @@ headers = {
 url = "https://core.hkexstaging.datahex.rozettatech.com/api/data/v1/datasets/tick/security_types"
 
 r=requests.get(url=url,headers=headers,cookies=cookies)
-print("===== GET resp text after login =========")
-print(r.text)
+print("===== GET security_types resp text after login =========")
+print(r.json())
 
+#get data
+url = "https://core.hkexstaging.datahex.rozettatech.com/api/account/v1/preferences/s3_details"
+r=requests.get(url=url,headers=headers,cookies=cookies)
+print("===== GET s3_details resp text after login =========")
+print(r.json())
 
