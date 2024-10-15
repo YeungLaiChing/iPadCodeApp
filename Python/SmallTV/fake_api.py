@@ -120,6 +120,7 @@ def get_close_value(symbol):
   global last_close_value
   global last_time
   day_ts=int((time.time()-8*3600-5*60)/24/3600)*24*3600+8*3600
+  print(f"day_ts = {day_ts}")
   rt_val=0;
   if (last_time.get(symbol) is None) or (int(last_time.get(symbol)) != day_ts) :
       if (symbol in append_list):
@@ -346,4 +347,4 @@ def get_aum():
     return jsonify(ret)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=listening_port)
+    app.run(host="0.0.0.0",port=listening_port,debug=True)
