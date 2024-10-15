@@ -120,7 +120,10 @@ def get_close_value(symbol):
   day_ts=int((time.time()-8*3600-5*60)/24/3600)*24*3600+8*3600
   rt_val=0;
   if (last_time.get(symbol) is None) or (int(last_time.get(symbol)) != day_ts) :
-      rt_val=get_close_value_from_rest(symbol,day_ts)
+      if (symbol in append_list):
+        rt_val=get_close_value_from_rest(f"{symbol}-USD",day_ts)
+      else:
+        rt_val=get_close_value_from_rest(symbol,day_ts)
   else:
       rt_val=float(last_close_value.get(symbol))
   
