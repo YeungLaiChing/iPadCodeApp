@@ -28,6 +28,9 @@ r = requests.post(url=url, headers=headers, data=payloads)
 
 print("===== login resp text=========")
 print(r.text)
+print("===== token =========")
+access_token=r.text.get('access_token')
+print(access_token)
 print("===== login resp header=========")
 print(r.headers)
 print("===== login resp cookies=========")
@@ -35,12 +38,15 @@ cookies=r.cookies
 print(cookies)
 print(cookies.get_dict())
 
+headers = {
+    "Authorization": f"Bearer {access_token}"  
+}
 
 #get data
-#url = "https://tickdata.hkex.datahex.rozettatech.com/api/data/v1/datasets/tick/security_types"
+url = "https://core.hkexstaging.datahex.rozettatech.com/api/data/v1/datasets/tick/security_types"
 
-#r=requests.get(url=url,cookies=cookies)
-#print("===== GET resp text=========")
-#print(r.text)
+r=requests.get(url=url,headers=headers,cookies=cookies)
+print("===== GET resp text after login =========")
+print(r.text)
 
 
