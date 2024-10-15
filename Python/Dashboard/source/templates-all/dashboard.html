@@ -220,7 +220,7 @@ function fetchData(crypto){
   var crypto='BTC';
   
   var jsonData = $.ajax({
-      url: "=https://min-api.cryptocompare.com/data/v2/histohour?fsym="+sym+"&limit=24&tsym=USD&e="+compare_exchange.value+"&toTs="+unix,
+      url: "https://min-api.cryptocompare.com/data/v2/histohour?fsym="+sym+"&limit=24&tsym=USD&e="+compare_exchange.value+"&toTs="+unix,
       dataType: "json",
       async: false
   }).responseText;
