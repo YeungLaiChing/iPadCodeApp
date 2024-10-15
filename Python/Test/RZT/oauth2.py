@@ -3,28 +3,28 @@ import json
 # login
 url = "https://core.hkexstaging.datahex.rozettatech.com/realms/datahex/protocol/openid-connect/token"
 
-#headers = {
-#    'Content-Tpye':'application/x-www-form-urlencoded'
-#}
-
 headers = {
-    'Content-Tpye':'application/json',
-    'accept': 'application/json'
+    'Content-Tpye':'application/x-www-form-urlencoded'
 }
+
+#headers = {
+#    'Content-Tpye':'application/json',
+#    'accept': 'application/json'
+#}
 
 
 payloads = {
   "grant_type": "password",
-  "username":"laichingyeung@hkex.com.hk",
-  "password":"P@ssw0rd!",
-  "client_id":"frontend_client"
+  "username": "laichingyeung@hkex.com.hk",
+  "password": "P@ssw0rd!",
+  "client_id": "frontend_client"
 }
 
 #curl -X POST https://core.hkexstaging.datahex.rozettatech.com/realms/datahex/protocol/openid-connect/token \
 #    -H 'Content-Type: application/x-www-form-urlencoded' \
 #    -d 'grant_type=password&username=laichingyeung@hkex.com.hk&password=P@ssw0rd!&client_id=frontend_client'
 
-r = requests.post(url=url, headers=headers, json=payloads)
+r = requests.post(url=url, headers=headers, data=payloads)
 
 print("===== login resp text=========")
 print(r.text)
