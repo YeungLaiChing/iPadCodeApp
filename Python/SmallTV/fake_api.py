@@ -92,21 +92,23 @@ def chart():
 last_time={}
 last_close_value={}
 
-def get_close_value_from_rest(symbol):
+def get_close_value_from_rest(symbol,day_ts):
   global last_close_value
   global last_time
-  day_ts=int((time.time()-8*3600-5*60)/24/3600)*24*3600+8*3600
+  #day_ts=int((time.time()-8*3600-5*60)/24/3600)*24*3600+8*3600
   instrument="BTC-USD"
   if "ETH" in symbol:
     instrument="ETH-USD"
   url=f'https://data-api.ccdata.io/index/cc/v1/historical/days?market=ccix&instrument={instrument}&limit=1&toTs={day_ts}'
+  url=f'https://data-api.cryptocompare.com/index/cc/v1/historical/hours?market=cchkex&instrument={instrument}&to_ts={day_ts}&limit=1&aggregate=1&fill=true&apply_mapping=true&response_format=JSON&api_key=1e0f131269d411f25453ad0820d526e937df1a7c1a929ee46f8b2fbf8cd2d387'
   resp=requests.get(url)
   rt_val=0;
   if resp.status_code==200 :
       content=resp.json()
-      ts=content['Data'][1]['TIMESTAMP']
-      if str(ts) == str(day_ts) :
-          rt_val=float(content['Data'][1]['CLOSE'])
+      ts=content['Data'][0]['TIMESTAMP']
+      total=content['Data'][0]['TOTAL_INDEX_UPDATES']
+      if int(total) > 0 :
+          rt_val=float(content['Data'][0]['CLOSE'])
           last_close_value[symbol]=rt_val
           last_time[symbol]=ts
           print(f"updated last time {ts} and last close {rt_val} for symbol {symbol}")
@@ -115,10 +117,10 @@ def get_close_value_from_rest(symbol):
 def get_close_value(symbol):
   global last_close_value
   global last_time
-  current=int((time.time()-8*3600-5*60)/24/3600)*24*3600+8*3600
+  day_ts=int((time.time()-8*3600-5*60)/24/3600)*24*3600+8*3600
   rt_val=0;
-  if (last_time.get(symbol) is None) or (int(last_time.get(symbol)) != current) :
-      rt_val=get_close_value_from_rest(symbol)
+  if (last_time.get(symbol) is None) or (int(last_time.get(symbol)) != day_ts) :
+      rt_val=get_close_value_from_rest(symbol,day_ts)
   else:
       rt_val=float(last_close_value.get(symbol))
   
