@@ -102,9 +102,11 @@ def get_close_value_from_rest(symbol,day_ts):
   url=f'https://data-api.ccdata.io/index/cc/v1/historical/days?market=ccix&instrument={symbol}&limit=1&toTs={day_ts}'
   url=f'https://data-api.cryptocompare.com/index/cc/v1/historical/hours?market=cchkex&instrument={symbol}&to_ts={day_ts}&limit=1&aggregate=1&fill=true&apply_mapping=true&response_format=JSON&api_key=1e0f131269d411f25453ad0820d526e937df1a7c1a929ee46f8b2fbf8cd2d387'
   resp=requests.get(url)
+  print(resp.status_code)
   rt_val=0;
   if resp.status_code==200 :
       content=resp.json()
+      print(content)
       ts=content['Data'][0]['TIMESTAMP']
       total=content['Data'][0]['TOTAL_INDEX_UPDATES']
       if int(total) > 0 :
