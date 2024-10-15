@@ -220,19 +220,19 @@ function fetchData(crypto){
   var crypto='BTC';
   
   var jsonData = $.ajax({
-      url: "https://min-api.cryptocompare.com/data/v2/histohour?fsym="+sym+"&limit=24&tsym=USD&e="+compare_exchange.value+"&toTs="+unix,
+      url: "=https://min-api.cryptocompare.com/data/v2/histohour?fsym="+sym+"&limit=24&tsym=USD&e="+compare_exchange.value+"&toTs="+unix,
       dataType: "json",
       async: false
   }).responseText;
 
   da = JSON.parse(jsonData);
-  console.log('Retrieve '+crypto+' data from '+compare_exchange.value+' @ '+new Date().toLocaleString()+" : "+da['Data']['Data'][hour_index]['close']);
-  document.getElementById('pre_HK'+sym+'I-USD').value=parseFloat(da['Data']['Data'][hour_index]['close']);
-  document.getElementById('pre_'+sym+'Index').value=parseFloat(da['Data']['Data'][hour_index]['close']);
+  console.log('Retrieve '+crypto+' data from '+compare_exchange.value+' @ '+new Date().toLocaleString()+" : "+da['Data']['Data'][hour_index]['open']);
+  document.getElementById('pre_HK'+sym+'I-USD').value=parseFloat(da['Data']['Data'][hour_index]['open']);
+  document.getElementById('pre_'+sym+'Index').value=parseFloat(da['Data']['Data'][hour_index]['open']);
   document.getElementById('pre_HK'+sym+'I-USD_time').innerHTML="@"+(new Date(parseInt(da['Data']['Data'][hour_index]['time'])*1000)).toLocaleString();
   document.getElementById('pre_'+sym+'Index_time').innerHTML="@"+(new Date(parseInt(da['Data']['Data'][hour_index]['time'])*1000)).toLocaleString();
-  pre['pre_HK'+sym+'I-USD']=parseFloat(da['Data']['Data'][hour_index]['close']);
-  pre['pre_'+sym+'Index']=parseFloat(da['Data']['Data'][hour_index]['close']);
+  pre['pre_HK'+sym+'I-USD']=parseFloat(da['Data']['Data'][hour_index]['open']);
+  pre['pre_'+sym+'Index']=parseFloat(da['Data']['Data'][hour_index]['open']);
 
 };
 
