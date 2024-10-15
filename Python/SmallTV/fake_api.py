@@ -110,7 +110,7 @@ def get_close_value_from_rest(symbol,day_ts):
       ts=content['Data'][0]['TIMESTAMP']
       total=content['Data'][0]['TOTAL_INDEX_UPDATES']
       if int(total) > 0 :
-          rt_val=float(content['Data'][0]['CLOSE'])
+          rt_val=float(content['Data'][0]['OPEN'])
           last_close_value[symbol]=rt_val
           last_time[symbol]=ts
           print(f"updated last time {ts} and last close {rt_val} for symbol {symbol}")
@@ -178,7 +178,7 @@ def get_value_from_redis(symbol):
     ret={
         "symbol": symbol,
         "priceChangePercent": diff,
-        "lastPrice": close
+        "lastPrice": val
         }
     return ret
 def get_kline_from_redis(symbol):
