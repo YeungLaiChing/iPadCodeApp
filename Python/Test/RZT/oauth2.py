@@ -57,3 +57,8 @@ r=requests.get(url=url,headers=headers,cookies=cookies)
 print("===== GET s3_details resp text after login =========")
 print(r.json())
 
+#get data
+url = "https://core.hkexstaging.datahex.rozettatech.com/api/extract/v1/datasets/tick/requests"
+r=requests.get(url=url,headers=headers,cookies=cookies)
+print("===== GET requests resp text after login =========")
+print(r.json())
