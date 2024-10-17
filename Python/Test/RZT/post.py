@@ -119,12 +119,8 @@ payloads = {
   "start": "2023-09-01",
   "end": "2023-09-02",
   "messageType": "tas",
-  "limit": "1000",
-  "includeFieldTypes": "false",
-  "useLocalTime": "false",
   "startTime": "00:00:00:000",
-  "endTime": "23:59:59:999",
-  "dateFormat": "YYYY-MM-DD"
+  "endTime": "23:59:59:999"
 }
 
 r=requests.post(url=f"https://core.hkexstaging.datahex.rozettatech.com{url}",headers=headers,json=payloads)
