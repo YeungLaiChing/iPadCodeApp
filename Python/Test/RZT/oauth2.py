@@ -42,7 +42,7 @@ payloads = {
   "extract.includeFieldTypes": "true",
   "extract.useLocalTime": "false",
   "extract.dateFormat": "YYYY-MM-DD",
-  "extract.periodType": "Continuous",
+  "extract.periodType": "Slice",
   "extract.upload": "None"
 }
 
