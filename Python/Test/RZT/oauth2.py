@@ -22,6 +22,7 @@ print(access_token)
 cookies=r.cookies
 
 headers = {
+    'Content-Tpye':'application/json',
     "Authorization": f"Bearer {access_token}"  
 }
 
