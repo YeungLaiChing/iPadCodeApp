@@ -248,8 +248,8 @@ url = "/api/account/v1/templates"
 headers = {    'Content-Tpye':'application/json',    "Authorization": f"Bearer {access_token}"  }
 
 payloads = {
-  "name": "API-template",
-  "messageType": "ref",
+  "name": "APItemplate",
+  "messageType": "tas",
   "detail": {
     "fields": [
       "MarketCode",
