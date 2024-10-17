@@ -47,6 +47,7 @@ url = "/api/data/v1/datasets/tick/instruments/search"
 r=requests.post(url=f"https://core.hkexstaging.datahex.rozettatech.com{url}",headers=headers,json=payloads)
 print(f"===== POST Result of {url} =========")
 result=r.json()
+print(r.status_code)
 print(result)
 if int(result['status']) == 200 :
     print(f"queryId = {r.json()['data']['id']}")
@@ -85,6 +86,7 @@ url = "/api/data/v1/datasets/tick/exchanges/instruments"
 r=requests.post(url=f"https://core.hkexstaging.datahex.rozettatech.com{url}",headers=headers,json=payloads)
 print(f"===== POST Result of {url} =========")
 result=r.json()
+print(r.status_code)
 print(result)
 if int(result['status']) == 200 :
     print(f"queryId = {r.json()['data']['id']}")
@@ -125,8 +127,9 @@ url = "/api/data/v1/datasets/tick/instruments/verify"
 r=requests.post(url=f"https://core.hkexstaging.datahex.rozettatech.com{url}",headers=headers,json=payloads)
 print(f"===== POST Result of {url} =========")
 result=r.json()
+print(r.status_code)
 print(result)
-if int(result['status']) == 200 :
+if int(r.status_code) == 200 :
     print(f"queryId = {r.json()['data']['id']}")
 else :
     print("xxxxx ERROR xxxxxxx")
