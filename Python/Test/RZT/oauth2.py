@@ -51,6 +51,6 @@ payloads = {
 url = "https://core.hkexstaging.datahex.rozettatech.com/api/account/v1/preferences"
 #r=requests.get(url=url,headers=headers,cookies=cookies)
 #r=requests.get(url=url,headers=headers,cookies=cookies)
-r=requests.post(url=url,headers=headers,cookies=cookies, data=payloads)
+r=requests.post(url=url,headers=headers,cookies=cookies, json=payloads)
 print("===== Post Ref resp text after login =========")
 print(r.json())
