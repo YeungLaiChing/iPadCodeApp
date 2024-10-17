@@ -43,7 +43,8 @@ payloads = {
   "extract.useLocalTime": "false",
   "extract.dateFormat": "YYYY-MM-DD",
   "extract.periodType": "Slice",
-  "extract.upload": "None"
+  "extract.upload": "None",
+  "extract.maxFileSize": 2
 }
 
 
