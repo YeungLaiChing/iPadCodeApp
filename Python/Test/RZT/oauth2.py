@@ -22,7 +22,6 @@ print(access_token)
 cookies=r.cookies
 
 headers = {
-    'Content-Tpye':'application/json',
     "Authorization": f"Bearer {access_token}"  
 }
 
@@ -34,6 +33,7 @@ print("===== GET security_types resp text after login =========")
 print(r.json())
 
 headers = {
+    'Content-Tpye':'application/json',
     "Authorization": f"Bearer {access_token}"  
 }
 
