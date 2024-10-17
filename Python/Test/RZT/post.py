@@ -25,12 +25,6 @@ headers = {
     "Authorization": f"Bearer {access_token}"  
 }
 
-#get data
-url = "https://core.hkexstaging.datahex.rozettatech.com/api/data/v1/datasets/tick/security_types"
-#r=requests.get(url=url,headers=headers,cookies=cookies)
-r=requests.get(url=url,headers=headers)
-print("===== GET security_types resp text after login =========")
-print(r.json())
 
 # POST	/api/data/v1/datasets/tick/instruments/search
 headers = {
@@ -52,8 +46,12 @@ url = "/api/data/v1/datasets/tick/instruments/search"
 #r=requests.post(url=url,headers=headers,cookies=cookies, json=payloads)
 r=requests.post(url=f"https://core.hkexstaging.datahex.rozettatech.com{url}",headers=headers,json=payloads)
 print(f"===== POST Result of {url} =========")
-print(r.json())
-print(f"queryId = {r.json()['data']['id']}")
+result=r.json()
+print(result)
+if int(result['status']) == 200 :
+    print(f"queryId = {r.json()['data']['id']}")
+else :
+    print("xxxxx ERROR xxxxxxx")
 
 
 
@@ -86,8 +84,12 @@ url = "/api/data/v1/datasets/tick/exchanges/instruments"
 #r=requests.post(url=url,headers=headers,cookies=cookies, json=payloads)
 r=requests.post(url=f"https://core.hkexstaging.datahex.rozettatech.com{url}",headers=headers,json=payloads)
 print(f"===== POST Result of {url} =========")
-print(r.json())
-print(f"queryId = {r.json()['data']['id']}")
+result=r.json()
+print(result)
+if int(result['status']) == 200 :
+    print(f"queryId = {r.json()['data']['id']}")
+else :
+    print("xxxxx ERROR xxxxxxx")
 
 
 
@@ -122,8 +124,13 @@ url = "/api/data/v1/datasets/tick/instruments/verify"
 #r=requests.post(url=url,headers=headers,cookies=cookies, json=payloads)
 r=requests.post(url=f"https://core.hkexstaging.datahex.rozettatech.com{url}",headers=headers,json=payloads)
 print(f"===== POST Result of {url} =========")
-print(r.json())
-print(f"queryId = {r.json()['data']['id']}")
+result=r.json()
+print(result)
+if int(result['status']) == 200 :
+    print(f"queryId = {r.json()['data']['id']}")
+else :
+    print("xxxxx ERROR xxxxxxx")
+
 
 
 
@@ -157,4 +164,9 @@ url = "/api/account/v1/preferences"
 #r=requests.post(url=url,headers=headers,cookies=cookies, json=payloads)
 r=requests.post(url=f"https://core.hkexstaging.datahex.rozettatech.com{url}",headers=headers,json=payloads)
 print(f"===== POST Result of {url} =========")
-print(r.json())
+result=r.json()
+print(result)
+if int(result['status']) == 200 :
+    print("OK")
+else :
+    print("xxxxx ERROR xxxxxxx")
