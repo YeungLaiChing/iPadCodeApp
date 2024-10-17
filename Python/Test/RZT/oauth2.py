@@ -47,7 +47,6 @@ payloads = {
   "extract.maxFileSize": "2"
 }
 
-
 url = "https://core.hkexstaging.datahex.rozettatech.com/api/account/v1/preferences"
 #r=requests.get(url=url,headers=headers,cookies=cookies)
 #r=requests.get(url=url,headers=headers,cookies=cookies)
@@ -55,3 +54,49 @@ url = "https://core.hkexstaging.datahex.rozettatech.com/api/account/v1/preferenc
 r=requests.post(url=url,headers=headers,json=payloads)
 print("===== Post Ref resp text after login =========")
 print(r.json())
+
+# POST	/api/data/v1/datasets/tick/instruments/search
+headers = {
+    'Content-Tpye':'application/json',
+    "Authorization": f"Bearer {access_token}"  
+}
+
+#get data
+payloads = {
+  "instrument": "1",
+  "start": "2023-09-05",
+  "end": "2023-09-06",
+  "searchType": "instrument"
+}
+
+url = "/api/data/v1/datasets/tick/instruments/search"
+#r=requests.get(url=url,headers=headers,cookies=cookies)
+#r=requests.get(url=url,headers=headers,cookies=cookies)
+#r=requests.post(url=url,headers=headers,cookies=cookies, json=payloads)
+r=requests.post(url=url,headers=headers,json=payloads)
+print(f"===== POST Result of {url} =========")
+print(r.json())
+print(r.json()['data']['id'])
+
+# GET LIST ########################################################################################
+url_list_get=[
+"/api/data/v1/datasets/tick/security_types",
+"/api/data/v1/datasets/tick/exchanges",
+"/api/data/v1/datasets/tick/generic_info",
+"/api/data/v1/datasets/tick/exchange_coverages",
+"/api/account/v1/usage",
+"/api/account/v1/messagetype_fields",
+"/api/account/v1/preferences",
+"/api/account/v1/preferences/ftp_details",
+"/api/account/v1/preferences/sftp_details",
+"/api/account/v1/preferences/s3_details",
+"/api/account/v1/templates"
+]
+
+headers = {
+    "Authorization": f"Bearer {access_token}"  
+}
+for url in url_list_get :
+    r=requests.get(url=f"https://core.hkexstaging.datahex.rozettatech.com{url}",headers=headers)
+    print(f"===== GET result for {url} =========")
+    print(r.json())
