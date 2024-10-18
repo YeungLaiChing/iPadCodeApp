@@ -43,8 +43,10 @@
     <input type="submit" value="Search">
 </form>
 <!-- the result of the search will be rendered inside this div -->
+<button onclick="copyResult()">Copy Result</button>
+<div>
 <pre id="result"></pre>
- 
+</div>
 <script>
 // Attach a submit handler to the form
 $( "#searchForm" ).on( "submit", function( event ) {
@@ -109,6 +111,19 @@ $( "#loginForm" ).on( "submit", function( event ) {
   
   
   } );
+
+  function copyResult() {
+    // Get the text field
+    var copyText = document.getElementById("result");
+  
+    // Select the text field
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile devices
+  
+     // Copy the text inside the text field
+    navigator.clipboard.writeText(copyText.innerHTML);
+
+  }  
 </script>
  
 </body>
