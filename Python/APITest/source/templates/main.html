@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery.post demo</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+ 
+<form action="/apiTestPostJson" id="searchForm">
+    <input type="text" name="server" placeholder="Search...">
+    <input type="text" name="url" placeholder="Search...">
+    <textarea   name="header" placeholder="Search...">
+    <textarea   name="data" placeholder="Search...">
+    <input type="text" name="token" placeholder="Search...">
+    <input type="submit" value="Search">
+</form>
+<!-- the result of the search will be rendered inside this div -->
+<div id="result"></div>
+ 
+<script>
+// Attach a submit handler to the form
+$( "#searchForm" ).on( "submit", function( event ) {
+ 
+  // Stop form from submitting normally
+  event.preventDefault();
+ 
+  // Get some values from elements on the page:
+  var $form = $( this ),
+    server = $form.find( "input[name='server']" ).val(),
+    url = $form.find( "input[name='url']" ).val(),
+    header = $form.find( "textarea[name='header']" ).val(),
+    data = $form.find( "textarea[name='data']" ).val(),
+    token = $form.find( "input[name='token']" ).val(),
+    action = $form.attr( "action" );
+ 
+    $.ajax({
+        url : action,
+        data : {
+            server : server,
+            url : url,
+            header : header,
+            data : data
+        },
+        always : function(data) {
+            var content = $( data ).find( "#content" );
+            $( "#result" ).empty().append( JSON.stringify(content, null, 2) );
+        }
+    })
+
+} );
+</script>
+ 
+</body>
+</html>

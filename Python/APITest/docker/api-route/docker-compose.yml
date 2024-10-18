@@ -1,0 +1,36 @@
+services:
+   api-route-web:
+        image: vaindex-base
+        container_name: api-route-web
+        restart: unless-stopped
+        ports:
+            - '8586:5000'
+        environment:
+            APP_NAME: "api-route-web"
+        volumes:
+            - ../../source/main.py:/code/app.py
+            - ../../source/templates:/code/templates
+            - .:/code/
+        networks:
+            - redis_network
+
+   api-route-server:
+        image: vaindex-base
+        container_name: api-route-server
+        restart: unless-stopped
+        ports:
+            - '8587:80'
+        environment:
+            APP_NAME: "api-route-server"
+        volumes:
+            - ../../source/api_test.py:/code/app.py
+            - .:/code/
+        networks:
+            - redis_network
+
+
+networks:
+  redis_network:
+    name: redis_network
+    external: true
+
