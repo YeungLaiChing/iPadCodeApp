@@ -6,7 +6,15 @@
   <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
- 
+
+<H1>Authenication</H1>    
+<form action="/apiLoginToken" id="loginForm" method="POST">
+    Username :  <input type="text" name="username" > <br/>
+    Password :  <input type="password" name="password" > <br/>
+    Token : <textarea  name="pretoken" id="pretoken" ></textarea> <br/>
+    <input type="submit" value="Authenicate">
+</form>
+<H1>POST ACTION</H1>
 <form action="/apiTestPostJson" id="searchForm" method="POST">
     
     <input type="text" name="server" value="https://core.hkexstaging.datahex.rozettatech.com">
@@ -50,7 +58,7 @@ $( "#searchForm" ).on( "submit", function( event ) {
     url = $form.find( "input[name='url']" ).val(),
     header = $form.find( "textarea[name='header']" ).val(),
     data = $form.find( "textarea[name='data']" ).val(),
-    token = $form.find( "input[name='token']" ).val(),
+    token = $( "#loginForm" ).find( "input[name='pretoken']" ).val(),
     action = $form.attr( "action" );
  
     $.post(action,
@@ -58,6 +66,7 @@ $( "#searchForm" ).on( "submit", function( event ) {
         server : server,
         url : url,
         header : header,
+        token : token,
         data : data
     },
     function(data, status){
@@ -68,6 +77,29 @@ $( "#searchForm" ).on( "submit", function( event ) {
 
 
 } );
+
+$( "#loginForm" ).on( "submit", function( event ) {
+ 
+    // Stop form from submitting normally
+    event.preventDefault();
+   
+    // Get some values from elements on the page:
+    var $form = $( this ),
+      username = $form.find( "input[name='username']" ).val(),
+      password = $form.find( "input[name='password']" ).val(),
+      action = $form.attr( "action" );
+   
+      $.post(action,
+      {
+          username : username,
+          password : password
+      },
+      function(data, status){
+          document.getElementById("pretoken").innerHTML =data;
+      });
+  
+  
+  } );
 </script>
  
 </body>

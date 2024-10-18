@@ -15,6 +15,9 @@ server="https://core.hkexstaging.datahex.rozettatech.com"
 
 @app.route('/apiLoginToken', methods=['POST'])
 def login_token():
+    username=request.form.get('username')
+    password=request.form.get('password')    
+
     username="laichingyeung@hkex.com.hk"
     password="P@ssw0rd!"
 
@@ -41,21 +44,9 @@ def login_token():
         return r.text
    
   
-@app.route('/apiTestPost', methods=['POST'])
-def api_test():
-    method="POST"
-    content_server=request.form.get('server')
-    content_url=request.form.get('url')
-    token=login_token()
-    content_header={    'Content-Tpye':'application/json',    "Authorization": f"Bearer {token}"  }
-    content_data=json.loads(request.form.get('data'))
-    r=requests.post(url=f"{content_server}{content_url}",headers=content_header,json=content_data)
-    return r.text,r.status_code
-   
   
 @app.route('/apiTestPostJson', methods=['POST'])
 def api_test_json():
-    #data=request.json()
     method="POST"
     content_server=request.form.get('server')
     content_url=request.form.get('url')
