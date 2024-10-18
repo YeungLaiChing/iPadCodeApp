@@ -54,12 +54,12 @@ def api_test():
   
 @app.route('/apiTestPostJson', methods=['POST'])
 def api_test_json():
-    data=request.json()
+    #data=request.json()
     method="POST"
-    content_server=data.get('server')
-    content_url=data.get('url')
-    content_header=json.loads(data.get('header'))
-    content_data=json.loads(data.get('data'))
+    content_server=request.form.get('server')
+    content_url=request.form.get('url')
+    content_header=json.loads(request.form.get('header'))
+    content_data=json.loads(request.form.get('data'))
     r=requests.post(url=f"{content_server}{content_url}",headers=content_header,json=content_data)
     print(r.status_code)
     print(r.text)    
