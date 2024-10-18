@@ -9,14 +9,30 @@
  
 <form action="/apiTestPostJson" id="searchForm">
     
-    <input type="text" name="server" placeholder="server...">
+    <input type="text" name="server" value="https://core.hkexstaging.datahex.rozettatech.com">
     <br/>
     <div>
-    <input type="text" name="url" placeholder="url...">
+    <input type="text" name="url" value="/api/account/v1/preferences">
 </div>
-    <textarea   name="header" placeholder="header..."></textarea>
-    <textarea   name="data" placeholder="data..."></textarea>
+    <textarea   name="header" >
+    {    
+            'Content-Tpye':'application/json',    
+            "Authorization": "Bearer "  
+    }
+    </textarea>
+    <br/>
+    <textarea   name="data" >
+    {
+        "extract.includeFieldTypes": "true",
+        "extract.useLocalTime": "false",
+        "extract.dateFormat": "YYYY-MM-DD",
+        "extract.periodType": "Slice",
+        "extract.upload": "None",
+        "extract.maxFileSize": "2"
+      }</textarea>
+    <br/>
     <input type="text" name="token" placeholder="Search...">
+    <br/>
     <input type="submit" value="Search">
 </form>
 <!-- the result of the search will be rendered inside this div -->
@@ -38,19 +54,17 @@ $( "#searchForm" ).on( "submit", function( event ) {
     token = $form.find( "input[name='token']" ).val(),
     action = $form.attr( "action" );
  
-    $.ajax({
-        url : action,
-        data : {
-            server : server,
-            url : url,
-            header : header,
-            data : data
-        },
-        always : function(data) {
-            var content = $( data ).find( "#content" );
-            $( "#result" ).empty().append( JSON.stringify(content, null, 2) );
-        }
-    })
+    $.post(action,
+    {
+        server : server,
+        url : url,
+        header : header,
+        data : data
+    },
+    function(data, status){
+        alert("Data: " + data + "\nStatus: " + status);
+    });
+
 
 } );
 </script>
