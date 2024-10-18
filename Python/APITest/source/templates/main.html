@@ -72,7 +72,15 @@ $( "#searchForm" ).on( "submit", function( event ) {
     function(data, status){
         //var content = $( data ).find( "#content" );
         //$( "#result" ).empty().append( data);
-        document.getElementById("result").innerHTML = JSON.stringify(JSON.parse(data), undefined, 2);
+        var result=data;
+        
+        try {
+            result=JSON.stringify(JSON.parse(data), undefined, 2);
+          }
+          catch(err) {
+            result=data;
+          }
+        document.getElementById("result").innerHTML = result;
     });
 
 
