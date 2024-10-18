@@ -62,7 +62,7 @@ $( "#searchForm" ).on( "submit", function( event ) {
     },
     function(data, status){
         //var content = $( data ).find( "#content" );
-        $( "#result" ).empty().append( JSON.stringify(data, null, 2) );
+        $( "#result" ).empty().append( data);
     });
 
 
