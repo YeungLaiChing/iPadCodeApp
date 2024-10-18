@@ -61,7 +61,9 @@ def api_test_json():
     content_header=json.loads(data.get('header'))
     content_data=json.loads(data.get('data'))
     r=requests.post(url=f"{content_server}{content_url}",headers=content_header,json=content_data)
-    return r.text,r.status_code
+    print(r.status_code)
+    print(r.text)    
+    return r.text
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",port=listening_port,debug=True)
