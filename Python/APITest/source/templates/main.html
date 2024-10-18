@@ -7,13 +7,17 @@
 </head>
 <body>
 
+    <div style="padding:10px;border:2px solid green;">
 <H1>Authenication</H1>    
 <form action="/apiLoginToken" id="loginForm" method="POST">
-    Username :  <input type="text" name="username" > <br/>
-    Password :  <input type="password" name="password" > <br/>
-    Token : <textarea  name="pretoken" id="pretoken" ></textarea> <br/>
+    <p  style="display:none" >Username :  </p><input type="text"  style="display:none" name="username" > <br/>
+    <p  style="display:none" >Password :  </p>  <input type="password"  style="display:none" name="password" > <br/>
     <input type="submit" value="Authenicate">
+    Token : <textarea  name="pretoken" id="pretoken" ></textarea> <br/>
+    
 </form>
+    </div>
+<div style="padding:10px;border:2px solid green;">
 <H1>POST ACTION</H1>
 <form action="/apiTestPostJson" id="searchForm" method="POST">
     
@@ -22,7 +26,7 @@
     <div>
     <input type="text" name="url" value="/api/account/v1/preferences">
 </div>
-    <textarea   name="header" >
+    <textarea  style="display:none"  name="header" >
     {    
             "Authorization": "Bearer "  
     }
@@ -38,13 +42,13 @@
         "extract.maxFileSize": "2"
       }</textarea>
     <br/>
-    <input type="text" name="token" id ="token" placeholder="Search...">
+    <input type="text" name="token" style="display:none"  id ="token" placeholder="Search...">
     <br/>
     <input type="submit" value="Search">
 </form>
 <!-- the result of the search will be rendered inside this div -->
-<button onclick="copyResult()">Copy Result</button>
-<div>
+</div>
+<div style="padding:10px;border:2px solid green;">
 <pre id="result"></pre>
 </div>
 <script>
@@ -112,18 +116,6 @@ $( "#loginForm" ).on( "submit", function( event ) {
   
   } );
 
-  function copyResult() {
-    // Get the text field
-    var copyText = document.getElementById("result");
-  
-    // Select the text field
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); // For mobile devices
-  
-     // Copy the text inside the text field
-    navigator.clipboard.writeText(copyText.innerHTML);
-
-  }  
 </script>
  
 </body>
