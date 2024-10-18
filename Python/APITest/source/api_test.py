@@ -30,7 +30,7 @@ def login_token():
         "client_id": "frontend_client"
     }
 
-    r = requests.post(url=url, headers=headers, data=payloads)
+    r = requests.post(url=f"{server}{url}", headers=headers, data=payloads)
 
     if (r.status_code==200):
         result=r.json().get('access_token')
