@@ -35,10 +35,10 @@ def login_token():
     if (r.status_code==200):
         result=r.json().get('access_token')
         print(result)
-        return result,200
+        return result
     else :
         print(result)
-        return r.text,400
+        return r.text
    
   
 @app.route('/apiTestPost', methods=['POST'])
@@ -46,7 +46,8 @@ def api_test():
     method="POST"
     content_server=request.form.get('server')
     content_url=request.form.get('url')
-    content_header=json.loads(request.form.get('header'))
+    token=login_token()
+    content_header={    'Content-Tpye':'application/json',    "Authorization": f"Bearer {token}"  }
     content_data=json.loads(request.form.get('data'))
     r=requests.post(url=f"{content_server}{content_url}",headers=content_header,json=content_data)
     return r.text,r.status_code
