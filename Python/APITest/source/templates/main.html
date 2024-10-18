@@ -6,8 +6,7 @@
   <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
-
-    <div style="padding:10px;border:2px solid green;">
+<div  id="login_section" style="padding:10px;border:2px solid green;">
 <H1>Authenication</H1>    
 <form action="/apiLoginToken" id="loginForm" method="POST">
     <p  style="display:none" >Username :  </p><input type="text"  style="display:none" name="username" > <br/>
@@ -17,7 +16,7 @@
     
 </form>
     </div>
-<div style="padding:10px;border:2px solid green;">
+<div id="post_action_section" style="display:none;padding:10px;border:2px solid green;">
 <H1>POST ACTION</H1>
 <form action="/apiTestPostJson" id="searchForm" method="POST">
     
@@ -48,7 +47,7 @@
 </form>
 <!-- the result of the search will be rendered inside this div -->
 </div>
-<div style="padding:10px;border:2px solid green;">
+<div  id="result_section" style="display:none;padding:10px;border:2px solid green;">
 <pre id="result"></pre>
 </div>
 <script>
@@ -111,6 +110,9 @@ $( "#loginForm" ).on( "submit", function( event ) {
       function(data, status){
           document.getElementById("pretoken").innerHTML =data;
           document.getElementById("token").value =data;
+          document.getElementById("result_section").style.display="inline"
+          document.getElementById("post_action_section").style.display="inline"
+          document.getElementById("login_section").style.display="none"
       });
   
   
