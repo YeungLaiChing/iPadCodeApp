@@ -22,10 +22,16 @@
 <form action="/apiTestPostJson" id="searchForm" method="POST">
     
     <input type="text" name="server" size="70" value="https://core.hkexstaging.datahex.rozettatech.com">
-    <br/>
-    <div>
-    <input type="text" name="url" size="70" value="/api/account/v1/preferences">
-</div>
+    <br/><div>    <input type="text" name="url" size="70" value="/api/account/v1/preferences">    </div>
+    <br/><div>   
+      <select name="action_type" id="action_type">
+        <option value="POST" selected>POST</option>
+        <option value="GET">GET</option>
+        <option value="DELETE">DELETE</option>
+        <option value="PATCH">PATCH</option>
+        <option value="PUT">PUT</option>
+      </select>      
+      </div>
     <textarea  style="display:none"  name="header" >
     {    
             "Authorization": "Bearer "  
@@ -65,6 +71,7 @@ $( "#searchForm" ).on( "submit", function( event ) {
     header = $form.find( "textarea[name='header']" ).val(),
     data = $form.find( "textarea[name='data']" ).val(),
     token = $form.find( "input[name='token']" ).val(),
+    action_type  = $form.find( "select[name='action_type']" ).val(),
     action = $form.attr( "action" );
  
     $.post(action,
@@ -73,6 +80,7 @@ $( "#searchForm" ).on( "submit", function( event ) {
         url : url,
         header : header,
         token : token,
+        action_type : action_type,
         data : data
     },
     function(data, status){
