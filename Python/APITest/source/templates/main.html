@@ -58,7 +58,7 @@ $( "#searchForm" ).on( "submit", function( event ) {
     url = $form.find( "input[name='url']" ).val(),
     header = $form.find( "textarea[name='header']" ).val(),
     data = $form.find( "textarea[name='data']" ).val(),
-    token = $( "#loginForm" ).find( "input[name='pretoken']" ).val(),
+    token = $form.find( "input[name='token']" ).val(),
     action = $form.attr( "action" );
  
     $.post(action,

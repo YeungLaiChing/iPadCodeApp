@@ -18,8 +18,8 @@ def login_token():
     username=request.form.get('username')
     password=request.form.get('password')    
 
-    #username="laichingyeung@hkex.com.hk"
-    #password="P@ssw0rd!"
+    username="laichingyeung@hkex.com.hk"
+    password="P@ssw0rd!"
 
     url= "/realms/datahex/protocol/openid-connect/token"
     headers = {
