@@ -59,7 +59,8 @@ def api_test_json():
     method="POST"
     content_server=request.form.get('server')
     content_url=request.form.get('url')
-    content_header=json.loads(request.form.get('header'))
+    token=login_token()
+    content_header={    'Content-Tpye':'application/json',    "Authorization": f"Bearer {token}"  }
     content_data=json.loads(request.form.get('data'))
     r=requests.post(url=f"{content_server}{content_url}",headers=content_header,json=content_data)
     print(r.status_code)
