@@ -35,7 +35,7 @@
     <input type="submit" value="Search">
 </form>
 <!-- the result of the search will be rendered inside this div -->
-<div id="result"></div>
+<pre id="result"></pre>
  
 <script>
 // Attach a submit handler to the form
@@ -62,7 +62,8 @@ $( "#searchForm" ).on( "submit", function( event ) {
     },
     function(data, status){
         //var content = $( data ).find( "#content" );
-        $( "#result" ).empty().append( data);
+        //$( "#result" ).empty().append( data);
+        document.getElementById("result").innerHTML = JSON.stringify(data, undefined, 2);
     });
 
 
