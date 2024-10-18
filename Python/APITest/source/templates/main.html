@@ -61,8 +61,8 @@ $( "#searchForm" ).on( "submit", function( event ) {
         data : data
     },
     function(data, status){
-        var content = $( data ).find( "#content" );
-        $( "#result" ).empty().append( JSON.stringify(content, null, 2) );
+        //var content = $( data ).find( "#content" );
+        $( "#result" ).empty().append( JSON.stringify(data, null, 2) );
     });
 
 
