@@ -63,7 +63,7 @@ $( "#searchForm" ).on( "submit", function( event ) {
     function(data, status){
         //var content = $( data ).find( "#content" );
         //$( "#result" ).empty().append( data);
-        document.getElementById("result").innerHTML = JSON.stringify(data, undefined, 2);
+        document.getElementById("result").innerHTML = JSON.stringify(JSON.parse(data), undefined, 2);
     });
 
 
