@@ -16,7 +16,6 @@
 </div>
     <textarea   name="header" >
     {    
-            'Content-Tpye':'application/json',    
             "Authorization": "Bearer "  
     }
     </textarea>
@@ -40,7 +39,7 @@
  
 <script>
 // Attach a submit handler to the form
-$( "#searchForm" ).on( "submita", function( event ) {
+$( "#searchForm" ).on( "submit", function( event ) {
  
   // Stop form from submitting normally
   event.preventDefault();
