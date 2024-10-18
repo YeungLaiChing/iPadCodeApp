@@ -21,10 +21,10 @@
 <H1>POST ACTION</H1>
 <form action="/apiTestPostJson" id="searchForm" method="POST">
     
-    <input type="text" name="server" value="https://core.hkexstaging.datahex.rozettatech.com">
+    <input type="text" name="server" size="70" value="https://core.hkexstaging.datahex.rozettatech.com">
     <br/>
     <div>
-    <input type="text" name="url" value="/api/account/v1/preferences">
+    <input type="text" name="url" size="70" value="/api/account/v1/preferences">
 </div>
     <textarea  style="display:none"  name="header" >
     {    
@@ -32,7 +32,7 @@
     }
     </textarea>
     <br/>
-    <textarea   name="data" >
+    <textarea   name="data" cols="70" rows="10">
     {
         "extract.includeFieldTypes": "true",
         "extract.useLocalTime": "false",
