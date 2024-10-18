@@ -2,13 +2,12 @@ services:
    api-route-web:
         image: vaindex-base
         container_name: api-route-web
-        restart: unless-stopped
         ports:
             - '8586:5000'
         environment:
             APP_NAME: "api-route-web"
         volumes:
-            - ../../source/main.py:/code/app.py
+            - ../../source/app.py:/code/app.py
             - ../../source/templates:/code/templates
             - .:/code/
         networks:
